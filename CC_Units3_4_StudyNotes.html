@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cloud Computing – Units 3 & 4 Study Notes</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg: #0f1117;
+    --surface: #181c27;
+    --card: #1e2336;
+    --border: #2a3050;
+    --accent1: #7c8cf8;
+    --accent2: #f7c59f;
+    --accent3: #6ee7b7;
+    --accent4: #f472b6;
+    --accent5: #fbbf24;
+    --text: #e2e8f8;
+    --muted: #8892b0;
+    --highlight: #2a3a6a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 15px;
+    line-height: 1.7;
+    padding: 2rem 1rem;
+  }
+
+  .container { max-width: 900px; margin: 0 auto; }
+
+  /* Header */
+  header {
+    text-align: center;
+    padding: 2.5rem 1rem 2rem;
+    border-bottom: 2px solid var(--border);
+    margin-bottom: 2.5rem;
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.4rem;
+    font-weight: 900;
+    color: var(--accent1);
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+  }
+  header .sub {
+    color: var(--accent2);
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    font-style: italic;
+  }
+
+  /* TOC */
+  .toc {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent1);
+    border-radius: 8px;
+    padding: 1.2rem 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+  .toc h2 { color: var(--accent1); font-size: 1rem; margin-bottom: 0.7rem; font-family: 'Playfair Display', serif; }
+  .toc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.15rem 2rem; }
+  .toc a { color: var(--muted); text-decoration: none; font-size: 0.85rem; }
+  .toc a:hover { color: var(--accent2); }
+
+  /* Unit headers */
+  .unit-badge {
+    display: inline-block;
+    background: var(--accent1);
+    color: #0f1117;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 0.5rem;
+  }
+  .unit-badge.u4 { background: var(--accent3); }
+
+  /* Section headings */
+  h2.section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.7rem;
+    color: var(--accent2);
+    margin: 2.5rem 0 1rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid var(--border);
+  }
+  h3.topic-title {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--accent3);
+    margin: 1.5rem 0 0.5rem;
+  }
+  h4.sub-topic {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--accent4);
+    margin: 1rem 0 0.3rem;
+  }
+
+  /* Content cards */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.1rem 1.3rem;
+    margin-bottom: 1rem;
+  }
+
+  /* Key point boxes */
+  .key-box {
+    background: var(--highlight);
+    border-left: 3px solid var(--accent1);
+    border-radius: 0 6px 6px 0;
+    padding: 0.7rem 1rem;
+    margin: 0.7rem 0;
+    font-size: 0.92rem;
+  }
+
+  /* Tip/formula boxes */
+  .formula {
+    background: #0d1f2d;
+    border: 1px solid #1e4060;
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--accent5);
+    margin: 0.5rem 0;
+    display: inline-block;
+  }
+
+  /* Comparison tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    margin: 0.8rem 0;
+  }
+  th {
+    background: var(--highlight);
+    color: var(--accent2);
+    padding: 0.5rem 0.8rem;
+    text-align: left;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+  }
+  td {
+    padding: 0.45rem 0.8rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) td { background: #1a1f30; }
+
+  /* MCQ callout */
+  .mcq-tip {
+    background: #1a1207;
+    border: 1px solid var(--accent5);
+    border-radius: 8px;
+    padding: 0.7rem 1rem;
+    margin: 0.6rem 0;
+    font-size: 0.88rem;
+    color: var(--accent5);
+  }
+  .mcq-tip::before { content: "⚡ MCQ LIKELY: "; font-weight: 600; }
+
+  /* Step lists */
+  ol.steps { padding-left: 1.3rem; }
+  ol.steps li { margin-bottom: 0.3rem; font-size: 0.92rem; }
+  ul.bullets { padding-left: 1.3rem; }
+  ul.bullets li { margin-bottom: 0.25rem; font-size: 0.92rem; }
+
+  p { margin-bottom: 0.6rem; font-size: 0.93rem; }
+
+  /* Divider */
+  hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .toc-grid { grid-template-columns: 1fr; }
+    header h1 { font-size: 1.7rem; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>Cloud Computing<br>Units 3 & 4 – Complete Study Notes</h1>
+  <p class="sub">Covering all topics from slides & notes · Optimised for 4-mark theory & MCQs</p>
+</header>
+
+<!-- TOC -->
+<div class="toc">
+  <h2>📋 Table of Contents</h2>
+  <div class="toc-grid">
+    <div>
+      <strong style="color:var(--accent2)">Unit 3 – Distributed Storage</strong><br>
+      <a href="#s1">1. Storage Types & Architectures</a><br>
+      <a href="#s2">2. Cloud Storage & Enablers</a><br>
+      <a href="#s3">3. Storage Virtualization</a><br>
+      <a href="#s4">4. Object Storage & S3</a><br>
+      <a href="#s5">5. DynamoDB & NoSQL</a><br>
+      <a href="#s6">6. Partitioning & Consistent Hashing</a><br>
+      <a href="#s7">7. Replication</a><br>
+      <a href="#s8">8. Consistency Models & CAP</a><br>
+      <a href="#s9">9. Distributed Transactions & 2PC</a><br>
+    </div>
+    <div>
+      <strong style="color:var(--accent3)">Unit 4 – Cloud Control</strong><br>
+      <a href="#u1">1. Master-Slave vs P2P</a><br>
+      <a href="#u2">2. Unreliable Communication & Faults</a><br>
+      <a href="#u3">3. Fault Tolerance & Availability</a><br>
+      <a href="#u4">4. Consensus & Paxos</a><br>
+      <a href="#u5">5. Leader Election Algorithms</a><br>
+      <a href="#u6">6. Resource Management & Scheduling</a><br>
+      <a href="#u7">7. Distributed Locking & ZooKeeper</a><br>
+      <a href="#u8">8. Reverse Proxy, Hybrid Cloud & Security</a><br>
+    </div>
+  </div>
+</div>
+
+<!-- ============================= UNIT 3 ============================= -->
+<div class="unit-badge">UNIT 3</div>
+<h2 class="section-title" id="s1">1. Storage Types & Architectures</h2>
+
+<div class="card">
+  <h3 class="topic-title">Three Types of Data Storage</h3>
+  <table>
+    <tr><th>Type</th><th>How it works</th><th>Example</th></tr>
+    <tr><td><strong>File Storage</strong></td><td>Organises data in a hierarchy of files and folders. Computer needs the full path to access data. Uses metadata to locate files.</td><td>NAS, DAS</td></tr>
+    <tr><td><strong>Block Storage</strong></td><td>Chops data into fixed-size blocks, each with a unique ID. Storage system reassembles blocks on request. No metadata handling.</td><td>SAN environments</td></tr>
+    <tr><td><strong>Object Storage</strong></td><td>Data stored as self-contained objects in a flat namespace. Each object has: data + unique ID + custom metadata. Accessed via REST APIs.</td><td>Amazon S3, Azure Blob</td></tr>
+  </table>
+  <div class="mcq-tip">Block storage is expensive and has limited metadata capability. Object storage uses GET/PUT/DELETE REST APIs.</div>
+</div>
+
+<div class="card">
+  <h3 class="topic-title">Storage Architectures</h3>
+  <ul class="bullets">
+    <li><strong>DAS (Directly Attached Storage):</strong> Storage physically connected to one server. Simple but not shareable.</li>
+    <li><strong>NAS (Network Attached Storage):</strong> File-level storage accessible over a network. Supports multiple users simultaneously.</li>
+    <li><strong>SAN (Storage Area Network):</strong> Dedicated high-speed network connecting servers to block-level storage devices.</li>
+  </ul>
+
+  <h4 class="sub-topic">Magnetic Disk Latency</h4>
+  <div class="formula">Disk Latency = Seek Time + Rotational Latency + Transfer Time</div>
+  <ul class="bullets">
+    <li><strong>Seek time:</strong> Head moves to the correct cylinder/track</li>
+    <li><strong>Rotational latency:</strong> Wait for the right sector to spin under the head</li>
+    <li><strong>Transfer time:</strong> Actual read/write of data</li>
+  </ul>
+
+  <h4 class="sub-topic">RAID</h4>
+  <p><strong>Redundant Array of Independent Disks</strong> — combines multiple physical disks into one logical unit for <em>redundancy + performance</em>. Data distributed across drives in different "RAID levels" (RAID 0, 1, 4…)</p>
+</div>
+
+<hr>
+<h2 class="section-title" id="s2">2. Cloud Storage & Enablers</h2>
+
+<div class="card">
+  <h3 class="topic-title">What is Cloud Storage?</h3>
+  <p>A data storage model where data is maintained and backed up remotely, accessible over the internet. The provider manages the physical environment; users buy/lease capacity.</p>
+
+  <h4 class="sub-topic">8 Key Properties of Cloud Storage</h4>
+  <ol class="steps">
+    <li><strong>Dramatic TCO reduction</strong> – 10× cheaper than block/file storage</li>
+    <li><strong>Unlimited scalability</strong> – built on distributed tech; add/remove nodes seamlessly</li>
+    <li><strong>Elasticity</strong> – virtual pool grows/shrinks as needed</li>
+    <li><strong>On-demand / pay-as-you-go</strong> – pay only for what you store & access</li>
+    <li><strong>Universal access</strong> – no SAN attachment required</li>
+    <li><strong>Multi-tenancy</strong> – shared, centrally managed, cost-efficient</li>
+    <li><strong>Data durability & availability</strong> – commodity hardware + software HA layer</li>
+    <li><strong>Disaster Recovery</strong></li>
+  </ol>
+</div>
+
+<div class="card">
+  <h3 class="topic-title">Cloud Storage Enablers</h3>
+
+  <h4 class="sub-topic">File Systems</h4>
+  <p>Controls how data is stored/retrieved. A file system provides structure (without it, storage is just a blob of data). Block = basic I/O unit.</p>
+  <p><strong>Network File Systems (NFS):</strong> Makes local files available over LAN. Server exports directories via <code>nfsd</code> daemon; clients mount them — transparently accessible.</p>
+
+  <h4 class="sub-topic">LVM – Logical Volume Manager</h4>
+  <ul class="bullets">
+    <li>Independent layer between file system and physical disks</li>
+    <li>Physical Partitions → Physical Volumes → Volume Group → Logical Volumes → File System</li>
+    <li>Allows dynamic resizing of storage without reformatting</li>
+  </ul>
+
+  <h4 class="sub-topic">Thin Provisioning (Virtual Provisioning)</h4>
+  <p>Hosts are presented with <em>more</em> capacity than is physically allocated. Physical storage allocated only when actually needed. Allows provisioning decisions without worrying about currently available storage.</p>
+  <div class="mcq-tip">Thin provisioning = logical capacity > physically allocated capacity</div>
+</div>
+
+<hr>
+<h2 class="section-title" id="s3">3. Storage Virtualization</h2>
+
+<div class="card">
+  <h3 class="topic-title">What is Storage Virtualization?</h3>
+  <p>Abstracts physical storage subsystems from applications and presents them as logical entities — hiding complexity of physical devices, network changes, and access types.</p>
+  <p>Can: aggregate multiple devices into one pool OR split one large device into many smaller logical entities.</p>
+
+  <h3 class="topic-title">Category 1: File-Level Virtualization</h3>
+  <p>Eliminates dependency between file access location and physical storage location. Manages files/directories across multiple servers as a single logical file system.</p>
+
+  <h4 class="sub-topic">Distributed File System (DFS)</h4>
+  <ul class="bullets">
+    <li>File system distributed across multiple servers</li>
+    <li>Provides location transparency + fault tolerance + replication</li>
+    <li>Two metadata management approaches:</li>
+  </ul>
+
+  <table>
+    <tr><th>Approach</th><th>System</th><th>How it works</th></tr>
+    <tr><td>Centralised metadata</td><td>Lustre</td><td>Dedicated MDS (Metadata Server). Good for large files. MDS can become a bottleneck under heavy metadata ops. Clients → MDS for layout → OSTs for actual data.</td></tr>
+    <tr><td>Distributed metadata</td><td>GlusterFS</td><td>No central metadata server. Metadata spread across all nodes. Uses "translators" (stackable filter programs) for features like AFR (replication), I/O scheduler. Higher complexity.</td></tr>
+  </table>
+
+  <h3 class="topic-title">Category 2: Block-Level Virtualization</h3>
+  <p>Virtualises multiple physical disks → single logical disk. Block addresses may span multiple physical subsystems.</p>
+  <table>
+    <tr><th>Level</th><th>How</th></tr>
+    <tr><td>Host-based</td><td>Uses LVM to create storage pool from multiple disks</td></tr>
+    <tr><td>Storage-device level</td><td>RAID in array controllers creates LUNs across disks. Low latency, host-agnostic.</td></tr>
+    <tr><td>Network-based</td><td>Most scalable. In Fibre Channel SAN. Two types: Switch-based (virtualisation in switch + metadata manager) or Appliance-based (I/O flows through appliance). Appliance can be <em>in-band</em> (all I/O through it) or <em>out-of-band</em> (only metadata through it, data path is direct).</td></tr>
+  </table>
+</div>
+
+<hr>
+<h2 class="section-title" id="s4">4. Object Storage & Amazon S3</h2>
+
+<div class="card">
+  <h3 class="topic-title">Object Storage Basics</h3>
+  <p>Stores data as flat-namespace objects (not files in folders or blocks). Each object = data + unique ID + metadata. Uses REST HTTP APIs (GET, PUT, DELETE).</p>
+  <p>Built on scale-out distributed systems using commodity hardware. Key tasks: <strong>data placement</strong> + <strong>durability automation</strong>.</p>
+  <div class="mcq-tip">Object storage uses REST APIs. Objects have unique IDs, no directory hierarchy (flat namespace).</div>
+
+  <h3 class="topic-title">Amazon S3</h3>
+  <ul class="bullets">
+    <li><strong>Buckets:</strong> containers for objects. Up to 100 buckets/account, unlimited objects/bucket.</li>
+    <li><strong>Objects:</strong> up to 5 TB each. Replicated across multiple geographic locations.</li>
+    <li><strong>Keys:</strong> path-like name for an object. URL: <code>http://s3.amazonaws.com/bucketname/key</code></li>
+    <li><strong>Security:</strong> Access control policies (via AWS Console) + Audit logs (stored in separate bucket)</li>
+    <li><strong>Data Protection:</strong> Default replication across multiple devices (survives 2 replica failures). <em>Reduced Redundancy Storage (RRS)</em> = 2 replicas, survives 1 failure.</li>
+    <li><strong>Regions:</strong> Choose at bucket level for performance/legal reasons</li>
+    <li><strong>Versioning:</strong> Stores full history; allows undo deletes</li>
+    <li><strong>Multi-part Uploads:</strong> Split large objects, upload parts in parallel; only failed parts need retry</li>
+  </ul>
+
+  <h3 class="topic-title">OpenStack Swift</h3>
+  <p>Another object storage system. Key concepts: <strong>Account</strong> (user in storage system) → <strong>Container</strong> (namespace to group objects) → <strong>Object</strong> (actual data). <strong>Partitions</strong> = storage locations distributed across disks. <strong>Ring</strong> = maps partition space to physical disk locations (like a hash-based encyclopedia).</p>
+</div>
+
+<hr>
+<h2 class="section-title" id="s5">5. DynamoDB (NoSQL)</h2>
+
+<div class="card">
+  <h3 class="topic-title">DynamoDB Key Concepts</h3>
+  <ul class="bullets">
+    <li>Fully managed NoSQL key-value + document database on AWS</li>
+    <li>Tables, Items, Attributes are core components</li>
+    <li>Supports only <strong>item-level consistency</strong> (row-level, no cross-item transactions)</li>
+    <li>No joins between tables — application must handle join logic</li>
+  </ul>
+
+  <h4 class="sub-topic">Primary Key Types</h4>
+  <ul class="bullets">
+    <li><strong>Partition key only:</strong> Value is hashed → determines physical partition</li>
+    <li><strong>Partition key + Sort key (Composite):</strong> Items with same partition key stored together, sorted by sort key</li>
+  </ul>
+
+  <h4 class="sub-topic">Secondary Indexes</h4>
+  <p>Allow querying by non-primary key attributes. Partitions are automatically replicated across multiple Availability Zones.</p>
+  <div class="mcq-tip">DynamoDB uses hash function on partition key to determine storage location. No joins supported.</div>
+</div>
+
+<hr>
+<h2 class="section-title" id="s6">6. Partitioning & Consistent Hashing</h2>
+
+<div class="card">
+  <h3 class="topic-title">Partitioning</h3>
+  <p>Intentionally splitting large data into smaller pieces (partitions), each on a single node or distributed across nodes — enables parallel queries and better throughput.</p>
+  <ul class="bullets">
+    <li><strong>Skew:</strong> uneven distribution across partitions</li>
+    <li><strong>Hot spot:</strong> one partition with disproportionately high load</li>
+  </ul>
+
+  <h3 class="topic-title">4 Approaches to Partitioning</h3>
+  <table>
+    <tr><th>Type</th><th>Idea</th><th>Pros/Cons</th></tr>
+    <tr><td>Vertical</td><td>Different columns on different nodes</td><td>Improves performance for column access patterns</td></tr>
+    <tr><td>Workload-driven</td><td>Partition based on application access patterns</td><td>Improves transaction scalability</td></tr>
+    <tr><td>Random assignment</td><td>Assign records randomly to nodes</td><td>Even distribution but requires querying all nodes for reads</td></tr>
+    <tr><td>Horizontal (key-based)</td><td>Static: by key range, schema, graph, or hash</td><td>Most common; various trade-offs below</td></tr>
+  </table>
+
+  <h4 class="sub-topic">Partitioning by Key Range</h4>
+  <p>Each partition gets a continuous range of keys. Easy range queries (e.g., all sensor readings in January). Risk: timestamp keys → all writes go to today's partition → hot spot.</p>
+
+  <h4 class="sub-topic">Partitioning by Hash of Key</h4>
+  <p>Hash function evenly distributes rows across partitions. Eliminates skew and hot spots. Downside: loses ability to do efficient range queries. Composite keys (e.g., user_id + timestamp) can partially restore range query ability.</p>
+
+  <h3 class="topic-title">Distributed Hashing & the Rehashing Problem</h3>
+  <p>Simple <code>hash(key) mod N</code> assigns keys to N servers. Problem: when a server is added/removed, almost all keys need to be remapped → massive data movement.</p>
+
+  <h3 class="topic-title">Consistent Hashing ⭐</h3>
+  <p>Maps both keys and servers onto a virtual circle (hash ring). Each key is assigned to the nearest server in the clockwise direction.</p>
+  <div class="key-box">
+    <strong>Key benefit:</strong> When a server is added or removed, only the keys closest to it (clockwise) need to be moved. The rest remain unaffected. Scales without affecting the overall system.
+  </div>
+  <div class="mcq-tip">Consistent hashing minimises key redistribution when servers join/leave. Used in distributed hash tables.</div>
+
+  <h3 class="topic-title">Secondary Indexes in Partitioned DBs</h3>
+  <table>
+    <tr><th>Type</th><th>How it works</th><th>Trade-off</th></tr>
+    <tr><td>Document-based (local index)</td><td>Each partition maintains its own secondary index for its documents only</td><td>Writes are fast (local only). Reads require scatter/gather across all partitions → expensive</td></tr>
+    <tr><td>Term-based (global index)</td><td>One global index covering all partitions, itself partitioned by term</td><td>Reads are efficient (query one partition). Writes are slow/complex (may update index in multiple partitions; often async)</td></tr>
+  </table>
+</div>
+
+<div class="card">
+  <h3 class="topic-title">Rebalancing Partitions</h3>
+  <p>Moving load between nodes when: throughput increases, dataset grows, a machine fails, or a machine rejoins. Requirements: fair load after rebalancing, DB stays available during rebalancing, minimum data movement.</p>
+
+  <h4 class="sub-topic">Strategies</h4>
+  <ul class="bullets">
+    <li><strong>hash mod N:</strong> Simple but moves most keys on any change — too expensive</li>
+    <li><strong>Fixed number of partitions:</strong> Create more partitions than nodes; new nodes steal some. Easy to manage but hard to tune partition size for variable datasets.</li>
+    <li><strong>Dynamic partitioning:</strong> Partition splits when it exceeds a size threshold; merges when it shrinks below. Number of partitions adapts to data volume. Starts slow (single partition at beginning).</li>
+    <li><strong>Proportional to nodes:</strong> Fixed partitions per node. When nodes increase, each partition gets smaller. Uses random splitting.</li>
+  </ul>
+
+  <h3 class="topic-title">Request Routing</h3>
+  <ul class="bullets">
+    <li><strong>Approach 1:</strong> Any node → forwards to correct node if needed (round-robin)</li>
+    <li><strong>Approach 2:</strong> Routing tier acts as partition-aware load balancer</li>
+    <li><strong>Approach 3:</strong> Client is partition-aware, connects directly</li>
+    <li><strong>Approach 4 (ZooKeeper):</strong> External coordination service tracks partition-to-node mapping. Nodes register themselves; routing tier subscribes to changes.</li>
+  </ul>
+  <div class="mcq-tip">HBase, Kafka, SolrCloud use ZooKeeper for partition tracking. Cassandra/Riak use gossip protocol instead.</div>
+</div>
+
+<hr>
+<h2 class="section-title" id="s7">7. Replication</h2>
+
+<div class="card">
+  <h3 class="topic-title">Why Replicate?</h3>
+  <ul class="bullets">
+    <li>Reduce latency (geographically close replicas)</li>
+    <li>Increase availability (system survives partial failures)</li>
+    <li>Increase read throughput (more nodes can serve reads)</li>
+  </ul>
+
+  <h3 class="topic-title">Algorithm 1: Leader-Based (Single-Leader) Replication</h3>
+  <p>One replica = leader (master/primary). Clients write only to the leader. Leader writes locally, then sends replication log to followers. Clients can read from any replica.</p>
+
+  <h4 class="sub-topic">Sync vs Async Replication</h4>
+  <table>
+    <tr><th></th><th>Synchronous</th><th>Asynchronous</th></tr>
+    <tr><td>When does leader respond?</td><td>After follower confirms receipt</td><td>Immediately, without waiting for follower</td></tr>
+    <tr><td>Guarantee</td><td>Follower always has latest data</td><td>Follower may lag behind</td></tr>
+    <tr><td>Downside</td><td>Write blocked if follower is slow/down</td><td>Replication lag → stale reads</td></tr>
+  </table>
+
+  <h4 class="sub-topic">Replication Log Implementations</h4>
+  <ol class="steps">
+    <li><strong>Statement-based:</strong> Log every SQL/write statement. Problem: non-deterministic functions (NOW(), RAND()) differ on replicas.</li>
+    <li><strong>Write-ahead log (WAL) shipping:</strong> Append-only byte sequence sent to followers. Tied to storage engine version.</li>
+    <li><strong>Change Data Capture (logical log):</strong> Row-level changes. Engine-agnostic. Easier for external tools to parse.</li>
+    <li><strong>Trigger-based:</strong> Application code fires on data change; external process replicates. Flexible but higher overhead.</li>
+  </ol>
+
+  <h4 class="sub-topic">Failure Handling</h4>
+  <ul class="bullets">
+    <li><strong>Follower failure:</strong> Uses local log to determine last processed transaction → requests missing changes from leader (catch-up recovery)</li>
+    <li><strong>Leader failure (Failover):</strong> 1) Detect leader failure (timeout) 2) Elect new leader (usually most up-to-date follower) 3) Reconfigure clients to use new leader</li>
+  </ul>
+
+  <h4 class="sub-topic">Replication Lag</h4>
+  <p>Delay between write on leader and it being reflected on follower. In normal operation: fraction of a second. Under load: can grow significantly → stale reads.</p>
+  <p><strong>Eventual consistency:</strong> If no new writes, followers will eventually converge to leader's state.</p>
+  <p><strong>Solutions:</strong> Always read critical data from leader; monitor lag on followers; client remembers its latest write timestamp; monotonic reads (same user always reads from same replica); consistent prefix reads.</p>
+
+  <h3 class="topic-title">Algorithm 2: Multi-Leader Replication</h3>
+  <p>Multiple nodes accept writes. Each leader replicates to other leaders and their followers. Also called master/master or active/active.</p>
+  <p><strong>Use cases:</strong> Multi-datacenter (one leader per DC), clients with offline operation (device = local leader), collaborative editing.</p>
+  <p><strong>Main challenge: Write conflicts.</strong> Solutions: conflict avoidance (route same record to same leader), last-write-wins (highest ID wins), custom conflict resolution logic.</p>
+  <p><strong>Topologies:</strong> Circular, Star, All-to-all (all-to-all is most fault-tolerant — no single point of failure).</p>
+
+  <table>
+    <tr><th></th><th>Single-Leader</th><th>Multi-Leader</th></tr>
+    <tr><td>Latency</td><td>All writes go to one DC</td><td>Writes processed locally per DC</td></tr>
+    <tr><td>DC outage</td><td>Failover promotes new leader</td><td>Other DCs keep operating independently</td></tr>
+    <tr><td>Network problems</td><td>Sensitive (writes are synchronous)</td><td>Tolerant (async replication)</td></tr>
+    <tr><td>Conflict</td><td>None</td><td>Must handle write conflicts</td></tr>
+  </table>
+
+  <h3 class="topic-title">Algorithm 3: Leaderless Replication</h3>
+  <p>All nodes accept writes and reads. No designated leader. Client broadcasts writes to all replicas, considers write successful after k-of-n ACKs (<strong>quorum</strong>).</p>
+
+  <div class="key-box">
+    <strong>Quorum rule:</strong> w + r > n ensures reads always see at least one up-to-date write.<br>
+    Common: n odd (3 or 5), w = r = (n+1)/2
+  </div>
+
+  <h4 class="sub-topic">Handling stale replicas</h4>
+  <ul class="bullets">
+    <li><strong>Read repair:</strong> Client detects stale replica during read, writes newer value back</li>
+    <li><strong>Anti-entropy:</strong> Background process compares replicas and copies missing data</li>
+  </ul>
+
+  <h4 class="sub-topic">Concurrent Write Detection</h4>
+  <ul class="bullets">
+    <li><strong>Last write wins (LWW):</strong> Highest timestamp/version number survives. Problem: clock sync issues.</li>
+    <li><strong>Version vectors:</strong> Per-replica version numbers to detect concurrency and merge values</li>
+    <li><strong>Happens-before:</strong> Operation A happens before B if B knows about A (depends on A)</li>
+  </ul>
+  <div class="mcq-tip">Leaderless replication: better availability (no single bottleneck). Quorum: w + r > n. Used in Dynamo/Cassandra-style systems.</div>
+</div>
+
+<hr>
+<h2 class="section-title" id="s8">8. Consistency Models & CAP Theorem</h2>
+
+<div class="card">
+  <h3 class="topic-title">Consistency Models</h3>
+  <table>
+    <tr><th>Model</th><th>Guarantee</th></tr>
+    <tr><td>Strict / Linearizability</td><td>Read always returns most recent write. Single-copy illusion. Operations atomic. Also: Strong consistency, Immediate consistency.</td></tr>
+    <tr><td>Sequential Consistency</td><td>All processes see operations in the same order, but not necessarily real-time order.</td></tr>
+    <tr><td>Causal Consistency</td><td>Only causally related operations must be seen in same order. Unrelated operations can be seen in different orders.</td></tr>
+    <tr><td>PRAM Consistency</td><td>All writes by a single process seen by all others in the same order (like a pipeline). Writes by different processes may be seen differently.</td></tr>
+    <tr><td>Eventual Consistency</td><td>If no new writes, replicas will eventually converge. Very weak guarantee — no bound on when.</td></tr>
+  </table>
+
+  <h4 class="sub-topic">Linearizability</h4>
+  <p>Basic idea: system appears as if there's only ONE copy of data, all operations atomic. Once any client reads new value after a write, all subsequent reads must return that new value. Compare-and-Set (CAS) is a key operation: atomically update if current value matches expected.</p>
+  <ul class="bullets">
+    <li>Single-leader replication with synchronous followers → potentially linearizable</li>
+    <li>Consensus algorithms (ZooKeeper) → linearizable</li>
+    <li>Multi-leader, Leaderless → NOT linearizable</li>
+  </ul>
+
+  <h3 class="topic-title">CAP Theorem ⭐</h3>
+  <p>In a distributed system with data replication, you can only <strong>strongly guarantee 2 of 3</strong>:</p>
+  <ul class="bullets">
+    <li><strong>C – Consistency:</strong> All nodes return the same, most recent data at any time</li>
+    <li><strong>A – Availability:</strong> Every request gets a response (not an error)</li>
+    <li><strong>P – Partition Tolerance:</strong> System keeps running despite network partitions</li>
+  </ul>
+  <div class="key-box">
+    Since network partitions (P) are unavoidable in real cloud systems, the real trade-off is between <strong>C and A</strong>:
+    <ul style="margin-top:0.4rem;padding-left:1.2rem;">
+      <li><strong>CP systems:</strong> Consistent + Partition Tolerant. Sacrifice availability. E.g., PostgreSQL, ZooKeeper</li>
+      <li><strong>AP systems:</strong> Available + Partition Tolerant. Sacrifice strict consistency (use eventual consistency). E.g., Cassandra, CouchDB</li>
+    </ul>
+  </div>
+  <p><strong>Criticisms of CAP:</strong> Ignores latency; reality is a continuum not binary; "pick two" is only relevant during a partition — when there's no failure, you can have both C and A.</p>
+  <div class="mcq-tip">CAP: can't have all 3. Since P is unavoidable → choose CP or AP. Cassandra = AP. PostgreSQL = CP.</div>
+</div>
+
+<hr>
+<h2 class="section-title" id="s9">9. Distributed Transactions & 2PC</h2>
+
+<div class="card">
+  <h3 class="topic-title">ACID Properties</h3>
+  <table>
+    <tr><th>Property</th><th>Meaning</th></tr>
+    <tr><td><strong>Atomic</strong></td><td>All-or-nothing: either all steps complete or none do. No partial results visible.</td></tr>
+    <tr><td><strong>Consistent</strong></td><td>System invariants hold before and after. (e.g., total money in all accounts stays same)</td></tr>
+    <tr><td><strong>Isolated (Serializable)</strong></td><td>Concurrent transactions produce same result as if they ran serially</td></tr>
+    <tr><td><strong>Durable</strong></td><td>Committed results are permanent; no failure can revert them</td></tr>
+  </table>
+  <div class="mcq-tip">ACID = Atomic, Consistent, Isolated, Durable. All 4 must hold for a valid transaction.</div>
+
+  <h3 class="topic-title">Distributed Transactions</h3>
+  <p>Transaction spans multiple data repositories on different nodes. Challenge: ensure all-or-nothing across all sites despite machine, software, and network failures.</p>
+  <p>Uses a <strong>Transaction Coordinator</strong> (one site nominated as coordinator) and <strong>Transaction Managers</strong> at each participating site.</p>
+
+  <h3 class="topic-title">Two-Phase Commit (2PC) ⭐</h3>
+  <p>Ensures atomicity across all sites.</p>
+  <div class="key-box">
+    <strong>Phase 1 – Voting:</strong><br>
+    1. Coordinator writes "Prepare T" to its log, sends <em>prepare T</em> to all sites<br>
+    2. Each site works on its component<br>
+    3. Site ready → writes "Ready T" to log, sends <em>Ready T</em> to coordinator (enters pre-committed state, holds locks)<br>
+    4. Site not ready → writes "Don't Commit T", sends <em>Don't Commit T</em><br><br>
+    <strong>Phase 2 – Decision:</strong><br>
+    1. If coordinator received <em>Ready T</em> from ALL → writes "Commit T", sends <em>commit T</em> to all<br>
+    2. If any site sent <em>Don't Commit T</em> → writes "Abort T", sends <em>abort T</em> to all<br>
+    3. Sites receiving <em>commit T</em>: commit, release locks, send Done<br>
+    4. Sites receiving <em>abort T</em>: rollback, release locks, send Done
+  </div>
+  <div class="mcq-tip">In 2PC, once a site sends "Ready T" it CANNOT abort on its own — only the coordinator can decide.</div>
+</div>
+
+<!-- ============================= UNIT 4 ============================= -->
+<hr>
+<div class="unit-badge u4">UNIT 4</div>
+<h2 class="section-title" id="u1">1. Master-Slave vs P2P Models</h2>
+
+<div class="card">
+  <h3 class="topic-title">Distributed System Models</h3>
+  <ul class="bullets">
+    <li><strong>Architectural Models:</strong> How components are placed/organized (P2P or Client-Server)</li>
+    <li><strong>Interaction Models:</strong> How time is handled (synchronous vs asynchronous)</li>
+    <li><strong>Fault Models:</strong> What kinds of faults can occur (omission, arbitrary, timing)</li>
+  </ul>
+
+  <h3 class="topic-title">P2P (Peer-to-Peer) Architecture</h3>
+  <ul class="bullets">
+    <li>Every node acts as both client and server</li>
+    <li>No hierarchy, no single coordinator, no global view of system</li>
+    <li>Self-organizing, distributed control</li>
+    <li><strong>Pros:</strong> Scalable, no SPOF, resilient to failures, no performance bottleneck in principle</li>
+    <li><strong>Cons:</strong> Hard to manage, security challenging, decision making harder</li>
+  </ul>
+
+  <h3 class="topic-title">Master-Slave (Client-Server) Architecture</h3>
+  <ul class="bullets">
+    <li>Nodes are unequal — master coordinates slaves</li>
+    <li>Master: central coordinator, makes decisions</li>
+    <li><strong>Pros:</strong> Easy monitoring, easier consistency/linearizability</li>
+    <li><strong>Cons:</strong> SPOF at master, performance bottleneck as workers scale</li>
+  </ul>
+
+  <table>
+    <tr><th></th><th>P2P</th><th>Master-Slave</th></tr>
+    <tr><td>SPOF</td><td>No</td><td>Yes (master)</td></tr>
+    <tr><td>Scalability</td><td>Indefinite</td><td>Limited by master</td></tr>
+    <tr><td>Security</td><td>Harder</td><td>Easier to control</td></tr>
+    <tr><td>Decision making</td><td>Harder</td><td>Easy (central)</td></tr>
+    <tr><td>Real-world example</td><td>Amazon Aurora multi-master</td><td>Hadoop MapReduce</td></tr>
+  </table>
+
+  <h4 class="sub-topic">Eucalyptus (Cloud Controller Context)</h4>
+  <ul class="bullets">
+    <li><strong>CLC (Cloud Controller):</strong> High-level resource tracking, only ONE per cloud, maintains System Resource State (SRS)</li>
+    <li><strong>Cluster Controller:</strong> Manages node controllers, deploys VMs</li>
+    <li><strong>Node Controller:</strong> Runs on VM host, interacts with OS/hypervisor</li>
+    <li>On user request: SRS checked → resources reserved → request sent to CC → NC → on success committed, else rolled back</li>
+  </ul>
+</div>
+
+<hr>
+<h2 class="section-title" id="u2">2. Unreliable Communication & Fault Models</h2>
+
+<div class="card">
+  <h3 class="topic-title">Challenges with Distributed Communication</h3>
+  <p>A request may: be lost, wait in queue, be processed but response lost, remote node failed, remote node slow/temporarily stopped. <strong>Non-deterministic + partial failures</strong> = core difficulty.</p>
+
+  <h3 class="topic-title">Fault Terminology</h3>
+  <ul class="bullets">
+    <li><strong>Fault:</strong> Root cause (e.g., hardware defect)</li>
+    <li><strong>Error:</strong> Fault manifests in system state</li>
+    <li><strong>Failure:</strong> System stops providing required service</li>
+    <li><strong>Transient:</strong> Appears once, disappears</li>
+    <li><strong>Intermittent:</strong> Comes and goes unpredictably (worst kind)</li>
+    <li><strong>Permanent:</strong> Only fixed by replacing/repairing the component</li>
+  </ul>
+  <div class="formula">MTBF = Total uptime / Number of breakdowns</div>
+
+  <h3 class="topic-title">Fault Models</h3>
+  <table>
+    <tr><th>Model</th><th>Description</th></tr>
+    <tr><td>Crash-stop</td><td>Node stops responding forever at some point. May or may not be detectable.</td></tr>
+    <tr><td>Crash-recovery</td><td>Node crashes and restarts after unknown time. Stable storage preserved; in-memory state lost.</td></tr>
+    <tr><td>Byzantine (arbitrary)</td><td>Node behaves arbitrarily — may send malicious or incorrect messages.</td></tr>
+    <tr><td>Omission faults</td><td>Messages silently dropped</td></tr>
+    <tr><td>Timing faults</td><td>Response outside expected time bounds</td></tr>
+  </table>
+
+  <h3 class="topic-title">Network Issues</h3>
+  <ul class="bullets">
+    <li><strong>Timeouts:</strong> No correct value — measure distribution of round-trip times experimentally; use adaptive timeouts based on observed jitter</li>
+    <li><strong>Congestion/Queueing:</strong> Busy links → packets wait; switch queues fill; virtualized multi-tenant networks add unpredictable delays</li>
+    <li><strong>Noisy neighbor:</strong> Other tenants using shared resources cause variable delays</li>
+  </ul>
+
+  <h3 class="topic-title">Failure Detection</h3>
+  <ul class="bullets">
+    <li><strong>Heartbeats (Push model):</strong> Process q periodically sends "I am alive" to monitor p. If p doesn't receive after timeout T, suspects failure.</li>
+    <li><strong>Probing (Pull model):</strong> Monitor p sends "are you alive?" to q; q responds. On no response after T, p suspects failure.</li>
+    <li><strong>Dual scheme:</strong> Combine both — more efficient</li>
+    <li><strong>Trade-off:</strong> Low threshold → fast detection but more false positives. High threshold → fewer false alarms but slower detection.</li>
+  </ul>
+  <p><em>Example: GFS uses centralised heartbeats — Master communicates with all chunkservers. On failure, master replicates data to another chunkserver.</em></p>
+
+  <h3 class="topic-title">Strategies After Detecting a Fault</h3>
+  <ul class="bullets">
+    <li><strong>Async communication:</strong> Avoid long chains of synchronous calls → use eventual consistency + event-driven</li>
+    <li><strong>Retries with exponential backoff:</strong> Retry on transient failures; delay grows exponentially to avoid overload</li>
+    <li><strong>Timeouts:</strong> Always set; prevent indefinite blocking</li>
+    <li><strong>Circuit Breaker:</strong> After X failures, stop sending requests for a timeout period, then retry</li>
+    <li><strong>Fallbacks:</strong> Return cached data or default value on failure</li>
+    <li><strong>Bulkheads (Isolation):</strong> Separate thread/process pools per function — one failure doesn't bring down others</li>
+    <li><strong>Failover:</strong> Switch to a replica (standby) on failure</li>
+  </ul>
+
+  <h4 class="sub-topic">Failover Architectures</h4>
+  <ul class="bullets">
+    <li><strong>Active-Active (symmetric):</strong> Both servers run; on failure, survivor takes all. Continuous availability.</li>
+    <li><strong>Active-Passive (asymmetric):</strong> Primary active, secondary idle standby. On failure, secondary takes over. Failback = returning to primary.</li>
+  </ul>
+</div>
+
+<hr>
+<h2 class="section-title" id="u3">3. Fault Tolerance & Availability</h2>
+
+<div class="card">
+  <h3 class="topic-title">System Availability</h3>
+  <p>Percentage of time a system is operational. 100% = never fails. "Five 9s" = 99.999% = ~5 min downtime/year.</p>
+  <p><strong>Downtime</strong> can be from unplanned events (crashes) or planned maintenance. <strong>Slow/non-responsiveness</strong> is also a form of unavailability.</p>
+  <p>High availability = remove all SPOFs through redundancy + automatic failover.</p>
+
+  <h3 class="topic-title">Fault Tolerance</h3>
+  <p>Ability to continue operating without interruption despite component failures. Can be hardware, software, or combined.</p>
+  <ul class="bullets">
+    <li><strong>Fail-safe tolerance:</strong> Safety preserved but performance may drop (e.g., traffic lights → all red on failure)</li>
+    <li><strong>Graceful degradation:</strong> App continues in reduced mode</li>
+  </ul>
+
+  <h3 class="topic-title">Approaches to Build Fault Tolerance</h3>
+  <ol class="steps">
+    <li><strong>Redundancy:</strong> Eliminate SPOFs — duplicate power supplies, processors, memory, disks</li>
+    <li><strong>Reliability:</strong> Dependable components. Measured by MTTF (Mean Time To Failure) and MTTR (Mean Time To Repair)</li>
+    <li><strong>Recoverability:</strong> Retries, acknowledgements, ECC (Parity Bit, Hamming Code, CRC), Checkpointing + Rollback</li>
+  </ol>
+  <div class="formula">MTTF = Average time before first failure | MTTR = Avg repair time</div>
+  <div class="mcq-tip">MTBF = MTTF + MTTR. Higher MTTF and lower MTTR = better availability.</div>
+</div>
+
+<hr>
+<h2 class="section-title" id="u4">4. Consensus & Paxos</h2>
+
+<div class="card">
+  <h3 class="topic-title">The Consensus Problem</h3>
+  <p>In a distributed system, N nodes must agree on a single output value despite failures. Each node has an input (0 or 1) and output (decided once, cannot change).</p>
+  <p><strong>Requirements for a consensus algorithm:</strong></p>
+  <ul class="bullets">
+    <li><strong>Agreement:</strong> All non-faulty nodes decide on the same value</li>
+    <li><strong>Termination:</strong> All non-faulty nodes eventually decide</li>
+    <li><strong>Validity:</strong> The decided value was proposed by some node</li>
+    <li><strong>Integrity:</strong> A node decides at most once</li>
+  </ul>
+
+  <h4 class="sub-topic">General Steps</h4>
+  <ol class="steps">
+    <li><strong>Elect:</strong> Elect a leader process to propose next value</li>
+    <li><strong>Vote:</strong> Non-faulty processes validate and vote on the proposed value</li>
+    <li><strong>Decide:</strong> If threshold votes agree, decide on that value; else repeat</li>
+  </ol>
+
+  <h3 class="topic-title">Consensus in Sync vs Async Systems</h3>
+  <ul class="bullets">
+    <li><strong>Synchronous systems:</strong> Bounded message delays and processing times → consensus is solvable</li>
+    <li><strong>Asynchronous systems (the Internet):</strong> Unbounded delays → consensus is <em>impossible to guarantee</em> (Fischer-Lynch-Paterson / FLP impossibility). Probabilistic solutions used in practice.</li>
+  </ul>
+  <div class="mcq-tip">FLP theorem: Consensus is impossible in a purely asynchronous system with even one possible faulty process.</div>
+
+  <h3 class="topic-title">Paxos Algorithm ⭐</h3>
+  <p>Family of distributed consensus algorithms used by Google (Chubby) and Amazon. Three roles: <strong>Proposers</strong> (leaders/coordinators), <strong>Acceptors</strong> (listen + respond), <strong>Learners</strong> (learn final decided value). A majority of acceptors must agree for a value to be accepted.</p>
+
+  <h4 class="sub-topic">Paxos Steps</h4>
+  <ol class="steps">
+    <li>Proposer sends <strong>prepare(n, v)</strong> to all acceptors (n = proposal number)</li>
+    <li>Acceptor: if n > highest seen proposal number (nv), respond with <strong>ack(nv, v')</strong> where v' = value of highest accepted proposal</li>
+    <li>Proposer gets acks from majority → sends <strong>accept(n, max(v, v' from acks))</strong></li>
+    <li>Acceptor: accepts value unless it has seen a higher n proposal. If majority accept → that value is decided. Learners are notified.</li>
+  </ol>
+
+  <h4 class="sub-topic">Problems Solved by Consensus</h4>
+  <ul class="bullets">
+    <li>Reliable multicast (same updates in same order)</li>
+    <li>Membership/failure detection (group awareness)</li>
+    <li>Leader election</li>
+    <li>Mutual exclusion (distributed critical section)</li>
+  </ul>
+</div>
+
+<hr>
+<h2 class="section-title" id="u5">5. Leader Election Algorithms</h2>
+
+<div class="card">
+  <h3 class="topic-title">Why Leader Election?</h3>
+  <p>Many distributed algorithms need a leader. If the leader fails, a new one must be elected. Goal: exactly one non-faulty process becomes leader; all agree on who it is.</p>
+  <p><strong>When to elect:</strong> System start-up, current leader fails (no response within timeout).</p>
+  <p><strong>Conditions:</strong> Liveness — every node eventually enters elected/not-elected state. Safety — only one node enters elected state.</p>
+
+  <h3 class="topic-title">Ring Election Algorithm</h3>
+  <ol class="steps">
+    <li>N processes in a logical ring; messages go clockwise. Any process detecting leader failure sends an <em>election</em> message with its own ID.</li>
+    <li>On receiving election message: if received ID > own ID → forward message. If received ID < own ID and haven't forwarded own election → overwrite with own ID and forward. If received ID == own ID → you are the new coordinator!</li>
+    <li>Winner sends <em>elected</em> message around the ring; all processes set their leader to winner's ID.</li>
+  </ol>
+  <div class="formula">Message Complexity = 3N − 1 (worst case)</div>
+
+  <h4 class="sub-topic">Modified Ring Election</h4>
+  <p>Each process appends its ID to message rather than overwriting. Initiator collects full list, picks best. Handles concurrent failures during election. Bypasses failed processes.</p>
+
+  <h3 class="topic-title">Bully Algorithm ⭐</h3>
+  <p>Works in a fully-connected network where all processes know each other's IDs. Process with highest ID becomes leader (it "bullies" lower ones).</p>
+
+  <h4 class="sub-topic">Steps</h4>
+  <ol class="steps">
+    <li>Process p detects leader failure</li>
+    <li>If p has highest known ID → declares itself leader, sends <em>Coordinator</em> to all lower IDs</li>
+    <li>Else → sends <em>Election</em> to all processes with higher IDs</li>
+    <li>If no response within timeout → p declares itself leader</li>
+    <li>If a higher process responds with <em>disagree/ok</em> → wait for <em>Coordinator</em> message from that process; if none received, restart election</li>
+    <li>Any process receiving Election message replies with ok/disagree and starts its own election</li>
+  </ol>
+
+  <table>
+    <tr><th></th><th>Bully Algorithm</th></tr>
+    <tr><td>Best case</td><td>2nd highest process notices failure → sends N-2 Coordinator messages. Turnaround: 1 message transmission.</td></tr>
+    <tr><td>Worst case</td><td>Lowest ID process initiates. N-1 processes start elections. Message overhead: O(N²). Turnaround: ~5 message transmissions.</td></tr>
+  </table>
+  <div class="formula">First timeout = 2T (round trip time). Assumes synchronous system.</div>
+  <div class="mcq-tip">Bully: highest ID wins. Ring: messages travel around ring. Modified ring: appends IDs. Bully worst case = O(N²) messages.</div>
+</div>
+
+<hr>
+<h2 class="section-title" id="u6">6. Resource Management & Scheduling</h2>
+
+<div class="card">
+  <h3 class="topic-title">Cloud Resource Management (CRM) Policies</h3>
+  <ol class="steps">
+    <li><strong>Admission control:</strong> Prevent accepting workload violating system policies</li>
+    <li><strong>Capacity allocation:</strong> Provision appropriate sizes for resources</li>
+    <li><strong>Load balancing:</strong> Distribute workload evenly</li>
+    <li><strong>Energy optimization:</strong> Minimize power consumption</li>
+    <li><strong>QoS guarantees:</strong> Meet SLA conditions</li>
+    <li><strong>Locale-based:</strong> Legal compliance, performance per location</li>
+    <li><strong>Cost:</strong> Auctions/perceived value</li>
+  </ol>
+
+  <h3 class="topic-title">CRM Mechanisms</h3>
+  <ul class="bullets">
+    <li><strong>Control theory:</strong> Feedback-based (system utilization, latency) to control resource allocation</li>
+    <li><strong>Utility-based:</strong> Performance models + SLA (rewards/penalties) guide allocation</li>
+    <li><strong>Machine learning:</strong> Predict resource requirements from historic data</li>
+    <li><strong>Market-oriented:</strong> Auction mechanisms (users bid for resources)</li>
+  </ul>
+
+  <h3 class="topic-title">Scheduling Algorithms</h3>
+  <ul class="bullets">
+    <li><strong>Batch systems:</strong> Maximize throughput, minimize turnaround. Algorithms: Round-Robin, FCFS, SJF, Priority.</li>
+    <li><strong>Real-time systems:</strong> Meet deadlines. Hard deadlines (strict, precise, penalties) vs Soft deadlines (guidelines, no penalties).</li>
+  </ul>
+
+  <h4 class="sub-topic">Workload Partition Rules</h4>
+  <ul class="bullets">
+    <li><strong>Optimal Partitioning Rule (OPR):</strong> Partition so all workers finish at the same time (earliest possible completion)</li>
+    <li><strong>Equal Partitioning Rule (EPR):</strong> Assign equal workload to each worker</li>
+  </ul>
+
+  <h3 class="topic-title">Scaling Strategies</h3>
+  <ul class="bullets">
+    <li><strong>Vertical scaling:</strong> Add more CPU/RAM to existing server (scale up)</li>
+    <li><strong>Horizontal scaling:</strong> Add more servers, split workload (scale out)</li>
+    <li><strong>Cloud bursting:</strong> Private cloud at 100% capacity → overflow to public cloud. Used in hybrid clouds.</li>
+    <li><strong>Elasticity:</strong> Dynamic auto-scaling in real-time. Different from scalability (planned growth).</li>
+  </ul>
+</div>
+
+<hr>
+<h2 class="section-title" id="u7">7. Distributed Locking & ZooKeeper</h2>
+
+<div class="card">
+  <h3 class="topic-title">Distributed Locking</h3>
+  <p>Mutual exclusion lock with global presence. Different clients on different machines must coordinate before accessing shared resources.</p>
+  <p><strong>Why use it:</strong> Efficiency (avoid duplicate work), Correctness (prevent data corruption, lost updates, inconsistency).</p>
+
+  <h4 class="sub-topic">Features of Distributed Locks</h4>
+  <ul class="bullets">
+    <li><strong>Mutual Exclusion:</strong> Only one client holds the lock globally at any moment</li>
+    <li><strong>Deadlock-free:</strong> Lease-based mechanism — lock auto-expires if client crashes</li>
+    <li><strong>Consistency:</strong> Lock remains consistent after failovers</li>
+  </ul>
+
+  <h4 class="sub-topic">Types</h4>
+  <ul class="bullets">
+    <li><strong>Optimistic locks:</strong> Proceed without blocking; check if record was modified before commit. If conflict → retry.</li>
+    <li><strong>Pessimistic locks:</strong> Acquire exclusive lock before any operation; release after.</li>
+  </ul>
+
+  <h4 class="sub-topic">Fencing Tokens</h4>
+  <p>Lock server assigns monotonically increasing fencing token with each lock grant. Write requests to storage must include fencing token. Storage rejects requests with outdated tokens. Prevents GC-paused clients from making stale writes after their lease expires.</p>
+
+  <h4 class="sub-topic">Distributed Lock Manager (DLM) Implementations</h4>
+  <ul class="bullets">
+    <li>Google Chubby, Apache ZooKeeper, Redis (Redlock algorithm)</li>
+  </ul>
+
+  <h3 class="topic-title">Apache ZooKeeper ⭐</h3>
+  <p>Open-source distributed coordination service. Provides naming, configuration management, distributed locks, synchronization, group services. Used by Kafka, HBase, Storm, Yarn.</p>
+
+  <h4 class="sub-topic">Architecture</h4>
+  <ul class="bullets">
+    <li><strong>Server (ensemble/cluster):</strong> Multiple ZK servers. One elected as Leader at startup. All store copy of data tree in memory. Clients connect to any server.</li>
+    <li><strong>Client:</strong> Sends requests + heartbeats to server. Auto-redirects on server failure.</li>
+    <li><strong>Leader:</strong> Handles all write requests. Performs automatic recovery on node failure.</li>
+    <li><strong>Follower:</strong> Handles read requests. Follows leader's instructions.</li>
+  </ul>
+
+  <h4 class="sub-topic">Data Model: znodes</h4>
+  <p>Hierarchical namespace like a file system. Each znode has data + optional children. Limited to a few KB (coordination data only — status, config, location info). Entire tree in main memory.</p>
+  <ul class="bullets">
+    <li><strong>Persistent znodes:</strong> Permanent; must be explicitly deleted. Survive session end.</li>
+    <li><strong>Ephemeral znodes:</strong> Deleted when creating session ends. Used to detect client termination. Cannot have children.</li>
+    <li><strong>Sequence znodes:</strong> Appends monotonically increasing counter to path name.</li>
+  </ul>
+
+  <h4 class="sub-topic">Operations & Consistency</h4>
+  <ul class="bullets">
+    <li>Operations: create, delete, exists, getData, setData, getChildren, sync</li>
+    <li><strong>Reads:</strong> Served locally from connected server (fast)</li>
+    <li><strong>Writes:</strong> Forwarded to leader → goes through majority consensus (Zab protocol) → response sent</li>
+    <li><strong>Watches:</strong> Clients set watches on znodes; notified on any change</li>
+    <li>All updates are <strong>totally ordered</strong> using <strong>zxid</strong> (ZooKeeper Transaction ID)</li>
+  </ul>
+
+  <h4 class="sub-topic">ZooKeeper Use Cases</h4>
+  <ul class="bullets">
+    <li><strong>Naming service:</strong> Maps names to service info; group membership</li>
+    <li><strong>Distributed locks:</strong> Client creates ephemeral sequential znode; lowest ID gets the lock; others watch and wait</li>
+    <li><strong>Leader election:</strong> Automatic fail-over with off-the-shelf support</li>
+    <li><strong>Config management:</strong> Centrally stores config; new nodes pick it up on join</li>
+    <li><strong>Message queue:</strong> znodes as queue items</li>
+  </ul>
+  <div class="mcq-tip">ZooKeeper: reads are local, writes go through leader. Ephemeral znodes die with session. Zxid = total order for updates.</div>
+</div>
+
+<hr>
+<h2 class="section-title" id="u8">8. Reverse Proxy, Hybrid Cloud, Multitenancy & Security</h2>
+
+<div class="card">
+  <h3 class="topic-title">Reverse Proxy vs Forward Proxy</h3>
+  <table>
+    <tr><th></th><th>Reverse Proxy</th><th>Forward Proxy</th></tr>
+    <tr><td>Sits in front of</td><td>Web servers (on behalf of servers)</td><td>Client group (on behalf of clients)</td></tr>
+    <tr><td>Who knows about it?</td><td>Client doesn't know about backend servers</td><td>Server doesn't know about real client</td></tr>
+    <tr><td>Used for</td><td>Load balancing, SSL offload, caching, security, compression</td><td>Content filtering, anonymity, bypassing restrictions</td></tr>
+    <tr><td>Example</td><td>Nginx, Apache reverse proxy</td><td>VPN, squid proxy</td></tr>
+  </table>
+  <p><strong>Nginx architecture:</strong> Master-slave, async, non-blocking event-driven. Master assigns jobs to workers; each worker handles 1000+ connections in single-threaded manner. Benefits: load balancing, security (hides backend IPs), caching, centralized logging, TLS/SSL.</p>
+
+  <h3 class="topic-title">Multitenancy</h3>
+  <p>Single software instance serves multiple customers (tenants). Enables better resource utilization and lower costs.</p>
+  <table>
+    <tr><th>Architecture</th><th>Description</th><th>Trade-off</th></tr>
+    <tr><td>Single multi-tenant DB</td><td>One app + one DB for all tenants</td><td>Highly scalable, low cost but complex to design</td></tr>
+    <tr><td>One DB per tenant</td><td>One app + separate DB per tenant</td><td>Simpler operations, but less scalable & higher cost</td></tr>
+    <tr><td>Standalone single-tenant</td><td>Separate app + DB per tenant</td><td>Highest isolation, highest cost</td></tr>
+  </table>
+  <p><strong>4 Levels:</strong> Ad hoc → Configurable → Configurable multi-tenant efficient → Scalable configurable multi-tenant (on cluster, unlimited scale).</p>
+  <p><strong>Resource sharing:</strong> Table sharing vs dedicated tables. ACL-based or capability-based access control. Customization via pre-allocated columns, name-value pairs, or XML.</p>
+
+  <h3 class="topic-title">Cloud Security</h3>
+  <h4 class="sub-topic">Physical Security</h4>
+  <p>Layered: central monitoring, threat detection (intrusion + natural hazards), staff training, backup systems, secure access.</p>
+
+  <h4 class="sub-topic">Virtual Security Best Practices</h4>
+  <ul class="bullets">
+    <li><strong>Cloud Time Service (NTP):</strong> Sync clocks across datacenter for log correlation and correct operation</li>
+    <li><strong>Identity Management:</strong> Scalable, federated (single sign-on), meets legal requirements, maintains audit trail</li>
+    <li><strong>Access Management:</strong> Multi-factor auth for sensitive ops, no shared accounts, IP whitelisting</li>
+    <li><strong>Break-glass procedures:</strong> Emergency bypass of security controls with alarm trigger</li>
+    <li><strong>Key Management:</strong> Secure generation, assignment, revocation, archiving of encryption keys</li>
+    <li><strong>Auditing:</strong> Captures all security events (time, system, user). Centralized, secure audit log.</li>
+    <li><strong>Security Monitoring:</strong> Intrusion detection on network and hosts</li>
+  </ul>
+
+  <h4 class="sub-topic">Risk Management Process</h4>
+  <ol class="steps">
+    <li>Categorize information resources by criticality + sensitivity</li>
+    <li>Select appropriate security controls</li>
+    <li>Assess if controls adequately address threats</li>
+    <li>Implement security controls</li>
+    <li>Monitor operational effectiveness</li>
+    <li>Periodic review (new threats, operational changes)</li>
+  </ol>
+
+  <h4 class="sub-topic">Security Design Patterns</h4>
+  <ul class="bullets">
+    <li><strong>Defense in Depth:</strong> Layer defenses (VPN + IP whitelist + OTP). Attacker must break multiple layers.</li>
+    <li><strong>Honeypots:</strong> Decoy systems to attract attackers and observe their behavior</li>
+    <li><strong>Sandboxes:</strong> Execute software in restricted environment; limits damage if compromised</li>
+    <li><strong>VM Isolation:</strong> Encrypt VM traffic, tighten port controls</li>
+    <li><strong>Subnet Isolation:</strong> Physically separate admin, customer, and storage network traffic</li>
+  </ul>
+
+  <h4 class="sub-topic">DoS / DDoS / EDoS</h4>
+  <ul class="bullets">
+    <li><strong>DoS:</strong> Single source overwhelming target with requests. Buffer overflow or flood attacks.</li>
+    <li><strong>DDoS:</strong> Distributed — many compromised bots (botnet) send requests. Hard to distinguish from normal traffic.</li>
+    <li><strong>EDoS (Economic DoS):</strong> Exploits cloud auto-scaling. Attacker sends gradual fake traffic → triggers auto-scaling → victim's cloud bill explodes. More intelligent and sustained than DDoS.</li>
+  </ul>
+  <div class="mcq-tip">EDoS targets the billing model of cloud, not just availability. DDoS = many bots from botnet.</div>
+
+  <h3 class="topic-title">Failure Detection & Application Recovery</h3>
+  <ul class="bullets">
+    <li><strong>Heartbeats:</strong> Instance sends periodic signal; silence → declared failed</li>
+    <li><strong>Probes:</strong> Monitor sends lightweight request; no response → failed</li>
+    <li><strong>Redirection:</strong> After failure detection, use HTTP 3xx redirects to route clients to healthy servers</li>
+    <li><strong>Checkpoint/Restart:</strong> Periodically save application state. On failure, restart from last checkpoint. Distributed checkpointing: all instances checkpoint together.</li>
+  </ul>
+
+  <h3 class="topic-title">Edge Computing (Brief)</h3>
+  <ul class="bullets">
+    <li>Moves compute/storage closer to data source (IoT devices, gateways) rather than sending everything to cloud</li>
+    <li><strong>Benefits:</strong> Ultra-low latency (single-digit ms), bandwidth optimization (filter/aggregate locally), enhanced privacy, reliability (works offline), cost efficiency</li>
+    <li><strong>Challenges:</strong> Resource heterogeneity, security, programming complexity</li>
+    <li><strong>vs Cloud:</strong> Edge = near data, real-time. Cloud = centralised, heavy compute.</li>
+    <li>Tools: Azure IoT Edge, AWS Greengrass, OpenStack (edge), EdgeX Foundry</li>
+  </ul>
+</div>
+
+<!-- Quick Revision Section -->
+<hr>
+<h2 class="section-title">⚡ Quick Revision – Key Formulas & Facts</h2>
+<div class="card">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+    <div>
+      <h4 class="sub-topic">Unit 3 Key Facts</h4>
+      <div class="formula">Disk Latency = Seek + Rotational + Transfer</div>
+      <div class="formula">Quorum: w + r > n</div>
+      <div class="formula">Consistent Hashing: place keys & servers on ring</div>
+      <p style="font-size:0.85rem;color:var(--muted)">• S3: 5TB per object, 100 buckets/account<br>• CAP: since P unavoidable → CP or AP<br>• 2PC: Phase 1 = Vote, Phase 2 = Decision<br>• Lustre = centralized metadata, Gluster = distributed<br>• Object storage = REST APIs (GET, PUT, DELETE)<br>• LVM: Physical Vol → Volume Group → Logical Vol</p>
+    </div>
+    <div>
+      <h4 class="sub-topic">Unit 4 Key Facts</h4>
+      <div class="formula">MTBF = Total uptime / # breakdowns</div>
+      <div class="formula">Ring Election: 3N-1 messages (worst case)</div>
+      <div class="formula">Bully: O(N²) messages worst case, 5 msg turnaround</div>
+      <p style="font-size:0.85rem;color:var(--muted)">• Bully: highest ID wins, fully-connected network<br>• ZooKeeper: reads=local, writes=leader+consensus<br>• FLP: consensus impossible in async systems<br>• Paxos roles: Proposer, Acceptor, Learner<br>• EDoS = cloud billing attack (vs DDoS = availability attack)<br>• Active-Active = both serve, Active-Passive = standby idle<br>• Ephemeral znode = deleted when session ends</p>
+    </div>
+  </div>
+</div>
+
+<div style="text-align:center;padding:1.5rem 0;color:var(--muted);font-size:0.8rem;font-style:italic;border-top:1px solid var(--border);margin-top:2rem;">
+  All the best for your test tomorrow! You've got this 🎯<br>
+  Cloud Computing Units 3 & 4 · Based on Prof. Auradkar & Prof. Jijo's slides
+</div>
+
+</div><!-- /container -->
+</body>
+</html>

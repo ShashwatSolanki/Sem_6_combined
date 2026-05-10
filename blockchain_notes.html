@@ -1,0 +1,2226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blockchain – Complete Study Notes</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+  :root {
+    --bg: #0a0d14;
+    --surface: #111520;
+    --card: #161c2e;
+    --border: #1e2a42;
+    --accent1: #00d4ff;
+    --accent2: #7b5ea7;
+    --accent3: #ff6b35;
+    --accent4: #00e676;
+    --text: #e2e8f0;
+    --muted: #7a8ba8;
+    --code-bg: #0d1117;
+    --correct: #00e676;
+    --wrong: #ff4757;
+    --unit3: #00d4ff;
+    --unit4: #ff6b35;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #0a0d14 0%, #0f1729 50%, #0a0d14 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 40px 24px 32px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,212,255,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header-badge {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--accent1);
+    border: 1px solid rgba(0,212,255,0.3);
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 18px;
+    text-transform: uppercase;
+  }
+  .header h1 {
+    font-family: 'Space Mono', monospace;
+    font-size: clamp(28px, 5vw, 52px);
+    font-weight: 700;
+    letter-spacing: -1px;
+    line-height: 1.1;
+    margin-bottom: 12px;
+  }
+  .header h1 span { color: var(--accent1); }
+  .header p {
+    color: var(--muted);
+    font-size: 15px;
+    max-width: 540px;
+    margin: 0 auto 24px;
+  }
+  .unit-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .unit-tab {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    padding: 8px 22px;
+    border-radius: 6px;
+    cursor: pointer;
+    border: none;
+    font-weight: 700;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+  }
+  .unit-tab.u3 { background: rgba(0,212,255,0.15); color: var(--unit3); border: 1px solid rgba(0,212,255,0.3); }
+  .unit-tab.u4 { background: rgba(255,107,53,0.15); color: var(--unit4); border: 1px solid rgba(255,107,53,0.3); }
+  .unit-tab.active.u3, .unit-tab.u3:hover { background: var(--unit3); color: #000; }
+  .unit-tab.active.u4, .unit-tab.u4:hover { background: var(--unit4); color: #000; }
+
+  /* NAV */
+  .toc-bar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .toc-bar::-webkit-scrollbar { display: none; }
+  .toc-item {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    padding: 14px 16px;
+    cursor: pointer;
+    white-space: nowrap;
+    color: var(--muted);
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+  }
+  .toc-item:hover, .toc-item.active { color: var(--accent1); border-bottom-color: var(--accent1); }
+
+  /* LAYOUT */
+  .container { max-width: 1000px; margin: 0 auto; padding: 32px 20px 80px; }
+
+  .unit-section { display: none; }
+  .unit-section.active { display: block; }
+
+  /* SECTION HEADER */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 28px;
+    padding-top: 40px;
+    border-top: 1px solid var(--border);
+  }
+  .section-header:first-child { border-top: none; padding-top: 0; }
+  .section-number {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 4px 10px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .section-title {
+    font-family: 'Space Mono', monospace;
+    font-size: clamp(18px, 3vw, 26px);
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+  .section-title.u3 { color: var(--unit3); }
+  .section-title.u4 { color: var(--unit4); }
+
+  /* CARDS */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 24px;
+    margin-bottom: 16px;
+    position: relative;
+  }
+  .card-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent1);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-title.orange { color: var(--accent3); }
+  .card-title.green { color: var(--accent4); }
+  .card-title.purple { color: var(--accent2); }
+  .card p { font-size: 15px; line-height: 1.7; color: var(--text); margin-bottom: 10px; }
+  .card p:last-child { margin-bottom: 0; }
+
+  /* LISTS */
+  .note-list { list-style: none; padding: 0; }
+  .note-list li {
+    padding: 8px 0 8px 20px;
+    position: relative;
+    font-size: 15px;
+    line-height: 1.65;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    color: var(--text);
+  }
+  .note-list li:last-child { border-bottom: none; }
+  .note-list li::before {
+    content: '▸';
+    position: absolute; left: 0;
+    color: var(--accent1);
+    font-size: 12px;
+  }
+  .note-list.orange li::before { color: var(--accent3); }
+  .note-list.green li::before { color: var(--accent4); }
+  .note-list li strong { color: var(--accent1); font-weight: 600; }
+
+  /* CODE */
+  .code-block {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent1);
+    border-radius: 8px;
+    padding: 18px 20px;
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    overflow-x: auto;
+    margin: 14px 0;
+    white-space: pre;
+    color: #a9d1f7;
+  }
+  .code-block .kw { color: #c792ea; }
+  .code-block .fn { color: #82aaff; }
+  .code-block .str { color: #c3e88d; }
+  .code-block .cm { color: #546e7a; font-style: italic; }
+  .code-block .num { color: #f78c6c; }
+
+  /* CALLOUT */
+  .callout {
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 14px 0;
+    font-size: 14px;
+    line-height: 1.6;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .callout.info { background: rgba(0,212,255,0.08); border: 1px solid rgba(0,212,255,0.2); }
+  .callout.warn { background: rgba(255,107,53,0.08); border: 1px solid rgba(255,107,53,0.2); }
+  .callout.success { background: rgba(0,230,118,0.08); border: 1px solid rgba(0,230,118,0.2); }
+  .callout.purple { background: rgba(123,94,167,0.08); border: 1px solid rgba(123,94,167,0.3); }
+  .callout-icon { font-size: 18px; flex-shrink: 0; line-height: 1.4; }
+  .callout strong { display: block; margin-bottom: 4px; }
+
+  /* TABLE */
+  .table-wrap { overflow-x: auto; margin: 14px 0; border-radius: 8px; border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th {
+    background: rgba(0,212,255,0.08);
+    color: var(--accent1);
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  td { padding: 11px 16px; border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: top; line-height: 1.5; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+  td code { font-family: 'Space Mono', monospace; font-size: 12px; background: var(--code-bg); padding: 2px 6px; border-radius: 4px; color: var(--accent1); }
+
+  /* GRID */
+  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-bottom: 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 16px; }
+
+  /* STEP FLOW */
+  .steps { display: flex; flex-direction: column; gap: 10px; }
+  .step {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .step-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: #000;
+    background: var(--accent1);
+    min-width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .step-num.orange { background: var(--accent3); }
+  .step-content strong { display: block; font-size: 14px; color: var(--text); margin-bottom: 4px; }
+  .step-content p { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+  /* MCQ */
+  .mcq-section { margin-top: 50px; }
+  .mcq-header {
+    font-family: 'Space Mono', monospace;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--accent4);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .mcq-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 24px;
+    margin-bottom: 16px;
+    transition: border-color 0.2s;
+  }
+  .mcq-card:hover { border-color: rgba(0,212,255,0.3); }
+  .mcq-q {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+  .mcq-q .qnum {
+    font-family: 'Space Mono', monospace;
+    color: var(--accent1);
+    font-size: 12px;
+    margin-right: 8px;
+  }
+  .mcq-options { display: flex; flex-direction: column; gap: 8px; }
+  .mcq-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 14px;
+    line-height: 1.4;
+    background: var(--surface);
+    user-select: none;
+  }
+  .mcq-option:hover { border-color: var(--accent1); color: var(--accent1); }
+  .mcq-option.correct { background: rgba(0,230,118,0.12); border-color: var(--correct); color: var(--correct); }
+  .mcq-option.wrong { background: rgba(255,71,87,0.1); border-color: var(--wrong); color: var(--wrong); }
+  .mcq-option.revealed-correct { background: rgba(0,230,118,0.08); border-color: rgba(0,230,118,0.4); color: var(--correct); }
+  .opt-letter {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    min-width: 20px;
+    opacity: 0.6;
+  }
+  .mcq-explain {
+    display: none;
+    margin-top: 12px;
+    padding: 12px 14px;
+    background: rgba(0,230,118,0.06);
+    border: 1px solid rgba(0,230,118,0.2);
+    border-radius: 8px;
+    font-size: 13px;
+    color: var(--accent4);
+    line-height: 1.6;
+  }
+  .mcq-explain.show { display: block; }
+  .mcq-score-bar {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .score-label { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--muted); }
+  .score-val { font-family: 'Space Mono', monospace; font-size: 22px; font-weight: 700; color: var(--accent4); }
+  .reset-btn {
+    margin-left: auto;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .reset-btn:hover { border-color: var(--accent1); color: var(--accent1); }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 36px 0;
+  }
+
+  /* BADGE */
+  .badge {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+  .badge.blue { background: rgba(0,212,255,0.15); color: var(--accent1); }
+  .badge.orange { background: rgba(255,107,53,0.15); color: var(--accent3); }
+  .badge.green { background: rgba(0,230,118,0.15); color: var(--accent4); }
+
+  /* SCROLL-TO-TOP */
+  .fab {
+    position: fixed;
+    bottom: 28px; right: 28px;
+    width: 44px; height: 44px;
+    background: var(--accent1);
+    color: #000;
+    border: none;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 20px rgba(0,212,255,0.4);
+    transition: transform 0.2s;
+    z-index: 200;
+  }
+  .fab:hover { transform: scale(1.1); }
+
+  /* PROGRESS */
+  .progress-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 18px;
+  }
+  .progress-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent4); }
+
+  /* Animations */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  .card, .mcq-card, .step { animation: fadeUp 0.4s ease both; }
+
+  @media (max-width: 640px) {
+    .container { padding: 20px 14px 60px; }
+    .header { padding: 28px 14px 24px; }
+    .code-block { font-size: 11px; }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-badge">PES University · UE22CS342BA5</div>
+  <h1>Block<span>chain</span><br>Complete Study Notes</h1>
+  <p>Units 3 &amp; 4 — Solidity Programming · Blockchain Risks · Smart Contract Security</p>
+  <div class="unit-tabs">
+    <button class="unit-tab u3 active" onclick="switchUnit('u3')">UNIT 3 — SOLIDITY</button>
+    <button class="unit-tab u4" onclick="switchUnit('u4')">UNIT 4 — BLOCKCHAIN RISKS</button>
+  </div>
+</div>
+
+<div class="toc-bar" id="tocBar"></div>
+
+<div class="container">
+
+<!-- ═══════════════ UNIT 3 ═══════════════ -->
+<div id="u3" class="unit-section active">
+
+  <!-- 3.1 Introduction to Solidity -->
+  <div id="u3-s1">
+    <div class="section-header">
+      <span class="section-number">3.1</span>
+      <h2 class="section-title u3">Introduction to Solidity</h2>
+    </div>
+    <div class="card">
+      <div class="card-title">What is Solidity?</div>
+      <p>Solidity is the <strong>primary programming language</strong> for writing smart contracts on the Ethereum blockchain. It is a <strong>contract-oriented, statically-typed, high-level language</strong> that compiles down to EVM (Ethereum Virtual Machine) bytecode.</p>
+      <ul class="note-list" style="margin-top:10px">
+        <li>Syntax resembles <strong>JavaScript, Python, and C++</strong></li>
+        <li>Designed specifically to run on the <strong>Ethereum Virtual Machine (EVM)</strong></li>
+        <li>The EVM is hosted on Ethereum Nodes connected to the blockchain</li>
+        <li>Smart contracts in Solidity store all programming logic that transacts with the blockchain</li>
+      </ul>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">What is Ethereum?</div>
+        <ul class="note-list">
+          <li>A <strong>decentralized open-source platform</strong> based on blockchain</li>
+          <li>Runs smart contracts — applications that execute <strong>exactly as programmed</strong> with no possibility of fraud, downtime, or third-party interference</li>
+          <li>Platform for nearly <strong>2,60,000 different cryptocurrencies</strong></li>
+          <li>Miners earn <strong>Ether</strong> as rewards for securing the blockchain</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">What is the EVM?</div>
+        <ul class="note-list">
+          <li>EVM = <strong>Ethereum Virtual Machine</strong></li>
+          <li>A <strong>runtime environment</strong> for executing smart contracts</li>
+          <li>Provides security and executes untrusted code via a <strong>public node network</strong></li>
+          <li>Prevents DoS attacks; ensures <strong>program isolation</strong> (contracts can't access each other's state)</li>
+          <li>Ensures communication with <strong>no potential interference</strong></li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Why Use Solidity for Smart Contracts?</div>
+      <div class="grid-2">
+        <ul class="note-list">
+          <li><strong>Security Focus:</strong> Prioritizes safety for handling valuable blockchain assets</li>
+          <li><strong>Blockchain Integration:</strong> Tailored for Ethereum's infrastructure</li>
+        </ul>
+        <ul class="note-list">
+          <li><strong>Decentralized Execution:</strong> Deterministic execution across all nodes</li>
+          <li><strong>Smart Contract Features:</strong> Built-in logic for contracts, events, access control</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout info">
+      <span class="callout-icon">💡</span>
+      <div><strong>Smart Contracts</strong> — high-level program codes compiled to EVM bytecode and deployed to the Ethereum blockchain. They allow credible, trackable, and <em>irreversible</em> transactions without any third-party.</div>
+    </div>
+  </div>
+
+  <!-- 3.2 Setting Up Remix IDE -->
+  <div id="u3-s2">
+    <div class="section-header">
+      <span class="section-number">3.2</span>
+      <h2 class="section-title u3">Remix IDE & First Contract</h2>
+    </div>
+    <div class="card">
+      <div class="card-title">What is Remix IDE?</div>
+      <p>Remix is a <strong>browser-based Integrated Development Environment (IDE)</strong> that lets you write, test, and deploy Solidity smart contracts — no installation required. Perfect for beginners.</p>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-content"><strong>Open Remix</strong><p>Go to remix.ethereum.org in your browser</p></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content"><strong>Create New File</strong><p>Click folder icon (+) → Name it FirstContract.sol (.sol = Solidity)</p></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content"><strong>Write Code</strong><p>Start with pragma solidity and define your contract</p></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-content"><strong>Compile</strong><p>Click Solidity Compiler tab → Set version ≥ 0.8.0 → Compile</p></div></div>
+      <div class="step"><div class="step-num">5</div><div class="step-content"><strong>Deploy</strong><p>Click Deploy & Run Transactions → Choose JavaScript VM → Deploy</p></div></div>
+      <div class="step"><div class="step-num">6</div><div class="step-content"><strong>Interact</strong><p>Expand deployed contract → Click function buttons to test</p></div></div>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <div class="card-title">First Solidity Program</div>
+<div class="code-block"><span class="cm">// SPDX-License-Identifier: MIT</span>
+<span class="kw">pragma solidity</span> ^<span class="num">0.8.0</span>;
+
+<span class="kw">contract</span> <span class="fn">HelloWorld</span> {
+    <span class="kw">string public</span> message;
+
+    <span class="fn">constructor</span>() {
+        message = <span class="str">"Hello, Blockchain!"</span>;
+    }
+
+    <span class="kw">function</span> <span class="fn">setMessage</span>(<span class="kw">string memory</span> newMessage) <span class="kw">public</span> {
+        message = newMessage;
+    }
+}</div>
+      <ul class="note-list" style="margin-top:12px">
+        <li><code>pragma solidity ^0.8.0;</code> — tells compiler the minimum version</li>
+        <li><code>contract HelloWorld</code> — defines the smart contract</li>
+        <li><code>string public message;</code> — a state variable visible to everyone</li>
+        <li><code>constructor()</code> — runs once at deployment to set initial state</li>
+        <li><code>setMessage()</code> — function allowing anyone to update the message</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 3.3 Variables -->
+  <div id="u3-s3">
+    <div class="section-header">
+      <span class="section-number">3.3</span>
+      <h2 class="section-title u3">Variables in Solidity</h2>
+    </div>
+    <div class="card">
+      <div class="card-title">Variable Syntax</div>
+      <div class="code-block"><span class="kw">datatype</span> access-modifier variablename;</div>
+      <p style="margin-top:10px">Example: <code>uint public myNumber;</code></p>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Variable Type</th><th>Where Stored</th><th>Lifetime</th><th>Description</th></tr>
+        <tr><td><strong>State Variable</strong></td><td>Blockchain (contract storage)</td><td>Permanent</td><td>Stored forever on-chain; survives function calls and transactions</td></tr>
+        <tr><td><strong>Local Variable</strong></td><td>Memory (EVM stack)</td><td>Function execution only</td><td>Temporary; deleted when function ends</td></tr>
+        <tr><td><strong>Global Variable</strong></td><td>EVM global namespace</td><td>Always available</td><td>Pre-defined variables about the current block/tx</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title">Important Global Variables</div>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Variable</th><th>Type</th><th>What it holds</th></tr>
+          <tr><td><code>msg.sender</code></td><td>address</td><td>Address of the account that sent the current transaction</td></tr>
+          <tr><td><code>msg.value</code></td><td>uint</td><td>Amount of Ether sent with the current transaction (in Wei)</td></tr>
+          <tr><td><code>block.number</code></td><td>uint</td><td>The current block's number</td></tr>
+          <tr><td><code>block.timestamp</code></td><td>uint</td><td>Current block timestamp (Unix time)</td></tr>
+          <tr><td><code>block.coinbase</code></td><td>address</td><td>Address of the miner of the current block</td></tr>
+          <tr><td><code>block.gaslimit</code></td><td>uint</td><td>Max gas allowed in the current block</td></tr>
+          <tr><td><code>tx.origin</code></td><td>address</td><td>Original sender of the transaction chain</td></tr>
+          <tr><td><code>tx.gasprice</code></td><td>uint</td><td>Gas price (in Wei) of the current transaction</td></tr>
+          <tr><td><code>now</code></td><td>uint</td><td>Alias for <code>block.timestamp</code></td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Access Modifiers (Visibility)</div>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Modifier</th><th>Who can access</th></tr>
+          <tr><td><code>public</code></td><td>Anyone — internal, external, and other contracts</td></tr>
+          <tr><td><code>private</code></td><td>Only within the same contract (not even derived contracts)</td></tr>
+          <tr><td><code>internal</code></td><td>Same contract AND derived (child) contracts</td></tr>
+          <tr><td><code>external</code></td><td>Only from outside the contract (not internal calls)</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title green">Useful Snippet: Variables, Enums, Structs, Mappings, Modifier</div>
+      <div class="code-block">contract VariableTypesDemo {
+    uint256 public myUint = 100;
+    int256 public myInt = -100;
+    bool public myBool = true;
+    string public myString = "Hello, Solidity!";
+    address public myAddress = msg.sender;
+    bytes32 public myBytes32 = "SolidityBytes";
+
+    enum Status { Pending, Shipped, Delivered }
+    struct Person { string name; uint age; }
+
+    mapping(address =&gt; uint256) public balances;
+    uint256[] public numbers = [1, 2, 3, 4, 5];
+
+    modifier onlyOwner() {
+        require(msg.sender == myAddress, "Not the owner");
+        _;
+    }
+}</div>
+      <p style="margin-top:10px">This one example combines the most common Unit 3 building blocks in a single contract, so it is a very useful revision snippet.</p>
+    </div>
+  </div>
+
+  <!-- 3.4 Data Types -->
+  <div id="u3-s4">
+    <div class="section-header">
+      <span class="section-number">3.4</span>
+      <h2 class="section-title u3">Data Types</h2>
+    </div>
+    <div class="callout info">
+      <span class="callout-icon">📌</span>
+      <div>Solidity is a <strong>statically typed language</strong> — every variable must have a declared type. Memory is allocated based on the declared type.</div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Value Types</div>
+        <ul class="note-list">
+          <li>Stored directly with the variable</li>
+          <li>Passed <strong>by value</strong> (copy)</li>
+          <li>Examples: int, uint, bool, address, bytes, enums</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">Reference Types</div>
+        <ul class="note-list">
+          <li>Store a <strong>pointer/reference</strong> to the data</li>
+          <li>Passed <strong>by reference</strong></li>
+          <li>Examples: arrays, strings, structs, mappings</li>
+        </ul>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Type</th><th>Description</th><th>Range / Notes</th></tr>
+        <tr><td><code>int8</code> to <code>int256</code></td><td>Signed integers (positive &amp; negative)</td><td><code>int8</code>: -128 to +127</td></tr>
+        <tr><td><code>uint8</code> to <code>uint256</code></td><td>Unsigned integers (positive only)</td><td><code>uint8</code>: 0 to 255; <code>uint256</code>: 0 to 2²⁵⁶−1</td></tr>
+        <tr><td><code>bool</code></td><td>Boolean value</td><td>true or false; default = false</td></tr>
+        <tr><td><code>address</code></td><td>Ethereum wallet/contract address</td><td>20-byte value; has .balance and .transfer</td></tr>
+        <tr><td><code>bytes1</code>...<code>bytes32</code></td><td>Fixed-size byte arrays</td><td>Efficient for fixed-length data</td></tr>
+        <tr><td><code>string</code></td><td>Dynamic UTF-8 string</td><td>No fixed size; grows as needed</td></tr>
+        <tr><td><code>fixed</code> / <code>ufixed</code></td><td>Fixed-point decimal numbers</td><td><code>fixed</code> = alias for <code>fixed128x18</code></td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title">Default Initial Values</div>
+      <ul class="note-list">
+        <li><strong>uint / int:</strong> 0</li>
+        <li><strong>bool:</strong> false</li>
+        <li><strong>address:</strong> 0x0000...0000</li>
+        <li><strong>string:</strong> "" (empty string)</li>
+        <li><strong>bytes:</strong> 0x (empty byte array)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 3.5 Operators & Constructors -->
+  <div id="u3-s5">
+    <div class="section-header">
+      <span class="section-number">3.5</span>
+      <h2 class="section-title u3">Operators &amp; Constructors</h2>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Operator</th><th>Symbol</th><th>Description</th></tr>
+        <tr><td>Addition</td><td><code>+</code></td><td>Adds two operands</td></tr>
+        <tr><td>Subtraction</td><td><code>-</code></td><td>Subtracts second operand from first</td></tr>
+        <tr><td>Multiplication</td><td><code>*</code></td><td>Multiplies both operands</td></tr>
+        <tr><td>Division</td><td><code>/</code></td><td>Divides numerator by denominator</td></tr>
+        <tr><td>Modulus</td><td><code>%</code></td><td>Gives remainder after integer division</td></tr>
+        <tr><td>Increment</td><td><code>++</code></td><td>Increases integer value by one</td></tr>
+        <tr><td>Decrement</td><td><code>--</code></td><td>Decreases integer value by one</td></tr>
+        <tr><td>Delete</td><td><code>delete</code></td><td>Resets variable to its default value</td></tr>
+        <tr><td>Ternary</td><td><code>? :</code></td><td>Shorthand if-else: <code>condition ? ifTrue : ifFalse</code></td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title">Constructors</div>
+      <p>A constructor is an <strong>optional function</strong> executed exactly once — at contract deployment. It initializes the contract's state.</p>
+      <div class="code-block"><span class="kw">constructor</span>() &lt;Access Modifier&gt; {
+    <span class="cm">// initialization code here</span>
+}</div>
+      <ul class="note-list" style="margin-top:12px">
+        <li><strong>Customization:</strong> Set initial state by passing values during deployment</li>
+        <li><strong>Efficiency:</strong> Runs only once — more efficient than regular function calls</li>
+        <li><strong>Security:</strong> Proper init avoids dangerous uninitialized states</li>
+        <li><strong>Code Clarity:</strong> Makes intent clear</li>
+        <li>Can be <code>public</code> or <code>internal</code>; internal makes contract <strong>abstract</strong></li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title green">Useful Snippet: Parent Constructor Initialization</div>
+      <div class="code-block">contract X {
+    string public name;
+    constructor(string memory _name) { name = _name; }
+}
+
+contract Y {
+    string public text;
+    constructor(string memory _text) { text = _text; }
+}
+
+contract C is X, Y {
+    constructor(string memory _name, string memory _text) X(_name) Y(_text) {}
+}</div>
+      <p style="margin-top:10px">This shows an important extension of the constructor idea: when contracts inherit from parent contracts, parent constructors must also be initialized properly.</p>
+    </div>
+  </div>
+
+  <!-- 3.6 Control Flow & Error Handling -->
+  <div id="u3-s6">
+    <div class="section-header">
+      <span class="section-number">3.6</span>
+      <h2 class="section-title u3">Control Flow &amp; Error Handling</h2>
+    </div>
+    <div class="card">
+      <div class="card-title">Control Flow Statements</div>
+      <ul class="note-list">
+        <li><strong>Conditionals:</strong> <code>if</code>, <code>else if</code>, <code>else</code>, <code>switch</code></li>
+        <li><strong>Loops:</strong> <code>for</code>, <code>while</code>, <code>do while</code></li>
+        <li><strong>Jump:</strong> <code>break</code>, <code>continue</code>, <code>return</code></li>
+        <li><strong>Error Handling:</strong> <code>assert</code>, <code>require</code>, <code>revert</code>, custom errors</li>
+      </ul>
+    </div>
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-title">assert()</div>
+        <ul class="note-list">
+          <li><strong>Purpose:</strong> Internal invariant checks (conditions that should NEVER be false)</li>
+          <li><strong>Gas:</strong> Consumes ALL remaining gas (no refund)</li>
+          <li><strong>Use when:</strong> Bug detection only</li>
+        </ul>
+        <div class="code-block" style="font-size:11px"><span class="fn">assert</span>(_value > <span class="num">100</span>);</div>
+      </div>
+      <div class="card">
+        <div class="card-title orange">require()</div>
+        <ul class="note-list orange">
+          <li><strong>Purpose:</strong> Input validation &amp; preconditions</li>
+          <li><strong>Gas:</strong> Refunds unused gas ✅</li>
+          <li><strong>Use when:</strong> Normal validation that can fail</li>
+        </ul>
+        <div class="code-block" style="font-size:11px"><span class="fn">require</span>(_val > <span class="num">100</span>, <span class="str">"Too small"</span>);</div>
+      </div>
+      <div class="card">
+        <div class="card-title green">revert()</div>
+        <ul class="note-list green">
+          <li><strong>Purpose:</strong> Flexible conditional errors</li>
+          <li><strong>Gas:</strong> Refunds unused gas ✅</li>
+          <li><strong>Use when:</strong> Complex conditions, try/catch</li>
+        </ul>
+        <div class="code-block" style="font-size:11px"><span class="kw">if</span>(_v &lt;= <span class="num">100</span>) <span class="fn">revert</span>(<span class="str">"Too small"</span>);</div>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Conditional Statements</div>
+        <div class="code-block">function isGreaterThan10(uint256 num) public pure returns (string memory) {
+    if (num &gt; 10) return "Number is greater than 10";
+    return "Number is 10 or less";
+}
+
+function isSmallNumber(uint256 num) public pure returns (string memory) {
+    return (num &lt; 10) ? "Small Number" : "Big Number";
+}</div>
+      </div>
+      <div class="card">
+        <div class="card-title orange">break and continue</div>
+        <div class="code-block">function findFirstEven(uint256[] memory numbers) public pure returns (uint256) {
+    for (uint256 i = 0; i &lt; numbers.length; i++) {
+        if (numbers[i] % 2 == 0) return numbers[i];
+    }
+    return 0;
+}</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title green">Useful Snippet: Custom Errors</div>
+      <div class="code-block">error InsufficientBalance(uint256 available, uint256 required);
+error UnauthorizedAccess(address caller);
+
+function withdraw(uint256 amount) public {
+    uint256 balance = balances[msg.sender];
+    if (balance &lt; amount) {
+        revert InsufficientBalance(balance, amount);
+    }
+    balances[msg.sender] -= amount;
+    payable(msg.sender).transfer(amount);
+}</div>
+      <p style="margin-top:10px">Custom errors are important because they are cleaner and more gas-efficient than long revert strings, especially in larger contracts.</p>
+    </div>
+  </div>
+
+  <!-- 3.7 Functions -->
+  <div id="u3-s7">
+    <div class="section-header">
+      <span class="section-number">3.7</span>
+      <h2 class="section-title u3">Functions &amp; State Mutability</h2>
+    </div>
+    <div class="card">
+      <div class="card-title">Function Basics</div>
+      <p>Functions are reusable blocks of code that reduce memory use and runtime. They take typed parameters and can return multiple values.</p>
+      <div class="code-block"><span class="kw">function</span> <span class="fn">functionName</span>(param1Type param1, param2Type param2)
+    visibility stateMutability
+    <span class="kw">returns</span> (returnType1, returnType2) {
+    <span class="cm">// function body</span>
+}</div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Mutability</th><th>Reads State?</th><th>Modifies State?</th><th>Can Receive Ether?</th><th>Gas Cost</th></tr>
+        <tr><td><code>pure</code></td><td>❌ No</td><td>❌ No</td><td>❌ No</td><td>Low (no blockchain access)</td></tr>
+        <tr><td><code>view</code></td><td>✅ Yes</td><td>❌ No</td><td>❌ No</td><td>Low (read-only)</td></tr>
+        <tr><td><code>payable</code></td><td>✅ Yes</td><td>✅ Yes</td><td>✅ Yes</td><td>Normal + Ether handling</td></tr>
+        <tr><td>(none)</td><td>✅ Yes</td><td>✅ Yes</td><td>❌ No</td><td>Normal</td></tr>
+      </table>
+    </div>
+    <div class="callout warn">
+      <span class="callout-icon">⚠️</span>
+      <div>A <strong>view function</strong> will trigger a compiler warning if it performs: modifying state variables, emitting events, creating contracts, using selfdestruct, sending Ether, or calling non-view/non-pure functions.</div>
+    </div>
+  </div>
+
+  <!-- 3.8 Arrays Strings Enums Structs Mappings -->
+  <div id="u3-s8">
+    <div class="section-header">
+      <span class="section-number">3.8</span>
+      <h2 class="section-title u3">Arrays, Strings, Enums, Structs &amp; Mappings</h2>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Arrays</div>
+        <ul class="note-list">
+          <li><strong>Fixed-size:</strong> <code>uint[3] fixedArray;</code> — size defined at declaration</li>
+          <li><strong>Dynamic:</strong> <code>uint[] dynamicArray;</code> — can grow/shrink</li>
+          <li><strong>Access:</strong> <code>numbers[0]</code> — zero-indexed</li>
+          <li><strong>Add element:</strong> <code>numbers.push(4);</code></li>
+          <li><strong>Memory:</strong> Temporary (function scope) or <strong>Storage</strong>: Persistent on-chain</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">Strings</div>
+        <ul class="note-list">
+          <li>Sequence of characters in <strong>UTF-8 encoding</strong></li>
+          <li>Can contain any Unicode character</li>
+          <li>No fixed size — grows dynamically</li>
+          <li><code>string public name = "Hello";</code></li>
+          <li>Strings are reference types — stored in memory or storage</li>
+        </ul>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Enums</div>
+        <p>User-defined types for a <strong>fixed set of named constants</strong>. Replaces "magic numbers" with readable names.</p>
+        <ul class="note-list" style="margin-top:10px">
+          <li>First value = 0, second = 1, and so on (stored as integers)</li>
+          <li>Useful for representing states (Active, Inactive, etc.)</li>
+        </ul>
+        <div class="code-block" style="font-size:11px;margin-top:10px"><span class="kw">enum</span> <span class="fn">OrderStatus</span> {
+    Placed, Shipped, Delivered, Cancelled
+}
+<span class="fn">OrderStatus</span> <span class="kw">public</span> status;</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Structs</div>
+        <p>Custom data types that <strong>group related variables</strong> of different types into one unit.</p>
+        <ul class="note-list" style="margin-top:10px">
+          <li>Combine multiple fields into a single type</li>
+          <li>Useful for user profiles, records, products</li>
+          <li>Define once, reuse multiple times</li>
+        </ul>
+        <div class="code-block" style="font-size:11px;margin-top:10px"><span class="kw">struct</span> <span class="fn">Product</span> {
+    <span class="kw">uint</span> id;
+    <span class="kw">string</span> name;
+    <span class="kw">uint</span> price;
+}</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Mappings</div>
+      <p>Data structures storing <strong>key-value pairs</strong> — like hash tables. Very efficient for storage and retrieval.</p>
+      <ul class="note-list" style="margin-top:10px">
+        <li><strong>Key-Value Storage:</strong> Each unique key maps to exactly one value</li>
+        <li><strong>Default Values:</strong> Unset keys return the default for the value type (0, false, "")</li>
+        <li><strong>Efficient Lookup:</strong> O(1) constant-time retrieval</li>
+        <li><strong>Cannot Iterate:</strong> No looping through all entries directly</li>
+      </ul>
+      <div class="code-block" style="margin-top:12px"><span class="kw">mapping</span>(<span class="kw">address</span> => <span class="kw">uint</span>) <span class="kw">public</span> balances;
+balances[msg.sender] += msg.value; <span class="cm">// add to mapping</span></div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title green">Useful Snippet: Arrays</div>
+        <div class="code-block">uint256[5] public fixedArray = [1, 2, 3, 4, 5];
+uint256[] public dynamicArray;
+
+function addElement(uint256 _num) public {
+    dynamicArray.push(_num);
+}
+
+function removeLastElement() public {
+    require(dynamicArray.length &gt; 0, "Array is already empty");
+    dynamicArray.pop();
+}</div>
+      </div>
+      <div class="card">
+        <div class="card-title purple">Useful Snippet: Enums</div>
+        <div class="code-block">enum Status { Pending, Approved, Rejected, Shipped, Delivered }
+Status public orderStatus;
+
+function approveOrder() public { orderStatus = Status.Approved; }
+function shipOrder() public { orderStatus = Status.Shipped; }
+function getStatus() public view returns (uint256) {
+    return uint256(orderStatus);
+}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3.9 Payable & Fallback -->
+  <div id="u3-s9">
+    <div class="section-header">
+      <span class="section-number">3.9</span>
+      <h2 class="section-title u3">Payable Functions &amp; Fallback</h2>
+    </div>
+    <div class="card">
+      <div class="card-title">Payable Functions</div>
+      <p>Functions marked <code>payable</code> allow a smart contract to <strong>accept Ether</strong>. Without this keyword, sending Ether to a function causes the transaction to revert.</p>
+      <div class="code-block"><span class="kw">function</span> <span class="fn">deposit</span>() <span class="kw">payable external</span> {
+    <span class="cm">// Ether is automatically stored in contract's balance</span>
+    balances[msg.sender] += msg.value; <span class="cm">// record who sent what</span>
+}</div>
+      <div class="callout info" style="margin-top:10px">
+        <span class="callout-icon">💡</span>
+        <div>If a function is NOT payable and someone sends Ether to it, the transaction will <strong>revert</strong> and funds are returned (minus gas cost).</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title orange">receive() Function</div>
+      <p>A special built-in function that gets called when the contract receives Ether with <strong>empty calldata</strong>. Allows contracts to receive Ether like a regular wallet.</p>
+      <div class="code-block"><span class="fn">receive</span>() <span class="kw">external payable</span> {
+    <span class="cm">// Called when msg.data is empty AND msg.value > 0</span>
+    <span class="cm">// No calldata needed</span>
+}</div>
+    </div>
+    <div class="card">
+      <div class="card-title green">Fallback Function</div>
+      <p>A <strong>unique function</strong> automatically executed when a contract receives a transaction that doesn't match any function signature, OR when msg.data is not empty.</p>
+      <div class="code-block"><span class="fn">fallback</span>() <span class="kw">external payable</span> {
+    <span class="cm">// Handles unknown function calls</span>
+}</div>
+      <div class="callout warn" style="margin-top:12px">
+        <span class="callout-icon">📋</span>
+        <div><strong>Fallback Function Rules:</strong>
+          <ul class="note-list orange" style="margin-top:8px">
+            <li>Declared with <code>fallback()</code> keyword — no arguments</li>
+            <li>Must be marked <code>external</code></li>
+            <li>Cannot return anything</li>
+            <li>Only <strong>one</strong> fallback per contract</li>
+            <li>Limited to <strong>2300 gas</strong> when called via <code>transfer()</code> or <code>send()</code></li>
+            <li>If not marked <code>payable</code>, throws exception when receiving plain Ether</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title purple">Ether Routing Logic</div>
+      <div class="code-block">            Ether sent to contract
+                     |
+            msg.data is empty?
+              /               \
+           YES                 NO
+            |                   |
+    receive() exists?       fallback()
+         /     \
+       YES       NO
+        |         |
+    receive()  fallback()</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Uses of Fallback Functions</div>
+      <ul class="note-list">
+        <li><strong>Handling Unexpected Transactions:</strong> Process unknown calls with custom error handling</li>
+        <li><strong>Custom Payment Processing:</strong> Accept specific tokens or do validation before altering state</li>
+        <li><strong>Gas Optimization:</strong> Accept compressed data formats to save gas</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 3.10 Events & Overloading -->
+  <div id="u3-s10">
+    <div class="section-header">
+      <span class="section-number">3.10</span>
+      <h2 class="section-title u3">Events &amp; Function Overloading</h2>
+    </div>
+    <div class="card">
+      <div class="card-title">Solidity Events</div>
+      <p>Events are the EVM's <strong>logging mechanism</strong> — they write information to a data structure on the blockchain that lives <em>outside</em> of smart contracts' storage variables. Used to notify external apps (dApps) of state changes.</p>
+      <div class="code-block"><span class="cm">// Define an event</span>
+<span class="kw">event</span> <span class="fn">NewTransaction</span>(<span class="kw">address indexed</span> sender, <span class="kw">uint</span> amount);
+
+<span class="cm">// Emit the event inside a function</span>
+<span class="kw">function</span> <span class="fn">sendFunds</span>() <span class="kw">public payable</span> {
+    <span class="kw">emit</span> <span class="fn">NewTransaction</span>(msg.sender, msg.value);
+}</div>
+      <ul class="note-list" style="margin-top:12px">
+        <li>Defined using the <code>event</code> keyword</li>
+        <li>Triggered (emitted) using <code>emit EventName(...)</code></li>
+        <li>dApps listen to events using libraries like <strong>ethers.js</strong> via the Ethereum JSON-RPC API</li>
+        <li><code>indexed</code> parameters allow efficient filtering and searching of event logs</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title orange">Function Overloading</div>
+      <p>Solidity allows <strong>multiple functions with the same name</strong> but different parameter types or counts. The compiler resolves which version to call based on the arguments passed.</p>
+      <div class="code-block"><span class="kw">function</span> <span class="fn">add</span>(<span class="kw">uint</span> a, <span class="kw">uint</span> b) <span class="kw">public pure returns</span> (<span class="kw">uint</span>) {
+    <span class="kw">return</span> a + b;
+}
+
+<span class="kw">function</span> <span class="fn">add</span>(<span class="kw">uint</span> a, <span class="kw">uint</span> b, <span class="kw">uint</span> c) <span class="kw">public pure returns</span> (<span class="kw">uint</span>) {
+    <span class="kw">return</span> a + b + c;
+}</div>
+      <ul class="note-list" style="margin-top:12px">
+        <li>Compiler searches for a function with matching name AND parameter types</li>
+        <li>If no matching function is found → <strong>compilation error</strong></li>
+        <li>Cannot overload based on return type alone</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 3.11 Withdrawal Patterns & Access Control -->
+  <div id="u3-s11">
+    <div class="section-header">
+      <span class="section-number">3.11</span>
+      <h2 class="section-title u3">Withdrawal Patterns &amp; Access Control</h2>
+    </div>
+    <div class="card">
+      <div class="card-title">Withdrawal Patterns</div>
+      <p>Strategies for handling fund transfers securely, protecting against <strong>reentrancy attacks</strong>.</p>
+      <div class="grid-2" style="margin-top:14px">
+        <div class="callout warn">
+          <span class="callout-icon">❌</span>
+          <div><strong>Simple / Vulnerable Pattern</strong><br>
+          Transfer funds to user BEFORE updating balance. Attacker can recursively call withdraw before balance is updated → <strong>Reentrancy Attack</strong></div>
+        </div>
+        <div class="callout success">
+          <span class="callout-icon">✅</span>
+          <div><strong>Pull Over Push (Safe)</strong><br>
+          Update balance FIRST, then transfer. User must actively "pull" funds. State updated before external transfer → <strong>Reentrancy-safe</strong></div>
+        </div>
+      </div>
+      <div class="code-block" style="margin-top:14px"><span class="cm">// Safe: Pull Over Push Pattern</span>
+<span class="kw">mapping</span>(<span class="kw">address</span> => <span class="kw">uint</span>) <span class="kw">public</span> balances;
+
+<span class="kw">function</span> <span class="fn">withdraw</span>(<span class="kw">uint</span> amount) <span class="kw">public</span> {
+    <span class="fn">require</span>(balances[msg.sender] >= amount, <span class="str">"Insufficient balance"</span>);
+    balances[msg.sender] -= amount; <span class="cm">// UPDATE STATE FIRST</span>
+    payable(msg.sender).transfer(amount); <span class="cm">// THEN transfer</span>
+}</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Access Control</div>
+      <p>Access control mechanisms <strong>regulate who can interact</strong> with specific functions or data. They enforce security policies and ensure only authorized users execute certain functions.</p>
+    </div>
+    <div class="card">
+      <div class="card-title orange">Modifiers for Access Control</div>
+      <p>Modifiers are special functions that <strong>augment the behavior</strong> of other functions. Applied using the <code>modifier</code> keyword.</p>
+      <div class="grid-3" style="margin-top:14px">
+        <div class="callout info">
+          <span class="callout-icon">🔐</span>
+          <div><strong>onlyBy</strong> — Restricts function to a specific address only<br><br>
+          <code>require(msg.sender == _account);</code></div>
+        </div>
+        <div class="callout warn">
+          <span class="callout-icon">⏰</span>
+          <div><strong>onlyAfter</strong> — Function can only be called after a specific time<br><br>
+          <code>require(block.timestamp >= _time);</code></div>
+        </div>
+        <div class="callout success">
+          <span class="callout-icon">💰</span>
+          <div><strong>costs</strong> — Caller must provide a minimum value<br><br>
+          <code>require(msg.value >= _value);</code></div>
+        </div>
+      </div>
+      <div class="code-block" style="margin-top:14px"><span class="kw">modifier</span> <span class="fn">onlyBy</span>(<span class="kw">address</span> _account) {
+    <span class="fn">require</span>(msg.sender == _account, <span class="str">"Only specified address can call"</span>);
+    _; <span class="cm">// continue with the function body</span>
+}
+
+<span class="kw">function</span> <span class="fn">changeOwner</span>(<span class="kw">address</span> _newOwner) <span class="kw">public</span> <span class="fn">onlyBy</span>(owner) {
+    owner = _newOwner;
+}</div>
+    </div>
+    <div class="card">
+      <div class="card-title green">Useful Snippet: Visibility in Inheritance</div>
+      <div class="code-block">contract Parent {
+    uint public publicVar = 10;
+    uint internal internalVar = 20;
+    uint private privateVar = 30;
+
+    function getPrivateVar() public view returns (uint) {
+        return privateVar;
+    }
+}
+
+contract Child is Parent {
+    function accessParentVars() public view returns (uint, uint) {
+        return (publicVar, internalVar);
+    }
+}</div>
+      <p style="margin-top:10px">This helps remember visibility rules clearly: child contracts can use <code>public</code> and <code>internal</code>, but not <code>private</code>.</p>
+    </div>
+  </div>
+
+  <!-- 3.12 Ether Units -->
+  <div id="u3-s12">
+    <div class="section-header">
+      <span class="section-number">3.12</span>
+      <h2 class="section-title u3">Ether Units</h2>
+    </div>
+    <div class="card">
+      <div class="card-title">Denominations of Ether</div>
+      <p>Ether units are <strong>denominations</strong> used to pay for computational processes within the EVM — like transferring funds or paying transaction costs. Ether can be divided into smaller units.</p>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Unit Name</th><th>Also Called</th><th>Value in Wei</th><th>Scientific Notation</th></tr>
+        <tr><td>Wei</td><td>—</td><td>1</td><td>1</td></tr>
+        <tr><td>Kwei</td><td>Babbage</td><td>1,000</td><td>1e3</td></tr>
+        <tr><td>Mwei</td><td>Lovelace</td><td>1,000,000</td><td>1e6</td></tr>
+        <tr><td>Gwei</td><td>Shannon</td><td>1,000,000,000</td><td>1e9</td></tr>
+        <tr><td>Microether</td><td>Szabo</td><td>1,000,000,000,000</td><td>1e12</td></tr>
+        <tr><td>Milliether</td><td>Finney</td><td>1,000,000,000,000,000</td><td>1e15</td></tr>
+        <tr><td><strong>Ether</strong></td><td>ETH</td><td>1,000,000,000,000,000,000</td><td>1e18</td></tr>
+      </table>
+    </div>
+    <div class="callout info">
+      <span class="callout-icon">💡</span>
+      <div><strong>Remember:</strong> The smallest unit is Wei. 1 Ether = 10¹⁸ Wei (1 quintillion Wei). Gas fees are typically quoted in <strong>Gwei</strong>.</div>
+    </div>
+  </div>
+
+  <!-- 3.13 Built-in Math & Crypto -->
+  <div id="u3-s13">
+    <div class="section-header">
+      <span class="section-number">3.13</span>
+      <h2 class="section-title u3">Built-in Mathematical &amp; Cryptographic Functions</h2>
+    </div>
+    <div class="card">
+      <div class="card-title">Why This Matters</div>
+      <p>Solidity includes built-in helpers for <strong>math, hashing, signature recovery, and block data access</strong>. These are important in commitments, authentication, verification, and protocol logic.</p>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Mathematical Built-ins</div>
+        <ul class="note-list">
+          <li><code>**</code> â€” exponentiation, e.g. <code>a ** b</code></li>
+          <li><code>addmod(x, y, k)</code> â€” computes <code>(x + y) % k</code> safely</li>
+          <li><code>mulmod(x, y, k)</code> â€” computes <code>(x * y) % k</code> safely</li>
+          <li>Useful in modular arithmetic and crypto-related calculations</li>
+        </ul>
+        <div class="code-block" style="margin-top:12px">function power(uint256 a, uint256 b) public pure returns (uint256) {
+    return a ** b;
+}
+
+function modularMath(uint256 x, uint256 y, uint256 k) public pure returns (uint256, uint256) {
+    return (addmod(x, y, k), mulmod(x, y, k));
+}</div>
+      </div>
+      <div class="card">
+        <div class="card-title orange">Cryptographic Built-ins</div>
+        <ul class="note-list orange">
+          <li><code>keccak256(...)</code> â€” Ethereum's primary hashing function</li>
+          <li><code>sha256(...)</code> â€” SHA-256 hashing</li>
+          <li><code>ripemd160(...)</code> â€” RIPEMD-160 hashing</li>
+          <li><code>ecrecover(hash, v, r, s)</code> â€” recovers signer address from a signature</li>
+          <li><code>blockhash(blockNumber)</code> â€” gets a recent block hash</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title green">Useful Snippet: Hashing &amp; Signature Verification</div>
+      <div class="code-block">function getHashes(string memory data) public pure returns (bytes32, bytes32, bytes20) {
+    bytes memory raw = bytes(data);
+    return (
+        keccak256(raw),
+        sha256(raw),
+        ripemd160(raw)
+    );
+}
+
+function recoverSigner(bytes32 hash, uint8 v, bytes32 r, bytes32 s) public pure returns (address) {
+    return ecrecover(hash, v, r, s);
+}</div>
+      <ul class="note-list green" style="margin-top:12px">
+        <li><strong>keccak256</strong> is used for commitments, Merkle proofs, and IDs</li>
+        <li><strong>ecrecover</strong> is used in signature-based authorization and meta-transactions</li>
+        <li><strong>blockhash</strong> should not be trusted for secure randomness in high-stakes logic</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- MCQs Unit 3 -->
+  <div class="mcq-section" id="u3-mcq">
+    <div class="divider"></div>
+    <div class="mcq-header">📝 Unit 3 — Practice MCQs</div>
+    <div class="mcq-score-bar">
+      <div><div class="score-label">SCORE</div><div class="score-val" id="u3-score">0 / 0</div></div>
+      <button class="reset-btn" onclick="resetMCQ('u3')">↺ Reset</button>
+    </div>
+
+    <div class="mcq-card" data-correct="b" data-unit="u3">
+      <div class="mcq-q"><span class="qnum">Q1.</span> What is Solidity primarily used for?</div>
+      <div class="mcq-options">
+        <div class="mcq-option" data-opt="a"><span class="opt-letter">A</span> Building mobile apps on Android</div>
+        <div class="mcq-option" data-opt="b"><span class="opt-letter">B</span> Writing smart contracts for the Ethereum blockchain</div>
+        <div class="mcq-option" data-opt="c"><span class="opt-letter">C</span> Creating machine learning models</div>
+        <div class="mcq-option" data-opt="d"><span class="opt-letter">D</span> Database management in SQL</div>
+      </div>
+      <div class="mcq-explain">Solidity is the primary programming language for writing smart contracts on the Ethereum blockchain. It compiles to EVM bytecode.</div>
+    </div>
+
+    <div class="mcq-card" data-correct="c" data-unit="u3">
+      <div class="mcq-q"><span class="qnum">Q2.</span> What does EVM stand for?</div>
+      <div class="mcq-options">
+        <div class="mcq-option" data-opt="a"><span class="opt-letter">A</span> Electronic Value Machine</div>
+        <div class="mcq-option" data-opt="b"><span class="opt-letter">B</span> Ethereum Validation Module</div>
+        <div class="mcq-option" data-opt="c"><span class="opt-letter">C</span> Ethereum Virtual Machine</div>
+        <div class="mcq-option" data-opt="d"><span class="opt-letter">D</span> Extended Verification Method</div>
+      </div>
+      <div class="mcq-explain">EVM = Ethereum Virtual Machine. It is the runtime environment for executing smart contracts in Ethereum, providing security and isolation.</div>
+    </div>
+
+    <div class="mcq-card" data-correct="a" data-unit="u3">
+      <div class="mcq-q"><span class="qnum">Q3.</span> Which global variable holds the address of the account that sent a transaction?</div>
+      <div class="mcq-options">
+        <div class="mcq-option" data-opt="a"><span class="opt-letter">A</span> msg.sender</div>
+        <div class="mcq-option" data-opt="b"><span class="opt-letter">B</span> tx.origin</div>
+        <div class="mcq-option" data-opt="c"><span class="opt-letter">C</span> block.coinbase</div>
+        <div class="mcq-option" data-opt="d"><span class="opt-letter">D</span> msg.value</div>
+      </div>
+      <div class="mcq-explain"><code>msg.sender</code> is the address of the account that sent the current transaction. <code>tx.origin</code> is the original sender of the entire call chain.</div>
+    </div>
+
+    <div class="mcq-card" data-correct="d" data-unit="u3">
+      <div class="mcq-q"><span class="qnum">Q4.</span> A <code>view</code> function in Solidity:</div>
+      <div class="mcq-options">
+        <div class="mcq-option" data-opt="a"><span class="opt-letter">A</span> Can modify state variables</div>
+        <div class="mcq-option" data-opt="b"><span class="opt-letter">B</span> Cannot read state variables</div>
+        <div class="mcq-option" data-opt="c"><span class="opt-letter">C</span> Can receive Ether</div>
+        <div class="mcq-option" data-opt="d"><span class="opt-letter">D</span> Can read but cannot modify state variables</div>
+      </div>
+      <div class="mcq-explain">A <code>view</code> function is read-only — it can read state variables but cannot modify them. It cannot emit events, create contracts, or send Ether.</div>
+    </div>
+
+    <div class="mcq-card" data-correct="b" data-unit="u3">
+      <div class="mcq-q"><span class="qnum">Q5.</span> What is the smallest unit of Ether?</div>
+      <div class="mcq-options">
+        <div class="mcq-option" data-opt="a"><span class="opt-letter">A</span> Gwei</div>
+        <div class="mcq-option" data-opt="b"><span class="opt-letter">B</span> Wei</div>
+        <div class="mcq-option" data-opt="c"><span class="opt-letter">C</span> Finney</div>
+        <div class="mcq-option" data-opt="d"><span class="opt-letter">D</span> Szabo</div>
+      </div>
+      <div class="mcq-explain">Wei is the smallest unit of Ether. 1 Ether = 10¹⁸ Wei. Gwei (1e9 Wei) is commonly used for gas price.</div>
+    </div>
+
+    <div class="mcq-card" data-correct="c" data-unit="u3">
+      <div class="mcq-q"><span class="qnum">Q6.</span> The fallback function in Solidity is executed when:</div>
+      <div class="mcq-options">
+        <div class="mcq-option" data-opt="a"><span class="opt-letter">A</span> The contract is deployed</div>
+        <div class="mcq-option" data-opt="b"><span class="opt-letter">B</span> A view function is called</div>
+        <div class="mcq-option" data-opt="c"><span class="opt-letter">C</span> A transaction doesn't match any function signature, or msg.data is not empty</div>
+        <div class="mcq-option" data-opt="d"><span class="opt-letter">D</span> The contract is destroyed</div>
+      </div>
+      <div class="mcq-explain">The fallback function is automatically executed when none of the contract's other functions match the called function signature, or when msg.data is non-empty.</div>
+    </div>
+
+    <div class="mcq-card" data-correct="a" data-unit="u3">
+      <div class="mcq-q"><span class="qnum">Q7.</span> In the "Pull Over Push" withdrawal pattern, what happens first?</div>
+      <div class="mcq-options">
+        <div class="mcq-option" data-opt="a"><span class="opt-letter">A</span> The user's balance is deducted before funds are transferred</div>
+        <div class="mcq-option" data-opt="b"><span class="opt-letter">B</span> Funds are transferred before the user's balance is updated</div>
+        <div class="mcq-option" data-opt="c"><span class="opt-letter">C</span> An event is emitted before any action</div>
+        <div class="mcq-option" data-opt="d"><span class="opt-letter">D</span> The contract checks the gas price first</div>
+      </div>
+      <div class="mcq-explain">In the safe Pull Over Push pattern, the contract deducts the balance first, THEN transfers funds. This prevents reentrancy attacks where an attacker re-enters the withdraw function before the balance is updated.</div>
+    </div>
+
+    <div class="mcq-card" data-correct="d" data-unit="u3">
+      <div class="mcq-q"><span class="qnum">Q8.</span> Which error handling mechanism consumes ALL remaining gas on failure?</div>
+      <div class="mcq-options">
+        <div class="mcq-option" data-opt="a"><span class="opt-letter">A</span> require()</div>
+        <div class="mcq-option" data-opt="b"><span class="opt-letter">B</span> revert()</div>
+        <div class="mcq-option" data-opt="c"><span class="opt-letter">C</span> try/catch</div>
+        <div class="mcq-option" data-opt="d"><span class="opt-letter">D</span> assert()</div>
+      </div>
+      <div class="mcq-explain"><code>assert()</code> is used for internal invariants and consumes ALL remaining gas on failure with no refund. <code>require()</code> and <code>revert()</code> refund unused gas.</div>
+    </div>
+
+    <div class="mcq-card" data-correct="b" data-unit="u3">
+      <div class="mcq-q"><span class="qnum">Q9.</span> What is the gas limit for a fallback function called via transfer() or send()?</div>
+      <div class="mcq-options">
+        <div class="mcq-option" data-opt="a"><span class="opt-letter">A</span> 1000 gas</div>
+        <div class="mcq-option" data-opt="b"><span class="opt-letter">B</span> 2300 gas</div>
+        <div class="mcq-option" data-opt="c"><span class="opt-letter">C</span> 5000 gas</div>
+        <div class="mcq-option" data-opt="d"><span class="opt-letter">D</span> No gas limit</div>
+      </div>
+      <div class="mcq-explain">The fallback function is limited to 2300 gas when called by another function using transfer() or send(). This makes the call cheap and prevents reentrancy.</div>
+    </div>
+
+    <div class="mcq-card" data-correct="c" data-unit="u3">
+      <div class="mcq-q"><span class="qnum">Q10.</span> Mappings in Solidity:</div>
+      <div class="mcq-options">
+        <div class="mcq-option" data-opt="a"><span class="opt-letter">A</span> Can be iterated directly with a for loop</div>
+        <div class="mcq-option" data-opt="b"><span class="opt-letter">B</span> Return errors for uninitialized keys</div>
+        <div class="mcq-option" data-opt="c"><span class="opt-letter">C</span> Return default values for uninitialized keys and cannot be directly iterated</div>
+        <div class="mcq-option" data-opt="d"><span class="opt-letter">D</span> Store ordered key-value pairs</div>
+      </div>
+      <div class="mcq-explain">Mappings return the default value of the value type for uninitialized keys (e.g., 0 for uint). They cannot be directly iterated — you need to track keys separately.</div>
+    </div>
+
+    <div class="mcq-card" data-correct="a" data-unit="u3">
+      <div class="mcq-q"><span class="qnum">Q11.</span> What is the purpose of the <code>onlyBy</code> modifier?</div>
+      <div class="mcq-options">
+        <div class="mcq-option" data-opt="a"><span class="opt-letter">A</span> Restricts a function to be called only by a specific address</div>
+        <div class="mcq-option" data-opt="b"><span class="opt-letter">B</span> Limits the function to run after a specific time</div>
+        <div class="mcq-option" data-opt="c"><span class="opt-letter">C</span> Requires a minimum payment value</div>
+        <div class="mcq-option" data-opt="d"><span class="opt-letter">D</span> Prevents the function from emitting events</div>
+      </div>
+      <div class="mcq-explain"><code>onlyBy</code> checks that <code>msg.sender == _account</code>. Only the specified address can call the function; otherwise it reverts with an error.</div>
+    </div>
+
+    <div class="mcq-card" data-correct="b" data-unit="u3">
+      <div class="mcq-q"><span class="qnum">Q12.</span> Which variable type in Solidity is stored permanently on the blockchain?</div>
+      <div class="mcq-options">
+        <div class="mcq-option" data-opt="a"><span class="opt-letter">A</span> Local variables</div>
+        <div class="mcq-option" data-opt="b"><span class="opt-letter">B</span> State variables</div>
+        <div class="mcq-option" data-opt="c"><span class="opt-letter">C</span> Memory variables</div>
+        <div class="mcq-option" data-opt="d"><span class="opt-letter">D</span> Global variables</div>
+      </div>
+      <div class="mcq-explain">State variables are stored permanently in contract storage on the blockchain. Local variables exist only during function execution and are deleted afterward.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════ UNIT 4 ═══════════════ -->
+<div id="u4" class="unit-section">
+
+  <!-- 4.1 Blockchain Risks Overview -->
+  <div id="u4-s1">
+    <div class="section-header">
+      <span class="section-number">4.1</span>
+      <h2 class="section-title u4">Blockchain Risks Overview</h2>
+    </div>
+    <div class="card">
+      <div class="card-title orange">Why Blockchain Is at Risk</div>
+      <ul class="note-list orange">
+        <li>Widespread adoption across finance, healthcare, and government <strong>increases exposure to threats</strong></li>
+        <li>Vulnerabilities exist at <strong>multiple layers</strong>: network, smart contracts, user behavior, and regulation</li>
+        <li>Security risks include 51% attacks, Sybil attacks, and smart contract exploits</li>
+        <li>Legal and regulatory ambiguity makes compliance challenging across jurisdictions</li>
+        <li>Human errors — mismanaging private keys or deploying buggy contracts — are common</li>
+        <li>Scalability limitations affect transaction speed and costs</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">Blockchain Attack Surface</div>
+      <div class="grid-3">
+        <div class="callout warn"><span class="callout-icon">🌐</span><div><strong>Blockchain Network Layer</strong><br>P2P communication, routing, node connectivity</div></div>
+        <div class="callout warn"><span class="callout-icon">🔌</span><div><strong>Application / API Layer</strong><br>RPC endpoints, dApps, wallets</div></div>
+        <div class="callout warn"><span class="callout-icon">📜</span><div><strong>Smart Contracts</strong><br>Bugs in contract code, logic flaws</div></div>
+        <div class="callout warn"><span class="callout-icon">✅</span><div><strong>Transaction Verification</strong><br>Consensus mechanism vulnerabilities</div></div>
+        <div class="callout warn"><span class="callout-icon">💾</span><div><strong>Storage Layer</strong><br>On-chain data, IPFS</div></div>
+        <div class="callout warn"><span class="callout-icon">⛏️</span><div><strong>Mining Pools</strong><br>Hash power concentration</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4.2 Operation Mechanism Risks -->
+  <div id="u4-s2">
+    <div class="section-header">
+      <span class="section-number">4.2</span>
+      <h2 class="section-title u4">Operation Mechanism Risks</h2>
+    </div>
+    <div class="card">
+      <div class="card-title orange">51% Attack</div>
+      <p>A 51% attack occurs when a single entity (or group) gains control of <strong>more than 50% of the network's total hashing power</strong>, allowing them to manipulate the transaction history.</p>
+      <div class="callout warn" style="margin-top:12px">
+        <span class="callout-icon">⚠️</span>
+        <div><strong>What the Attacker Can Do:</strong>
+          <ul class="note-list orange" style="margin-top:8px">
+            <li><strong>Double Spending:</strong> Reverse transactions on the honest chain and reuse tokens on the malicious chain</li>
+            <li><strong>Block New Transactions:</strong> Prevent transactions from being confirmed, effectively freezing the network</li>
+            <li><strong>Disrupt Confidence:</strong> Shatter trust in the network's immutability</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card" style="background: rgba(0,230,118,0.04); border-color: rgba(0,230,118,0.2); margin-top:12px">
+        <div class="card-title green">Mitigation Strategies</div>
+        <ul class="note-list green">
+          <li><strong>Higher Network Hashrate:</strong> Makes 51% computationally and economically unviable</li>
+          <li><strong>Checkpointing / Finality Rules:</strong> Blocks after a certain depth cannot be changed</li>
+          <li><strong>Switch to Proof of Stake (PoS):</strong> Reduces power centralization (e.g., Ethereum 2.0)</li>
+          <li><strong>Monitor Mining Pools:</strong> Enforce policies preventing any pool from exceeding 50%</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title orange">Private Key Security</div>
+      <p>In blockchain, ownership of digital assets is determined entirely by who controls the <strong>private key</strong>. Unlike traditional login systems, there is no username/password — just cryptographic keys.</p>
+      <div class="callout warn" style="margin-top:12px">
+        <span class="callout-icon">🔑</span>
+        <div><strong>Attack Scenario:</strong> A hacker steals Alice's private key → Impersonates Alice → Signs fraudulent messages → The network accepts them (public key still matches) → <strong>Funds stolen, irreversibly</strong>.</div>
+      </div>
+      <div class="card" style="background: rgba(0,230,118,0.04); border-color: rgba(0,230,118,0.2); margin-top:12px">
+        <div class="card-title green">Best Practices</div>
+        <ul class="note-list green">
+          <li><strong>Hardware Wallets:</strong> Store keys offline, away from hackers</li>
+          <li><strong>Multi-Sig Wallets:</strong> Require multiple keys to approve a transaction</li>
+          <li><strong>Never Plaintext Storage:</strong> Avoid screenshots, cloud storage, or emails</li>
+          <li><strong>Strong Passwords + 2FA:</strong> Even for wallets and exchange accounts</li>
+          <li><strong>Encrypted Backups:</strong> USB, cold storage, multiple locations</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title orange">Criminal Activities</div>
+      <p>Blockchain enables fast, borderless, pseudonymous transactions — ideal for innovation but exploitable for illegal activities.</p>
+      <div class="grid-3">
+        <div class="callout warn"><span class="callout-icon">💻</span><div><strong>Ransomware</strong><br>Encrypted files held for crypto ransom</div></div>
+        <div class="callout warn"><span class="callout-icon">🌑</span><div><strong>Dark Web Markets</strong><br>Illicit goods traded with crypto</div></div>
+        <div class="callout warn"><span class="callout-icon">🧹</span><div><strong>Money Laundering</strong><br>Clean funds by mixing crypto</div></div>
+      </div>
+      <div class="card" style="background: rgba(0,230,118,0.04); border-color: rgba(0,230,118,0.2); margin-top:12px">
+        <div class="card-title green">Countermeasures</div>
+        <ul class="note-list green">
+          <li><strong>Chain Analytics Tools</strong> (Chainalysis, CipherTrace) — track suspicious fund flows</li>
+          <li><strong>KYC/AML Compliance</strong> on exchanges — verify user identity</li>
+          <li><strong>Regulation of Privacy Coins</strong> — legal restrictions on Monero, Zcash, mixers</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title orange">Double Spending</div>
+      <p>Spending the <strong>same cryptocurrency more than once</strong>. Unlike physical cash, digital currencies can be copied unless properly validated.</p>
+      <div class="steps" style="margin-top:14px">
+        <div class="step"><div class="step-num orange">1</div><div class="step-content"><strong>Fake Trust</strong><p>Attacker sends TXₐ to a vendor (honest chain) and simultaneously creates TXᵦ sending same coins to their own address</p></div></div>
+        <div class="step"><div class="step-num orange">2</div><div class="step-content"><strong>Mining the Real Transaction</strong><p>Attacker ensures TXᵦ gets mined (via hash power or colluding pool). TXₐ to the vendor becomes invalid as blockchain accepts longest chain</p></div></div>
+        <div class="step"><div class="step-num orange">3</div><div class="step-content"><strong>Exploiting the Race</strong><p>Attacker receives goods from vendor (who thought TXₐ was legitimate). Only TXᵦ is on the blockchain. Attacker keeps BOTH the goods AND the money.</p></div></div>
+      </div>
+      <div class="callout success" style="margin-top:12px">
+        <span class="callout-icon">✅</span>
+        <div><strong>Countermeasures:</strong> Wait for multiple confirmations • Use real-time payment gateways • Employ double-spending detection tools • Avoid zero-confirmation payments for valuable goods</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title orange">Transaction Privacy Leakage</div>
+      <p>Most blockchains are <strong>pseudonymous, not anonymous</strong>. Addresses aren't directly tied to identities, but all transactions are <strong>public and traceable</strong>.</p>
+      <ul class="note-list orange" style="margin-top:10px">
+        <li>Privacy leakage = observer deduces identity/behavior from transaction patterns, linkages, or metadata</li>
+        <li><strong>Implications:</strong> De-anonymization, government surveillance, exposure of business strategies, risk to activists/journalists</li>
+        <li><strong>Mitigations:</strong> Privacy coins (Monero, Zcash), avoid address reuse, coin mixers, fresh addresses per transaction, use Tor/VPN</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 4.3 Network Attacks -->
+  <div id="u4-s3">
+    <div class="section-header">
+      <span class="section-number">4.3</span>
+      <h2 class="section-title u4">Blockchain Network Attacks</h2>
+    </div>
+    <div class="callout warn">
+      <span class="callout-icon">📊</span>
+      <div><strong>Real-World Impact:</strong> 2022: ~$3.7B stolen from crypto platforms | 2023: $1.7B (−54.3%) | 2024: $2.2B (+21%). Number of incidents continues rising each year.</div>
+    </div>
+    <div class="card">
+      <div class="card-title orange">DDoS (Distributed Denial of Service)</div>
+      <p>Targets blockchain <strong>availability</strong> by overwhelming nodes, RPC endpoints, or the mempool with massive traffic. Doesn't compromise integrity but can cripple usability and inflate gas fees.</p>
+      <div class="table-wrap" style="margin-top:12px">
+        <table>
+          <tr><th>Target</th><th>Attack Type</th><th>Effect</th></tr>
+          <tr><td>Full Nodes</td><td>Network Flooding</td><td>Saturate bandwidth or memory</td></tr>
+          <tr><td>Smart Contracts</td><td>Logic Bombs / Looping</td><td>Infinite loops, expensive operations</td></tr>
+          <tr><td>Mining/Validator Pools</td><td>Consensus Disruption</td><td>Delay validation</td></tr>
+          <tr><td>Mempool</td><td>Transaction Spamming</td><td>Clog the pending tx pool</td></tr>
+          <tr><td>Oracles</td><td>Data Query Floods</td><td>Manipulate or break oracle data</td></tr>
+        </table>
+      </div>
+      <div class="card" style="background: rgba(0,230,118,0.04); border-color: rgba(0,230,118,0.2); margin-top:12px">
+        <div class="card-title green">Mitigation</div>
+        <ul class="note-list green">
+          <li><strong>Gas Fees</strong> — Economic deterrent; spamming becomes expensive</li>
+          <li><strong>Mempool Filtering</strong> — Reject low-fee/duplicate tx, use Replace-by-Fee</li>
+          <li><strong>Rate Limiting</strong> — Control requests from a single source</li>
+          <li><strong>Load Balancing</strong> — Distribute traffic across multiple nodes</li>
+          <li><strong>CDN</strong> — Offload traffic from primary infrastructure</li>
+          <li><strong>Cloud-Based DDoS Protection</strong> — Absorb large-scale attacks</li>
+        </ul>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Detailed DDoS Classification</div>
+        <ul class="note-list">
+          <li><strong>Network-Level Attacks:</strong> UDP flood, ICMP flood</li>
+          <li><strong>Transport/Server-Level Attacks:</strong> TCP SYN flood, SSL flood</li>
+          <li><strong>Application-Level Attacks:</strong> HTTP GET/POST flood, DNS query flood</li>
+          <li><strong>Blockchain-Specific Vectors:</strong> transaction spam, mempool flooding, resource exhaustion</li>
+          <li><strong>Consensus Mechanism Attacks:</strong> target block production or validator coordination to slow the chain</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title orange">Impact of DDoS on Blockchain</div>
+        <ul class="note-list orange">
+          <li><strong>Network Congestion:</strong> legitimate transactions wait longer</li>
+          <li><strong>Service Disruption:</strong> wallets, exchanges, nodes, and RPC APIs become unavailable</li>
+          <li><strong>Increased Costs:</strong> more fees and infrastructure expense</li>
+          <li><strong>Consensus Disruption:</strong> validators/miners may lag or miss blocks</li>
+          <li><strong>Security Exposure:</strong> stressed systems are easier to exploit</li>
+          <li><strong>Risk of Forks:</strong> delayed propagation can create inconsistent chain views</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title orange">Transaction Malleability Attack</div>
+      <p>The ability to <strong>alter a transaction's hash (TXID) without changing its effect</strong>. An attacker tweaks a transaction slightly, giving it a different TXID, causing confusion in systems that track by TXID.</p>
+      <ul class="note-list orange" style="margin-top:10px">
+        <li>Problem: Wallets/exchanges tracking TXID may think a tx failed and resend → double spending</li>
+        <li><strong>Fix:</strong> SegWit (Segregated Witness) — separates signature from TXID hash computation</li>
+        <li>Bitcoin adopted SegWit in <strong>2017</strong> to eliminate this class of attacks</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title orange">Time Jacking</div>
+      <p>An attacker manipulates the <strong>network time perceived by a node</strong> by flooding it with Sybil nodes that send incorrect timestamps. The victim's internal clock shifts, causing invalid block acceptance or forks.</p>
+      <div class="table-wrap" style="margin-top:12px">
+        <table>
+          <tr><th>Goal</th><th>Impact</th></tr>
+          <tr><td>Desynchronize node</td><td>Accept outdated or invalid blocks</td></tr>
+          <tr><td>Force forks</td><td>Exploit differences in chain view</td></tr>
+          <tr><td>Censorship</td><td>Delay confirmation of valid transactions</td></tr>
+          <tr><td>Denial of Service</td><td>Node becomes stuck or disconnected</td></tr>
+        </table>
+      </div>
+      <ul class="note-list" style="margin-top:10px">
+        <li><strong>Countermeasure:</strong> Bitcoin Core sets bounds of ±70 minutes from system clock</li>
+        <li>Rely on system time rather than peer time</li>
+        <li>NTP integration for time verification</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title orange">Routing Attacks</div>
+      <p>Attacker manipulates <strong>internet traffic routing protocols</strong> (BGP, DNS) that blockchain nodes depend on for synchronization.</p>
+      <ul class="note-list orange" style="margin-top:10px">
+        <li><strong>Partitioning Attack:</strong> Splits blockchain network into disjoint segments → forks, stale blocks, double-spending risk</li>
+        <li><strong>Delay Attack:</strong> Slows traffic between nodes → nodes get outdated info → attacker mining advantage</li>
+        <li><strong>Hijack Attack:</strong> Misleads nodes through malicious networks (BGP hijack) → monitor/modify/discard data</li>
+        <li><strong>Mitigations:</strong> Multiple ISPs, encrypted comms (VPN/Tor), network monitoring, diversified peers, Route Origin Validation (ROV)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title orange">Sybil Attacks</div>
+      <p>An attacker creates <strong>multiple fake identities</strong> (nodes) in the network. The victim is surrounded by fake nodes that intercept all their transactions, making them vulnerable to double spending.</p>
+      <ul class="note-list orange" style="margin-top:10px">
+        <li>Difficult to detect and prevent</li>
+        <li><strong>Countermeasures:</strong> Increase cost of creating new identity | Require trust for joining network | Determine user power based on reputation</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title orange">Eclipse Attacks</div>
+      <p>Attacker controls <strong>all peer connections</strong> of a victim node, cutting it off from honest nodes. The victim becomes entirely dependent on the attacker's (possibly false) view of the blockchain.</p>
+      <div class="steps" style="margin-top:14px">
+        <div class="step"><div class="step-num orange">1</div><div class="step-content"><strong>Peer Table Flooding</strong><p>Attacker floods victim's peer table with fake/malicious IPs, crowding out real peers</p></div></div>
+        <div class="step"><div class="step-num orange">2</div><div class="step-content"><strong>Restart Exploit</strong><p>Node reloads peers from disk on restart. Attackers stored as preferred peers reconnect automatically</p></div></div>
+        <div class="step"><div class="step-num orange">3</div><div class="step-content"><strong>Full Isolation</strong><p>Attacker controls all connections → can send old blocks, hide mempool transactions, feed fake blockchain forks</p></div></div>
+      </div>
+      <div class="callout success" style="margin-top:12px">
+        <span class="callout-icon">✅</span>
+        <div><strong>Mitigation:</strong> Diversify connections (no all-from-one-IP) | Authenticated peers / whitelists | Rate-limit new peer additions | Periodic peer rotation</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title orange">Long-Range Attacks (PoS)</div>
+      <p>Targets <strong>Proof of Stake blockchains</strong> by reconstructing an alternative history from a point far back in the chain using old private keys. Unlike 51% attacks, no massive energy is needed — just old validator keys.</p>
+      <div class="steps" style="margin-top:14px">
+        <div class="step"><div class="step-num orange">1</div><div class="step-content"><strong>Obtain Old Keys</strong><p>Attacker acquires private keys of validators who had high stake in the past</p></div></div>
+        <div class="step"><div class="step-num orange">2</div><div class="step-content"><strong>Rebuild Chain from Genesis</strong><p>Creates a valid alternative chain from a distant checkpoint using those old keys</p></div></div>
+        <div class="step"><div class="step-num orange">3</div><div class="step-content"><strong>Convince New Nodes</strong><p>New/offline nodes syncing may adopt the malicious chain if it appears valid and follows protocol rules</p></div></div>
+      </div>
+      <div class="callout success" style="margin-top:12px">
+        <span class="callout-icon">✅</span>
+        <div><strong>Mitigations:</strong> Checkpointing (ignore chains before trusted checkpoint) | Weak Subjectivity (new nodes get trusted snapshot) | Slashing (penalize double-signing) | Key Expiry &amp; Rotation</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4.4 Smart Contract Attacks -->
+  <div id="u4-s4">
+    <div class="section-header">
+      <span class="section-number">4.4</span>
+      <h2 class="section-title u4">Smart Contract Attacks</h2>
+    </div>
+    <div class="card">
+      <div class="card-title orange">Top 5 Smart Contract Attacks</div>
+      <div class="grid-2">
+        <ul class="note-list orange">
+          <li>Reentrancy Attack</li>
+          <li>Integer Overflow / Underflow</li>
+          <li>Front-Running (Transaction Ordering Dependency)</li>
+        </ul>
+        <ul class="note-list orange">
+          <li>Flash Loan Attacks</li>
+          <li>Unchecked External Calls</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title orange">1. Reentrancy Attack</div>
+      <p>Exploits coding vulnerabilities that allow an <strong>external contract to re-enter a function before the state is updated</strong>. The most famous example is The DAO hack (2016).</p>
+      <div class="callout warn" style="margin-top:12px">
+        <span class="callout-icon">⚠️</span>
+        <div><strong>How it works:</strong> Contract sends ETH to external address → external contract's fallback runs → before original contract updates balance, attacker calls withdraw again → drains funds repeatedly</div>
+      </div>
+      <div class="card" style="background: rgba(0,230,118,0.04); border-color: rgba(0,230,118,0.2); margin-top:12px">
+        <div class="card-title green">Mitigation</div>
+        <ul class="note-list green">
+          <li><strong>Checks-Effects-Interactions pattern:</strong> Validate → Update state → External call</li>
+          <li><strong>Reentrancy Guard / Mutex:</strong> Modifier preventing function re-entry while already executing</li>
+          <li><strong>Avoid call() unless necessary:</strong> Prefer transfer() or send() which limit gas</li>
+          <li><strong>Pull Over Push pattern</strong> for fund transfers</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title orange">2. Integer Overflow/Underflow</div>
+      <p>In older Solidity (pre-0.8.0), when a calculation <strong>exceeds the max value or drops below zero</strong>, it wraps around silently.</p>
+      <div class="grid-2" style="margin-top:12px">
+        <div class="callout warn">
+          <span class="callout-icon">⬆️</span>
+          <div><strong>Overflow:</strong> uint8 max is 255. If you add 1 → it becomes 0 silently! Attacker can wrap balances around to gain funds.</div>
+        </div>
+        <div class="callout warn">
+          <span class="callout-icon">⬇️</span>
+          <div><strong>Underflow:</strong> uint8 value 0. Subtract 1 → it becomes 255 silently! Attacker can gain a massive balance from nothing.</div>
+        </div>
+      </div>
+      <div class="callout success" style="margin-top:12px">
+        <span class="callout-icon">✅</span>
+        <div><strong>Fix:</strong> Use Solidity ≥ 0.8.0 (built-in overflow checks) | Use SafeMath library for older versions | Always validate arithmetic manually if unsure</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title orange">3. Front-Running</div>
+      <p>An attacker observes a pending transaction in the <strong>public mempool</strong> and submits their own transaction with a higher gas fee, causing it to be mined first.</p>
+      <div class="steps" style="margin-top:14px">
+        <div class="step"><div class="step-num orange">1</div><div class="step-content"><strong>Alice's TX in Mempool</strong><p>Alice submits a buy order on Uniswap for a token</p></div></div>
+        <div class="step"><div class="step-num orange">2</div><div class="step-content"><strong>Bob Sees It</strong><p>Bob (attacker/MEV bot) sees the pending transaction and knows it will push the price up</p></div></div>
+        <div class="step"><div class="step-num orange">3</div><div class="step-content"><strong>Bob Frontruns</strong><p>Bob submits the same buy with higher gas → mined first → price rises</p></div></div>
+        <div class="step"><div class="step-num orange">4</div><div class="step-content"><strong>Profit</strong><p>Alice's tx mines after at the higher price. Bob immediately sells — profiting at Alice's expense (sandwich attack)</p></div></div>
+      </div>
+      <div class="callout success" style="margin-top:12px">
+        <span class="callout-icon">✅</span>
+        <div><strong>Mitigation:</strong> Commit-Reveal scheme (commit hash first, reveal later) | Randomized/delayed execution | Private transaction relays (Flashbots) — submit privately to miners</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title orange">5. Unchecked External Calls</div>
+      <p>When a smart contract calls another contract or address, it <strong>temporarily gives up control</strong>. If the external call fails silently or misbehaves and the result isn't checked, bad things happen.</p>
+      <ul class="note-list orange" style="margin-top:10px">
+        <li>Types: <code>address.call()</code>, <code>address.send()</code>, <code>address.transfer()</code>, <code>externalContract.someFunction()</code></li>
+        <li>Can't be sure what external code will do</li>
+        <li>Might fail without you knowing (if not checking return value)</li>
+        <li>Might re-enter your contract (reentrancy)</li>
+        <li>Might consume too much gas</li>
+      </ul>
+      <div class="callout success" style="margin-top:12px">
+        <span class="callout-icon">✅</span>
+        <div><strong>Mitigation:</strong> Always check return values | Avoid calling unknown contracts | Use pull instead of push | Use limited gas forwarding</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title green">Key Defense Best Practices</div>
+      <ul class="note-list green">
+        <li>Use latest Solidity version (≥ 0.8.0) for built-in safety</li>
+        <li>Avoid external calls or check them rigorously</li>
+        <li>Follow <strong>Checks-Effects-Interactions</strong> pattern always</li>
+        <li>Use OpenZeppelin libraries for security-hardened patterns</li>
+        <li>Rigorously test and audit all logic using tools like <strong>Slither, MythX, and Foundry</strong></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 4.5 Selfish Mining -->
+  <div id="u4-s5">
+    <div class="section-header">
+      <span class="section-number">4.5</span>
+      <h2 class="section-title u4">Selfish Mining</h2>
+    </div>
+    <div class="card">
+      <div class="card-title orange">What is Selfish Mining?</div>
+      <p>A deceptive strategy where a miner (or group) solves a block but <strong>withholds it from the public blockchain</strong>, creating a private fork to gain an unfair advantage over honest miners.</p>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="step-num orange">1</div><div class="step-content"><strong>Mine Privately</strong><p>Selfish miner finds a block but withholds it from the network</p></div></div>
+      <div class="step"><div class="step-num orange">2</div><div class="step-content"><strong>Extend Private Chain</strong><p>Continues mining on its own secret chain to stay ahead</p></div></div>
+      <div class="step"><div class="step-num orange">3</div><div class="step-content"><strong>Wait for Public Catch-Up</strong><p>If public miners find a block, the selfish miner quickly releases their chain</p></div></div>
+      <div class="step"><div class="step-num orange">4</div><div class="step-content"><strong>Longest Chain Wins</strong><p>Network accepts selfish miner's chain (if longer), orphaning honest miners' blocks</p></div></div>
+      <div class="step"><div class="step-num orange">5</div><div class="step-content"><strong>Unfair Reward</strong><p>Selfish miner earns more than their share of mining power; honest miners waste resources</p></div></div>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <div class="card-title">Why It Works</div>
+      <ul class="note-list">
+        <li>Most blockchains follow the <strong>longest-chain rule</strong></li>
+        <li>Honest miners waste resources on blocks that get orphaned</li>
+        <li>Selfish miners get more frequent rewards by <strong>manipulating chain visibility</strong></li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title orange">Impact &amp; Mitigation</div>
+      <div class="grid-2">
+        <ul class="note-list orange">
+          <li><strong>Centralization Risk:</strong> Encourages large mining pools</li>
+          <li><strong>Security Degradation:</strong> Reduces trust in PoW consensus</li>
+          <li><strong>Lower Network Efficiency:</strong> More orphaned blocks, wasted resources</li>
+          <li><strong>Fairness Violation:</strong> Honest miners unfairly penalized</li>
+        </ul>
+        <ul class="note-list green">
+          <li>Modify consensus to penalize block withholding</li>
+          <li>Uncle/orphan rewards (Ethereum) reduce selfish incentives</li>
+          <li>Detect abnormal chain behaviors using statistical/game-theoretic models</li>
+          <li>No known real-world attacks as of 2021</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4.6 CIA Triad -->
+  <div id="u4-s6">
+    <div class="section-header">
+      <span class="section-number">4.6</span>
+      <h2 class="section-title u4">Blockchain &amp; the CIA Triad</h2>
+    </div>
+    <div class="card">
+      <div class="card-title">CIA Triad — Foundational Security Concept</div>
+      <div class="grid-3">
+        <div class="callout info"><span class="callout-icon">🔒</span><div><strong>Confidentiality</strong><br>Only authorized individuals have access to information and resources</div></div>
+        <div class="callout info"><span class="callout-icon">🛡️</span><div><strong>Integrity</strong><br>Guard against improper modification; ensure non-repudiation and authenticity</div></div>
+        <div class="callout info"><span class="callout-icon">⚡</span><div><strong>Availability</strong><br>Ensure timely and reliable access to and use of information</div></div>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <tr><th>CIA Property</th><th>Blockchain Impact</th><th>Details</th></tr>
+        <tr><td><strong>Confidentiality</strong></td><td>🟡 Mixed Impact</td><td>Public chains (Bitcoin, Ethereum) are NOT confidential — all transactions are public. Private chains (Hyperledger) can enforce confidentiality via access controls and encryption.</td></tr>
+        <tr><td><strong>Integrity</strong></td><td>🟢 Strong Positive</td><td>Immutable ledger — confirmed data cannot be altered without redoing the entire chain. SHA-256 hashing + distributed consensus ensures no tampering. Automatic audit trails with timestamps.</td></tr>
+        <tr><td><strong>Availability</strong></td><td>🟢 Generally Strong</td><td>Decentralization = no single point of failure. Nodes replicate the entire ledger. Highly resilient to DDoS. As long as the network is live, data is accessible.</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title">Blockchain's Impact on Cybersecurity</div>
+      <div class="grid-2">
+        <ul class="note-list">
+          <li><strong>Decentralization:</strong> No single point of failure; increased resilience against attacks</li>
+          <li><strong>Data Integrity &amp; Immutability:</strong> Verifiable, traceable records; protection against unauthorized modification</li>
+          <li><strong>Enhanced Authentication:</strong> Public/private key cryptography for identity verification; smart contract access control</li>
+        </ul>
+        <ul class="note-list">
+          <li><strong>Secure Transactions:</strong> End-to-end encryption; transparent records prevent fraud</li>
+          <li><strong>Improved Audit Trails:</strong> Permanent, transparent transaction history; facilitates regulatory compliance</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4.7 Blockchain-Based DNS -->
+  <div id="u4-s7">
+    <div class="section-header">
+      <span class="section-number">4.7</span>
+      <h2 class="section-title u4">Blockchain-Based DNS Security</h2>
+    </div>
+    <div class="card">
+      <div class="card-title orange">Traditional DNS Problems</div>
+      <p>DNS (Domain Name System) translates human-readable domain names (like google.com) into IP addresses. Traditional DNS relies on <strong>centralized servers managed by companies or governments</strong>.</p>
+      <ul class="note-list orange" style="margin-top:10px">
+        <li><strong>DNS Spoofing/Poisoning:</strong> Attacker sends fake DNS responses, rerouting users to malicious sites</li>
+        <li><strong>Single Point of Failure:</strong> If a DNS server is down or hacked, domains become unreachable</li>
+        <li><strong>Censorship:</strong> Governments/ISPs can block or manipulate domain names</li>
+        <li><strong>Lack of Transparency:</strong> No public record of DNS entry changes</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title green">How Blockchain Fixes DNS</div>
+      <p>A blockchain-based DNS replaces central registries with a <strong>decentralized ledger</strong> maintained by multiple nodes where domain ownership is recorded as blockchain transactions.</p>
+      <ul class="note-list green" style="margin-top:10px">
+        <li>Entries can't be altered without private keys</li>
+        <li>Every change is publicly verifiable on-chain</li>
+        <li>No central body controls access or domain revocation</li>
+        <li>Smart contracts enforce rules (renewals, transfers)</li>
+        <li>Decentralized — no single point of failure</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">Real-World Examples</div>
+      <div class="grid-3">
+        <div class="callout info"><span class="callout-icon">🌐</span><div><strong>ENS (Ethereum Name Service)</strong><br>Uses Ethereum smart contracts. Maps .eth domains to wallet addresses or IPFS sites.</div></div>
+        <div class="callout info"><span class="callout-icon">🤝</span><div><strong>Handshake (HNS)</strong><br>Decentralized root DNS zone. Competes with ICANN. Auction-based TLD registration.</div></div>
+        <div class="callout info"><span class="callout-icon">🔑</span><div><strong>Unstoppable Domains</strong><br>.crypto, .wallet, .x domains. Links to multiple wallets. One-time payment, no renewals.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4.8 Hyperledger Fabric -->
+  <div id="u4-s8">
+    <div class="section-header">
+      <span class="section-number">4.8</span>
+      <h2 class="section-title u4">Hyperledger Fabric Architecture</h2>
+    </div>
+    <div class="card">
+      <div class="card-title">Node Types in Hyperledger Fabric</div>
+      <div class="grid-3">
+        <div class="callout info"><span class="callout-icon">📦</span><div><strong>Committing Peer</strong><br>Maintains ledger and world state. Commits transactions. May hold chaincode (smart contract).</div></div>
+        <div class="callout info"><span class="callout-icon">✅</span><div><strong>Endorsing Peer</strong><br>Specialized committing peer. Receives transaction proposals and grants/denies endorsement. Must hold chaincode.</div></div>
+        <div class="callout info"><span class="callout-icon">📋</span><div><strong>Ordering Node</strong><br>Approves transaction block inclusion in the ledger. Does NOT hold chaincode or ledger. Communicates with peers.</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title orange">7-Step Transaction Flow</div>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-content"><strong>Propose Transaction</strong><p>Client application submits a transaction proposal to required endorsing peers (as per endorsement policy)</p></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-content"><strong>Execute Proposed Transaction</strong><p>Endorsers execute proposals independently — NO ledger update yet. Each captures Read-Write (RW) sets.</p></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-content"><strong>Proposal Response</strong><p>RW sets are signed by each endorser and returned to the application asynchronously</p></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-content"><strong>Order Transaction</strong><p>Application submits responses to the ordering service. Ordering happens in parallel for all applications.</p></div></div>
+        <div class="step"><div class="step-num">5</div><div class="step-content"><strong>Deliver Transaction</strong><p>Ordering service packages transactions into blocks and delivers to committing peers</p></div></div>
+        <div class="step"><div class="step-num">6</div><div class="step-content"><strong>Validate Transaction</strong><p>Every committing peer validates against endorsement policy AND checks RW sets against current world state. Valid tx → applied to state. Invalid tx → recorded but world state NOT updated.</p></div></div>
+        <div class="step"><div class="step-num">7</div><div class="step-content"><strong>Notify Transaction</strong><p>Applications registered for events are notified of success/failure for each transaction and new block additions</p></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Ordering Service Options</div>
+      <ul class="note-list">
+        <li><strong>SOLO:</strong> Single node — for development only</li>
+        <li><strong>Kafka:</strong> Crash fault tolerant consensus — minimum 3 nodes, odd number recommended</li>
+        <li><strong>Raft:</strong> Leader-based crash fault tolerant ordering widely used in modern Fabric networks</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">Channels</div>
+      <p>Channels provide <strong>privacy between different ledgers</strong> within the same Fabric network.</p>
+      <ul class="note-list" style="margin-top:10px">
+        <li>Ledgers exist in the scope of a channel</li>
+        <li>Can be shared across an entire network or limited to specific participants</li>
+        <li>Chaincode is instantiated on specific channels</li>
+        <li>Peers can participate in <strong>multiple channels</strong> simultaneously</li>
+        <li>Enables concurrent execution for performance and scalability</li>
+      </ul>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Identity, MSP, and Certificate Authorities</div>
+        <ul class="note-list">
+          <li><strong>MSP (Membership Service Provider):</strong> defines how identities are issued, validated, and trusted</li>
+          <li><strong>Fabric CA:</strong> default CA used to register and enroll users and nodes</li>
+          <li><strong>External CA:</strong> organizations can plug in their own PKI infrastructure</li>
+          <li><strong>LDAP Integration:</strong> allows enterprise-backed identity and authentication workflows</li>
+          <li>Each organization typically maintains its own local MSP and trust roots</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title orange">Single-Channel vs Multi-Channel Networks</div>
+        <ul class="note-list orange">
+          <li><strong>Single-channel network:</strong> all participants share one ledger and one visibility scope</li>
+          <li><strong>Multi-channel network:</strong> different participant groups can maintain separate ledgers</li>
+          <li>Useful when business relationships require selective privacy</li>
+          <li>Improves confidentiality without building entirely separate blockchains</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title green">Key Benefits of Hyperledger Fabric Transaction Flow</div>
+      <ul class="note-list green">
+        <li>Better reflects business processes by specifying who endorses transactions</li>
+        <li>Eliminates non-deterministic transactions</li>
+        <li>Scales the number of participants and transaction throughput</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- MCQs Unit 4 -->
+  <div class="mcq-section" id="u4-mcq">
+    <div class="divider"></div>
+    <div class="mcq-header">📝 Unit 4 — Practice MCQs</div>
+    <div class="mcq-score-bar">
+      <div><div class="score-label">SCORE</div><div class="score-val" id="u4-score">0 / 0</div></div>
+      <button class="reset-btn" onclick="resetMCQ('u4')">↺ Reset</button>
+    </div>
+
+    <div class="mcq-card" data-correct="b" data-unit="u4">
+      <div class="mcq-q"><span class="qnum">Q1.</span> In a 51% attack, what does the attacker gain control of?</div>
+      <div class="mcq-options">
+        <div class="mcq-option" data-opt="a"><span class="opt-letter">A</span> More than 50% of all wallets on the network</div>
+        <div class="mcq-option" data-opt="b"><span class="opt-letter">B</span> More than 50% of the network's total hashing power</div>
+        <div class="mcq-option" data-opt="c"><span class="opt-letter">C</span> More than 50% of smart contracts</div>
+        <div class="mcq-option" data-opt="d"><span class="opt-letter">D</span> More than 50% of private keys</div>
+      </div>
+      <div class="mcq-explain">A 51% attack requires gaining control of more than 50% of the network's total hashing power, giving the attacker decisive control over the blockchain.</div>
+    </div>
+
+    <div class="mcq-card" data-correct="c" data-unit="u4">
+      <div class="mcq-q"><span class="qnum">Q2.</span> What is a Sybil attack?</div>
+      <div class="mcq-options">
+        <div class="mcq-option" data-opt="a"><span class="opt-letter">A</span> An attack that modifies transaction hashes</div>
+        <div class="mcq-option" data-opt="b"><span class="opt-letter">B</span> An attack that floods the network with transactions</div>
+        <div class="mcq-option" data-opt="c"><span class="opt-letter">C</span> An attack using multiple fake identities assigned to the same node to surround victims</div>
+        <div class="mcq-option" data-opt="d"><span class="opt-letter">D</span> An attack that steals private keys</div>
+      </div>
+      <div class="mcq-explain">A Sybil attack assigns multiple identities to the same node. The attacker controls many fake nodes, surrounding a victim node so all its transactions are intercepted, enabling double-spending.</div>
+    </div>
+
+    <div class="mcq-card" data-correct="a" data-unit="u4">
+      <div class="mcq-q"><span class="qnum">Q3.</span> What is a reentrancy attack in smart contracts?</div>
+      <div class="mcq-options">
+        <div class="mcq-option" data-opt="a"><span class="opt-letter">A</span> An external contract repeatedly calls a withdraw function before the state is updated</div>
+        <div class="mcq-option" data-opt="b"><span class="opt-letter">B</span> An attacker mines blocks faster than the network</div>
+        <div class="mcq-option" data-opt="c"><span class="opt-letter">C</span> A transaction is modified after being submitted</div>
+        <div class="mcq-option" data-opt="d"><span class="opt-letter">D</span> A miner withholds a found block from the network</div>
+      </div>
+      <div class="mcq-explain">Reentrancy occurs when an external contract exploits a vulnerability to re-enter a function (usually withdraw) before the original contract updates its balance, allowing repeated fund draining.</div>
+    </div>
+
+    <div class="mcq-card" data-correct="d" data-unit="u4">
+      <div class="mcq-q"><span class="qnum">Q4.</span> What does SegWit (Segregated Witness) fix in Bitcoin?</div>
+      <div class="mcq-options">
+        <div class="mcq-option" data-opt="a"><span class="opt-letter">A</span> 51% attacks</div>
+        <div class="mcq-option" data-opt="b"><span class="opt-letter">B</span> Double spending</div>
+        <div class="mcq-option" data-opt="c"><span class="opt-letter">C</span> Private key theft</div>
+        <div class="mcq-option" data-opt="d"><span class="opt-letter">D</span> Transaction malleability attacks</div>
+      </div>
+      <div class="mcq-explain">SegWit separates the signature from the TXID hash computation, making TXIDs non-malleable. Bitcoin adopted SegWit in 2017 specifically to fix transaction malleability attacks.</div>
+    </div>
+
+    <div class="mcq-card" data-correct="b" data-unit="u4">
+      <div class="mcq-q"><span class="qnum">Q5.</span> In the CIA Triad, which property does blockchain MOST strongly support?</div>
+      <div class="mcq-options">
+        <div class="mcq-option" data-opt="a"><span class="opt-letter">A</span> Confidentiality</div>
+        <div class="mcq-option" data-opt="b"><span class="opt-letter">B</span> Integrity</div>
+        <div class="mcq-option" data-opt="c"><span class="opt-letter">C</span> Authentication</div>
+        <div class="mcq-option" data-opt="d"><span class="opt-letter">D</span> Accountability</div>
+      </div>
+      <div class="mcq-explain">Blockchain strongly supports Integrity. Its immutable ledger, cryptographic hashing (SHA-256), and distributed consensus ensure data cannot be tampered with. Note: Confidentiality is mixed (public chains are transparent).</div>
+    </div>
+
+    <div class="mcq-card" data-correct="c" data-unit="u4">
+      <div class="mcq-q"><span class="qnum">Q6.</span> In front-running attacks, what does the attacker exploit?</div>
+      <div class="mcq-options">
+        <div class="mcq-option" data-opt="a"><span class="opt-letter">A</span> Weak private keys</div>
+        <div class="mcq-option" data-opt="b"><span class="opt-letter">B</span> Integer overflow vulnerabilities</div>
+        <div class="mcq-option" data-opt="c"><span class="opt-letter">C</span> Publicly visible pending transactions in the mempool</div>
+        <div class="mcq-option" data-opt="d"><span class="opt-letter">D</span> Weak consensus mechanisms</div>
+      </div>
+      <div class="mcq-explain">Front-running exploits the fact that transactions are publicly visible in the mempool before being mined. The attacker submits the same transaction with higher gas to be mined first.</div>
+    </div>
+
+    <div class="mcq-card" data-correct="a" data-unit="u4">
+      <div class="mcq-q"><span class="qnum">Q7.</span> What is selfish mining?</div>
+      <div class="mcq-options">
+        <div class="mcq-option" data-opt="a"><span class="opt-letter">A</span> Mining and withholding a found block to gain unfair advantage over honest miners</div>
+        <div class="mcq-option" data-opt="b"><span class="opt-letter">B</span> Mining with stolen computing resources</div>
+        <div class="mcq-option" data-opt="c"><span class="opt-letter">C</span> Refusing to validate other miners' blocks</div>
+        <div class="mcq-option" data-opt="d"><span class="opt-letter">D</span> Creating fake transactions to clog the network</div>
+      </div>
+      <div class="mcq-explain">Selfish mining = finding a block, keeping it secret, continuing to mine privately. When honest miners find a block, the selfish miner releases their chain. If longer, it wins and honest miners' work is orphaned.</div>
+    </div>
+
+    <div class="mcq-card" data-correct="d" data-unit="u4">
+      <div class="mcq-q"><span class="qnum">Q8.</span> An eclipse attack achieves its goal by:</div>
+      <div class="mcq-options">
+        <div class="mcq-option" data-opt="a"><span class="opt-letter">A</span> Overwhelming a node with transactions</div>
+        <div class="mcq-option" data-opt="b"><span class="opt-letter">B</span> Stealing the victim node's private key</div>
+        <div class="mcq-option" data-opt="c"><span class="opt-letter">C</span> Modifying blockchain consensus rules</div>
+        <div class="mcq-option" data-opt="d"><span class="opt-letter">D</span> Controlling all peer connections of a victim node, isolating it from honest nodes</div>
+      </div>
+      <div class="mcq-explain">An eclipse attack works by flooding a victim's peer table with malicious IPs so all connections go to attacker-controlled nodes. The victim is isolated and receives only the attacker's view of the blockchain.</div>
+    </div>
+
+    <div class="mcq-card" data-correct="b" data-unit="u4">
+      <div class="mcq-q"><span class="qnum">Q9.</span> In Hyperledger Fabric, which node type does NOT hold a ledger or chaincode?</div>
+      <div class="mcq-options">
+        <div class="mcq-option" data-opt="a"><span class="opt-letter">A</span> Endorsing Peer</div>
+        <div class="mcq-option" data-opt="b"><span class="opt-letter">B</span> Ordering Node</div>
+        <div class="mcq-option" data-opt="c"><span class="opt-letter">C</span> Committing Peer</div>
+        <div class="mcq-option" data-opt="d"><span class="opt-letter">D</span> Fabric CA</div>
+      </div>
+      <div class="mcq-explain">The Ordering Node is responsible for ordering transactions into blocks and communicating with peers. It does NOT hold smart contracts (chaincode) or a ledger — that's the peers' job.</div>
+    </div>
+
+    <div class="mcq-card" data-correct="c" data-unit="u4">
+      <div class="mcq-q"><span class="qnum">Q10.</span> In Solidity ≥ 0.8.0, integer overflow/underflow is:</div>
+      <div class="mcq-options">
+        <div class="mcq-option" data-opt="a"><span class="opt-letter">A</span> Still possible and requires SafeMath</div>
+        <div class="mcq-option" data-opt="b"><span class="opt-letter">B</span> Impossible due to fixed integers</div>
+        <div class="mcq-option" data-opt="c"><span class="opt-letter">C</span> Automatically reverted by built-in overflow checks</div>
+        <div class="mcq-option" data-opt="d"><span class="opt-letter">D</span> Handled by the EVM, not Solidity</div>
+      </div>
+      <div class="mcq-explain">Solidity ≥ 0.8.0 has built-in overflow/underflow checks that automatically revert the transaction when arithmetic exceeds bounds. SafeMath is only needed for older versions.</div>
+    </div>
+
+    <div class="mcq-card" data-correct="a" data-unit="u4">
+      <div class="mcq-q"><span class="qnum">Q11.</span> Long-range attacks target which type of blockchain?</div>
+      <div class="mcq-options">
+        <div class="mcq-option" data-opt="a"><span class="opt-letter">A</span> Proof of Stake (PoS) blockchains</div>
+        <div class="mcq-option" data-opt="b"><span class="opt-letter">B</span> Proof of Work (PoW) blockchains</div>
+        <div class="mcq-option" data-opt="c"><span class="opt-letter">C</span> Private/permissioned blockchains only</div>
+        <div class="mcq-option" data-opt="d"><span class="opt-letter">D</span> All types of blockchains equally</div>
+      </div>
+      <div class="mcq-explain">Long-range attacks specifically target PoS blockchains. Attackers use old validator private keys to reconstruct a valid alternative history from genesis — something not possible in PoW (which requires actual energy/hash power).</div>
+    </div>
+
+    <div class="mcq-card" data-correct="d" data-unit="u4">
+      <div class="mcq-q"><span class="qnum">Q12.</span> What was the approximate amount stolen from cryptocurrency platforms in 2022?</div>
+      <div class="mcq-options">
+        <div class="mcq-option" data-opt="a"><span class="opt-letter">A</span> $500 million</div>
+        <div class="mcq-option" data-opt="b"><span class="opt-letter">B</span> $1.7 billion</div>
+        <div class="mcq-option" data-opt="c"><span class="opt-letter">C</span> $2.2 billion</div>
+        <div class="mcq-option" data-opt="d"><span class="opt-letter">D</span> $3.7 billion</div>
+      </div>
+      <div class="mcq-explain">In 2022, approximately $3.7 billion was stolen from cryptocurrency platforms. This decreased to $1.7B in 2023, then rose again to $2.2B in 2024.</div>
+    </div>
+
+  </div>
+</div><!-- end u4 -->
+</div><!-- end container -->
+
+<button class="fab" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">↑</button>
+
+<script>
+// ─── UNIT SWITCHING ───
+const tocData = {
+  u3: [
+    {id:'u3-s1', label:'Intro to Solidity'},
+    {id:'u3-s2', label:'Remix IDE'},
+    {id:'u3-s3', label:'Variables'},
+    {id:'u3-s4', label:'Data Types'},
+    {id:'u3-s5', label:'Operators & Constructors'},
+    {id:'u3-s6', label:'Control Flow'},
+    {id:'u3-s7', label:'Functions'},
+    {id:'u3-s8', label:'Arrays/Structs/Maps'},
+    {id:'u3-s9', label:'Payable & Fallback'},
+    {id:'u3-s10', label:'Events & Overloading'},
+    {id:'u3-s11', label:'Withdrawal & Access'},
+    {id:'u3-s12', label:'Ether Units'},
+    {id:'u3-s13', label:'Math & Crypto Built-ins'},
+    {id:'u3-mcq', label:'📝 MCQs'},
+  ],
+  u4: [
+    {id:'u4-s1', label:'Risks Overview'},
+    {id:'u4-s2', label:'Mechanism Risks'},
+    {id:'u4-s3', label:'Network Attacks'},
+    {id:'u4-s4', label:'Smart Contract Attacks'},
+    {id:'u4-s5', label:'Selfish Mining'},
+    {id:'u4-s6', label:'CIA Triad'},
+    {id:'u4-s7', label:'Blockchain DNS'},
+    {id:'u4-s8', label:'Hyperledger Fabric'},
+    {id:'u4-mcq', label:'📝 MCQs'},
+  ]
+};
+
+let currentUnit = 'u3';
+
+function buildTOC(unit) {
+  const bar = document.getElementById('tocBar');
+  bar.innerHTML = '';
+  tocData[unit].forEach(item => {
+    const el = document.createElement('div');
+    el.className = 'toc-item';
+    el.textContent = item.label;
+    el.onclick = () => {
+      document.getElementById(item.id)?.scrollIntoView({behavior:'smooth', block:'start'});
+    };
+    bar.appendChild(el);
+  });
+}
+
+function switchUnit(unit) {
+  currentUnit = unit;
+  document.querySelectorAll('.unit-section').forEach(s => s.classList.remove('active'));
+  document.getElementById(unit).classList.add('active');
+  document.querySelectorAll('.unit-tab').forEach(t => t.classList.remove('active'));
+  document.querySelector(`.unit-tab.${unit}`).classList.add('active');
+  buildTOC(unit);
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+buildTOC('u3');
+
+// ─── MCQ LOGIC ───
+const scores = { u3: {correct:0, total:0}, u4: {correct:0, total:0} };
+
+document.querySelectorAll('.mcq-card').forEach(card => {
+  const correct = card.dataset.correct;
+  const unit = card.dataset.unit;
+  const options = card.querySelectorAll('.mcq-option');
+  const explain = card.querySelector('.mcq-explain');
+  let answered = false;
+
+  options.forEach(opt => {
+    opt.addEventListener('click', () => {
+      if (answered) return;
+      answered = true;
+      scores[unit].total++;
+      const chosen = opt.dataset.opt;
+
+      options.forEach(o => {
+        if (o.dataset.opt === correct) o.classList.add('revealed-correct');
+      });
+
+      if (chosen === correct) {
+        opt.classList.add('correct');
+        scores[unit].correct++;
+      } else {
+        opt.classList.add('wrong');
+      }
+
+      explain.classList.add('show');
+      updateScore(unit);
+    });
+  });
+});
+
+function updateScore(unit) {
+  const el = document.getElementById(`${unit}-score`);
+  if (el) el.textContent = `${scores[unit].correct} / ${scores[unit].total}`;
+}
+
+function resetMCQ(unit) {
+  scores[unit] = {correct:0, total:0};
+  updateScore(unit);
+  document.querySelectorAll(`.mcq-card[data-unit="${unit}"]`).forEach(card => {
+    card.querySelectorAll('.mcq-option').forEach(o => {
+      o.classList.remove('correct','wrong','revealed-correct');
+    });
+    card.querySelector('.mcq-explain').classList.remove('show');
+  });
+  // Re-enable clicking
+  document.querySelectorAll(`.mcq-card[data-unit="${unit}"]`).forEach(card => {
+    const options = card.querySelectorAll('.mcq-option');
+    options.forEach(opt => {
+      const newOpt = opt.cloneNode(true);
+      opt.parentNode.replaceChild(newOpt, opt);
+    });
+    const explain = card.querySelector('.mcq-explain');
+    let answered = false;
+    const correct = card.dataset.correct;
+    card.querySelectorAll('.mcq-option').forEach(opt => {
+      opt.addEventListener('click', () => {
+        if (answered) return;
+        answered = true;
+        scores[unit].total++;
+        const chosen = opt.dataset.opt;
+        card.querySelectorAll('.mcq-option').forEach(o => {
+          if (o.dataset.opt === correct) o.classList.add('revealed-correct');
+        });
+        if (chosen === correct) { opt.classList.add('correct'); scores[unit].correct++; }
+        else { opt.classList.add('wrong'); }
+        explain.classList.add('show');
+        updateScore(unit);
+      });
+    });
+  });
+}
+</script>
+</body>
+</html>

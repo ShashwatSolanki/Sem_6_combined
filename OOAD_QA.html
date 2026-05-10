@@ -1,0 +1,2130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OOAD — Complete Q&A Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f14;
+    --surface: #13161e;
+    --surface2: #1a1e28;
+    --border: #252a38;
+    --accent: #6ee7b7;
+    --accent2: #818cf8;
+    --accent3: #f59e0b;
+    --accent4: #f87171;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --tag-bg: #1e2538;
+    --code-bg: #0f1117;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* ─── Header ─── */
+  .hero {
+    background: linear-gradient(135deg, #0d0f14 0%, #131a2e 50%, #0f1a24 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 60px 40px 50px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; left: -60px;
+    width: 360px; height: 360px;
+    background: radial-gradient(circle, rgba(110,231,183,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; right: -80px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(129,140,248,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-inner { max-width: 1100px; margin: 0 auto; position: relative; }
+  .hero-tag {
+    display: inline-block;
+    background: rgba(110,231,183,0.12);
+    color: var(--accent);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(110,231,183,0.2);
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero-sub {
+    color: var(--muted);
+    font-size: 15px;
+    max-width: 560px;
+  }
+  .stats {
+    display: flex;
+    gap: 32px;
+    margin-top: 32px;
+    flex-wrap: wrap;
+  }
+  .stat { text-align: left; }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent);
+    display: block;
+    line-height: 1;
+  }
+  .stat-label { font-size: 12px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
+
+  /* ─── Layout ─── */
+  .wrapper { max-width: 1100px; margin: 0 auto; padding: 40px 24px; }
+
+  /* ─── Filters / Search ─── */
+  .controls {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 36px;
+  }
+  .search-wrap {
+    flex: 1; min-width: 240px;
+    position: relative;
+  }
+  .search-wrap input {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    padding: 10px 16px 10px 40px;
+    border-radius: 10px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .search-wrap input:focus { border-color: var(--accent); }
+  .search-wrap svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
+  .search-wrap input::placeholder { color: var(--muted); }
+
+  .filter-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    padding: 9px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .filter-btn:hover, .filter-btn.active {
+    background: var(--accent);
+    color: #0d0f14;
+    border-color: var(--accent);
+  }
+
+  /* ─── Section headers ─── */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    margin-top: 48px;
+  }
+  .section-header:first-of-type { margin-top: 0; }
+  .section-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .unit1 .section-dot { background: var(--accent); }
+  .unit2 .section-dot { background: var(--accent2); }
+  .unit3 .section-dot { background: var(--accent3); }
+  .unit4 .section-dot { background: var(--accent4); }
+
+  .section-header h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  .section-header .unit-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    padding: 3px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+  }
+  .unit1 .unit-pill { background: rgba(110,231,183,0.1); color: var(--accent); }
+  .unit2 .unit-pill { background: rgba(129,140,248,0.1); color: var(--accent2); }
+  .unit3 .unit-pill { background: rgba(245,158,11,0.1); color: var(--accent3); }
+  .unit4 .unit-pill { background: rgba(248,113,113,0.1); color: var(--accent4); }
+
+  /* ─── Q&A Cards ─── */
+  .qa-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    margin-bottom: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .qa-card:hover { border-color: #3a4055; }
+  .qa-card.hidden { display: none; }
+
+  .qa-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 18px 22px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .qa-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    flex-shrink: 0;
+    padding-top: 2px;
+    min-width: 28px;
+  }
+  .qa-q {
+    flex: 1;
+    font-weight: 500;
+    font-size: 14.5px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .qa-chevron {
+    flex-shrink: 0;
+    margin-top: 2px;
+    color: var(--muted);
+    transition: transform 0.3s;
+  }
+  .qa-card.open .qa-chevron { transform: rotate(180deg); }
+
+  .qa-body {
+    display: none;
+    padding: 0 22px 22px 64px;
+    border-top: 1px solid var(--border);
+    padding-top: 18px;
+  }
+  .qa-card.open .qa-body { display: block; }
+
+  .qa-body p { margin-bottom: 12px; color: #cbd5e1; font-size: 14.5px; }
+  .qa-body p:last-child { margin-bottom: 0; }
+
+  .qa-body h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin: 18px 0 8px;
+  }
+  .qa-body h4:first-child { margin-top: 0; }
+
+  .qa-body ul, .qa-body ol {
+    padding-left: 20px;
+    margin-bottom: 12px;
+  }
+  .qa-body li {
+    color: #cbd5e1;
+    font-size: 14.5px;
+    margin-bottom: 6px;
+  }
+  .qa-body li strong { color: var(--text); }
+
+  .qa-body code {
+    font-family: 'DM Mono', monospace;
+    font-size: 12.5px;
+    background: var(--code-bg);
+    color: var(--accent);
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+
+  .qa-body pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    overflow-x: auto;
+    margin: 12px 0;
+    font-family: 'DM Mono', monospace;
+    font-size: 12.5px;
+    line-height: 1.6;
+    color: #a5f3fc;
+  }
+
+  .qa-body .note {
+    background: rgba(110,231,183,0.06);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 12px 0;
+    font-size: 13.5px;
+    color: #94a3b8;
+  }
+  .qa-body .note strong { color: var(--accent); }
+
+  .qa-body .diagram-placeholder {
+    background: var(--surface2);
+    border: 1px dashed var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    font-family: 'DM Mono', monospace;
+    margin: 12px 0;
+  }
+
+  .tag {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-right: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .tag-java { background: rgba(248,113,113,0.12); color: #fca5a5; }
+  .tag-uml { background: rgba(129,140,248,0.12); color: #a5b4fc; }
+  .tag-grasp { background: rgba(245,158,11,0.12); color: #fcd34d; }
+  .tag-solid { background: rgba(52,211,153,0.12); color: #6ee7b7; }
+  .tag-pattern { background: rgba(167,139,250,0.12); color: #c4b5fd; }
+  .tag-anti { background: rgba(251,113,133,0.12); color: #fda4af; }
+
+  /* ─── No results ─── */
+  #no-results {
+    display: none;
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+  #no-results svg { display: block; margin: 0 auto 16px; opacity: 0.3; }
+
+  /* ─── Expand all button ─── */
+  .expand-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    padding: 7px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .expand-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ─── Footer ─── */
+  .footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 24px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.06em;
+  }
+
+  @media (max-width: 600px) {
+    .hero { padding: 40px 20px 36px; }
+    .wrapper { padding: 28px 16px; }
+    .qa-body { padding-left: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">OOAD with Java · UE19CS353 / UE20CS352</div>
+    <h1>Complete <span>Q&A</span> Guide</h1>
+    <p class="hero-sub">All unique exam questions answered from the official course slides — Units 1–4.</p>
+    <div class="stats">
+      <div class="stat"><span class="stat-num">55+</span><span class="stat-label">Unique Questions</span></div>
+      <div class="stat"><span class="stat-num">4</span><span class="stat-label">Units Covered</span></div>
+      <div class="stat"><span class="stat-num">9</span><span class="stat-label">Past Papers</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="wrapper">
+
+  <!-- Controls -->
+  <div class="controls">
+    <div class="search-wrap">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="searchInput" placeholder="Search questions…" oninput="filterCards()">
+    </div>
+    <button class="filter-btn active" onclick="filterUnit('all', this)">All</button>
+    <button class="filter-btn" onclick="filterUnit('unit1', this)">Unit 1</button>
+    <button class="filter-btn" onclick="filterUnit('unit2', this)">Unit 2</button>
+    <button class="filter-btn" onclick="filterUnit('unit3', this)">Unit 3</button>
+    <button class="filter-btn" onclick="filterUnit('unit4', this)">Unit 4</button>
+    <button class="expand-btn" onclick="toggleAll()">Expand All</button>
+  </div>
+
+  <!-- ══════════════ UNIT 1 ══════════════ -->
+  <div class="section-header unit1" data-unit="unit1">
+    <div class="section-dot"></div>
+    <h2>Unit 1 — OOP Concepts & UML Diagrams</h2>
+    <span class="unit-pill">Unit 1</span>
+  </div>
+
+  <div class="qa-card" data-unit="unit1">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">01</span>
+      <span class="qa-q">Elucidate the four main pillars of Object-Oriented Programming: Abstraction, Encapsulation, Inheritance, and Polymorphism.</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-java">Java</span><span class="tag tag-uml">OOP</span>
+      <h4>1. Abstraction</h4>
+      <p>Abstraction means representing essential features of an entity while hiding the irrelevant implementation details. It lets you model real-world concepts in a simplified way. In Java, abstraction is achieved via <code>abstract</code> classes and <code>interface</code>s — abstract classes allow partial abstraction and interfaces allow 100% abstraction.</p>
+      <pre>abstract class Animal {
+    public abstract void animalSound(); // abstract method — no body
+    public void sleep() { System.out.println("Zzz"); }
+}
+class Dog extends Animal {
+    public void animalSound() { System.out.println("Woof"); }
+}</pre>
+      <h4>2. Encapsulation</h4>
+      <p>Encapsulation bundles data (attributes) and the methods that operate on that data within a single unit (class), and restricts direct access to internal state using access modifiers (<code>private</code>, <code>protected</code>, <code>public</code>). External code interacts only through well-defined getter/setter methods, protecting the internal representation.</p>
+      <pre>class Person {
+    private String name; // hidden
+    public String getName() { return name; }
+    public void setName(String n) { this.name = n; }
+}</pre>
+      <h4>3. Inheritance</h4>
+      <p>Inheritance is the mechanism by which a child (subclass) acquires the attributes and behaviours of a parent (superclass). It promotes code reuse and represents "is-a" relationships. In UML, shown as a solid line with a hollow triangle pointing to the superclass.</p>
+      <pre>class Vehicle { void start() { System.out.println("Starting"); } }
+class Car extends Vehicle { void honk() { System.out.println("Beep"); } }</pre>
+      <h4>4. Polymorphism</h4>
+      <p>Polymorphism ("many forms") allows a single interface to represent different underlying forms. There are two main types:</p>
+      <ul>
+        <li><strong>Compile-time (overloading / ad-hoc):</strong> Same method name with different parameter signatures in the same class.</li>
+        <li><strong>Runtime (overriding / inclusion):</strong> A subclass provides a specific implementation for a method already defined in its superclass; the correct version is resolved at runtime via dynamic dispatch.</li>
+      </ul>
+      <pre>class Shape { void draw() { System.out.println("Shape"); } }
+class Circle extends Shape {
+    @Override void draw() { System.out.println("Circle"); }
+}</pre>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit1">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">02</span>
+      <span class="qa-q">Write short notes on the different types of relationships in a UML Class Diagram: Association, Aggregation, Composition, Qualified Association, Generalization, Dependency, and Realization.</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-uml">Class Diagram</span>
+      <h4>Association</h4>
+      <p>A structural relationship between two classes indicating that objects of one class are connected to objects of another. Drawn as a plain solid line; can be unidirectional (open arrowhead) or bidirectional. Annotated with multiplicity (e.g., <code>1..*</code>). Example: <em>Student</em> ↔ <em>Instructor</em>.</p>
+      <h4>Aggregation ("has-a", weak)</h4>
+      <p>A special association representing a whole–part relationship where the part can exist independently of the whole. Drawn as a solid line with a <strong>hollow diamond</strong> at the whole end. Example: <em>Department</em> ◇— <em>Professor</em>. Professors survive even if a department is dissolved.</p>
+      <h4>Composition ("has-a", strong)</h4>
+      <p>A stronger form of aggregation where the part <em>cannot</em> exist without the whole — lifecycle of the part depends on the whole. Drawn with a <strong>filled diamond</strong> at the whole end. Example: <em>Car</em> ◆— <em>Engine</em>. If the car is destroyed, the engine instance ceases to exist as well.</p>
+      <h4>Qualified Association</h4>
+      <p>An association with a <em>qualifier</em> — a key or discriminator attribute placed in a small box on the association end — that identifies or reduces the multiplicity on the other end. Example: <em>Bank</em> [accountNumber] → <em>Account</em>. A specific account number uniquely identifies one Account from the Bank's perspective, reducing multiplicity from many to one.</p>
+      <h4>Generalization (Inheritance)</h4>
+      <p>An "is-a" relationship from subclass to superclass. Child inherits parent attributes/operations. Drawn as a solid line with a <strong>hollow triangle arrowhead</strong> pointing to the parent. Example: <em>Car</em> → <em>Vehicle</em>.</p>
+      <h4>Dependency</h4>
+      <p>A weak relationship indicating that one class uses another (e.g., as a method parameter) but does not store it as an attribute. A change in the used class may affect the dependent class. Drawn as a <strong>dashed arrow</strong>. Example: <em>Person</em> --→ <em>Book</em> (Person has <code>hasRead(Book)</code> method).</p>
+      <h4>Realization (Interface Implementation)</h4>
+      <p>A relationship between a class and an interface where the class guarantees to implement all operations declared in the interface. Drawn as a <strong>dashed line with a hollow open arrowhead</strong> pointing to the interface. Example: <em>AudioPlayer</em> - - ▷ «interface» <em>MediaPlayer</em>.</p>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit1">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">03</span>
+      <span class="qa-q">Identify the relationships (include/extend/generalization) between given pairs of Use Cases and depict them with appropriate notation.</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-uml">Use Case</span>
+      <h4>Use Case Relationship Types</h4>
+      <ul>
+        <li><strong>«include»</strong>: The base use case <em>always</em> invokes the included use case. Arrow points from base to the included use case. Think: mandatory sub-behaviour.</li>
+        <li><strong>«extend»</strong>: The extending use case <em>optionally</em> augments the base under certain conditions. Arrow points from the extending case to the base use case. Think: optional add-on.</li>
+        <li><strong>Generalization</strong>: A child use case inherits and specialises a parent use case. Hollow arrowhead points to parent.</li>
+      </ul>
+      <h4>Applying to the Given Pairs</h4>
+      <ol>
+        <li><strong>Create new order → Validate customer account:</strong> «<code>include</code>» — every new order creation always requires validation.</li>
+        <li><strong>Update order → Validate customer account:</strong> «<code>include</code>» — updating an order also always validates the account.</li>
+        <li><strong>Place order → Login:</strong> «<code>include</code>» — placing an order always requires the user to be logged in.</li>
+        <li><strong>Login account → Change password:</strong> «<code>extend</code>» — after login, changing the password is optional behaviour.</li>
+        <li><strong>Choose folder → Upload document:</strong> «<code>include</code>» — uploading always involves choosing a folder.</li>
+        <li><strong>Purchase item ← Purchase phone / Purchase accessories:</strong> Generalization — "Purchase phone" and "Purchase accessories" are specialized versions of "Purchase item".</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit1">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">04</span>
+      <span class="qa-q">Draw a Use Case Diagram for a Movie Ticket Booking System.</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-uml">Use Case</span>
+      <h4>Actors</h4>
+      <ul>
+        <li><strong>Customer</strong> — primary actor who uses the system.</li>
+        <li><strong>Bank</strong> — external system that validates payment.</li>
+        <li><strong>System Admin</strong> — manages movies and cancellations.</li>
+      </ul>
+      <h4>Use Cases & Relationships</h4>
+      <ul>
+        <li>Login (Customer)</li>
+        <li>View Currently Streaming Movies (Customer)</li>
+        <li>View Upcoming Movies (Customer)</li>
+        <li>Book Ticket (Customer) → «include» Make Payment → «include» Validate Payment (Bank)</li>
+        <li>Choose Seat (Customer) → «extend» Book Ticket (optional seat selection)</li>
+        <li>Cancel Ticket (Customer) → «include» Process Cancellation (System Admin)</li>
+        <li>Provide Review (Customer)</li>
+        <li>Update Movies (System Admin)</li>
+      </ul>
+      <div class="diagram-placeholder">
+        [ Use Case Diagram — System boundary: Movie Ticket Booking System ]<br>
+        Customer ──→ Login<br>
+        Customer ──→ View Streaming Movies<br>
+        Customer ──→ Book Ticket ─«include»─→ Make Payment ─«include»─→ Bank: Validate Payment<br>
+        Choose Seat ─«extend»─→ Book Ticket<br>
+        Customer ──→ Cancel Ticket ─«include»─→ System Admin: Process Cancellation<br>
+        System Admin ──→ Update Movies<br>
+        Customer ──→ Provide Review
+      </div>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit1">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">05</span>
+      <span class="qa-q">Draw a Use Case Diagram for an ATM Machine.</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-uml">Use Case</span>
+      <h4>Actors</h4>
+      <ul>
+        <li><strong>Customer</strong> — primary actor.</li>
+        <li><strong>Bank</strong> — external system for authentication and transaction processing.</li>
+      </ul>
+      <h4>Use Cases</h4>
+      <ul>
+        <li>Insert Card → «include» Authenticate (Bank)</li>
+        <li>Withdraw Cash → «include» Check Balance (Bank)</li>
+        <li>Deposit Cash</li>
+        <li>Check Balance</li>
+        <li>Transfer Funds → «include» Authenticate</li>
+        <li>Change PIN → «include» Authenticate</li>
+        <li>Print Receipt → «extend» Withdraw Cash (optional)</li>
+      </ul>
+      <div class="note"><strong>Note:</strong> Authentication is shared by multiple use cases via «include». Receipt printing is an optional extension of cash withdrawal.</div>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit1">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">06</span>
+      <span class="qa-q">Write short notes on the elements of a UML Component Diagram (Port, Dependency, Component, Interface).</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-uml">Component Diagram</span>
+      <h4>Component</h4>
+      <p>A replaceable and executable piece of a system whose implementation is hidden from the external environment. A component provides and requires interfaces to function. Notated as a rectangle with the «component» stereotype or a small component icon in the corner.</p>
+      <h4>Interface</h4>
+      <p>A named set of public features (operations) that a component exposes or requires. Two types: <strong>Provided Interface</strong> (lollipop notation — what the component offers) and <strong>Required Interface</strong> (socket notation — what the component needs from others).</p>
+      <h4>Port</h4>
+      <p>A specific interaction point on a component through which the component communicates with its environment. A port is drawn as a small square on the boundary of the component rectangle. It groups related interfaces and can have both provided and required interfaces.</p>
+      <h4>Dependency</h4>
+      <p>A "uses" relationship between components indicating that one component depends on services provided by another. Drawn as a dashed arrow (→) from the dependent component to the component it depends upon. A change in the depended-upon component may affect the dependent one.</p>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit1">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">07</span>
+      <span class="qa-q">Write short notes on State Diagram — State, Event, Guard Condition, Transition, Synchronization/Splitting.</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-uml">State Diagram</span>
+      <h4>State</h4>
+      <p>A state represents a situation during the life of an object where it satisfies some condition, performs some activity, or waits for an event. Drawn as a <strong>rounded rectangle</strong>. An initial state is a filled circle; a final state is a filled circle inside a larger circle.</p>
+      <h4>Event</h4>
+      <p>An event is an occurrence that triggers a transition from one state to another. Events are labelled on transition arrows. Example: <em>borrow()</em> event on a Book object moves it from "Available" to "OnLoan".</p>
+      <h4>Guard Condition</h4>
+      <p>A Boolean expression in square brackets that must evaluate to <code>true</code> before a transition fires. Example: <code>[daysOverdue &gt; 365]</code> triggers the "Lost" transition for a library book.</p>
+      <h4>Transition</h4>
+      <p>Shown as a solid arrow between states, labelled with the triggering event and optional guard condition and action: <code>event [guard] / action</code>. A self-transition (looping arrow on same state) is also valid.</p>
+      <h4>Synchronization and Splitting (Fork/Join)</h4>
+      <p>Used in state diagrams with concurrent (composite) states. A <strong>fork</strong> (splitting bar) splits one incoming flow into multiple parallel sub-states. A <strong>join</strong> (synchronization bar) merges multiple concurrent sub-states back into one. Represented as a short, heavy horizontal or vertical bar.</p>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit1">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">08</span>
+      <span class="qa-q">Draw a State Diagram for the Book object based on a Library scenario.</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-uml">State Diagram</span>
+      <h4>States</h4>
+      <ul>
+        <li><strong>Catalogued</strong> — book has just been added to the system.</li>
+        <li><strong>Available (Loanable)</strong> — non-reference book ready for borrowing.</li>
+        <li><strong>Reference Only (Non-loanable)</strong> — reference book, cannot be borrowed.</li>
+        <li><strong>On Loan</strong> — book is borrowed by a student.</li>
+        <li><strong>Overdue</strong> — book not returned by due date.</li>
+        <li><strong>Lost</strong> — book is 12+ months overdue.</li>
+        <li><strong>Disposed</strong> — book is no longer required or is damaged.</li>
+      </ul>
+      <h4>Key Transitions</h4>
+      <ul>
+        <li>Catalogued → Available: <code>categorize [loanable = true]</code></li>
+        <li>Catalogued → Reference Only: <code>categorize [loanable = false]</code></li>
+        <li>Available → On Loan: <code>borrow()</code></li>
+        <li>On Loan → Available: <code>return() [before due date]</code></li>
+        <li>On Loan → Overdue: <code>due date passed</code></li>
+        <li>Overdue → Lost: <code>[months overdue &gt; 12]</code></li>
+        <li>Lost → Available: <code>found and returned</code></li>
+        <li>Available → Disposed: <code>damaged or not required</code></li>
+        <li>Reference Only → Disposed: <code>damaged or not required</code></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit1">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">09</span>
+      <span class="qa-q">Describe the elements of a Deployment Diagram with an example showing notations.</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-uml">Deployment Diagram</span>
+      <h4>Elements</h4>
+      <ul>
+        <li><strong>Node</strong>: A physical or virtual hardware/software resource (server, device, execution environment). Drawn as a 3D box. Types: Device node (physical hardware) or Execution Environment node (software container like JVM, Web Server).</li>
+        <li><strong>Artifact</strong>: A physical piece of software (JAR, WAR, EAR, DLL, EXE) deployed on a node. Drawn as a rectangle with the «artifact» stereotype.</li>
+        <li><strong>Communication Path</strong>: Drawn as a solid line between nodes, indicating that they communicate. Labelled with the protocol (e.g., HTTP, HTTPS, JDBC).</li>
+        <li><strong>Deployment relationship</strong>: A dashed arrow («deploy») from an artifact to the node it is deployed on.</li>
+      </ul>
+      <div class="diagram-placeholder">
+        [Client PC] ─── HTTP ─── [Web Server: Apache Tomcat]<br>
+        [Web Server] hosts: «artifact» WebApp.war<br>
+        [Web Server] ─── JDBC ─── [Database Server: MySQL]<br>
+        [Database Server] hosts: «artifact» AppDB
+      </div>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit1">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">10</span>
+      <span class="qa-q">Identify classes, attributes, and relationships for a Course Management System.</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-uml">Class Diagram</span>
+      <h4>Key Classes & Attributes</h4>
+      <ul>
+        <li><strong>Department</strong>: deptName, deptCode</li>
+        <li><strong>Session</strong>: startDate, endDate, name (e.g., "Jan–May 2023")</li>
+        <li><strong>Semester</strong>: semesterNumber</li>
+        <li><strong>Section</strong>: sectionName (min 60 students)</li>
+        <li><strong>Student</strong>: name, SRN, email</li>
+        <li><strong>Course</strong>: courseCode, courseName, credits</li>
+        <li><strong>Enrollment</strong>: attendance, ISAmarks, ESAmarks, grade</li>
+        <li><strong>Teacher</strong>: name, employeeID</li>
+      </ul>
+      <h4>Relationships</h4>
+      <ul>
+        <li>Department <strong>manages</strong> many Sessions (1..*)</li>
+        <li>Session <strong>has</strong> many Semesters (1..*)</li>
+        <li>Semester <strong>has</strong> many Sections (1..*)</li>
+        <li>Section <strong>has</strong> minimum 60 Students (60..*)</li>
+        <li>Semester <strong>offers</strong> many Courses (1..*)</li>
+        <li>Student <strong>enrolls in</strong> exactly 5 Courses per semester (minimum 20 students per elective)</li>
+        <li>Enrollment is an <em>association class</em> between Student and Course holding attendance, marks, grade</li>
+        <li>Teacher <strong>assigned to</strong> Section for a Course; may be <strong>class teacher</strong> of one Section</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit1">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">11</span>
+      <span class="qa-q">Describe the Analysis and Design phases in the Object-Oriented approach. Distinguish OO approach from Procedure-Oriented approach.</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-uml">OOP</span>
+      <h4>OO Analysis (OOA)</h4>
+      <p>OOA involves understanding and modelling the <em>problem domain</em> in terms of objects, classes, and their relationships. Activities include identifying actors and use cases, discovering domain classes (using noun-phrase or common class patterns approaches), and capturing structural relationships via class diagrams and dynamic behaviour via activity/sequence diagrams.</p>
+      <h4>OO Design (OOD)</h4>
+      <p>OOD refines the analysis model into a technical blueprint for implementation — assigning responsibilities to classes using GRASP principles, designing interactions between objects (sequence diagrams), applying design patterns (Singleton, Factory, etc.), and defining system architecture (component and deployment diagrams).</p>
+      <h4>OO vs Procedure-Oriented Programming</h4>
+      <ul>
+        <li><strong>Focus:</strong> POP focuses on <em>functions/procedures</em>; OOP focuses on <em>objects/data</em>.</li>
+        <li><strong>Data access:</strong> POP data is global and freely accessible; OOP data is encapsulated and hidden.</li>
+        <li><strong>Approach:</strong> POP is top-down decomposition; OOP is bottom-up with objects collaborating.</li>
+        <li><strong>Reusability:</strong> POP has limited reuse; OOP promotes reuse via inheritance and composition.</li>
+        <li><strong>Real-world mapping:</strong> OOP naturally maps to real-world entities; POP does not.</li>
+        <li><strong>Examples:</strong> POP — C, FORTRAN, COBOL; OOP — Java, C++, Python.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ══════════════ UNIT 2 ══════════════ -->
+  <div class="section-header unit2" data-unit="unit2">
+    <div class="section-dot"></div>
+    <h2>Unit 2 — OOP in Java</h2>
+    <span class="unit-pill">Unit 2</span>
+  </div>
+
+  <div class="qa-card" data-unit="unit2">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">12</span>
+      <span class="qa-q">What are the three types of constructors in Java? Give an example of each.</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-java">Java</span>
+      <p>A constructor initialises an object when it is created. It has the same name as the class and has <em>no explicit return type</em>.</p>
+      <h4>1. Default Constructor (No-arg)</h4>
+      <p>Has no parameters. Initialises instance variables to default values (0, false, null). If no constructor is defined, Java automatically provides one.</p>
+      <pre>class Student {
+    int id; String name;
+    Student() { // default constructor
+        id = 0; name = "Unknown";
+    }
+}</pre>
+      <h4>2. Parameterised Constructor</h4>
+      <p>Accepts parameters to initialise the object with specific values. Uses <code>this</code> to resolve name conflicts.</p>
+      <pre>class Student {
+    int id; String name;
+    Student(int id, String name) { // parameterised
+        this.id = id;
+        this.name = name;
+    }
+}</pre>
+      <h4>3. Copy Constructor</h4>
+      <p>Takes an object of the same class as a parameter and creates a new object with the same state. Prevents unwanted reference sharing.</p>
+      <pre>class Student {
+    int id; String name;
+    Student(Student s) { // copy constructor
+        this.id = s.id;
+        this.name = new String(s.name); // deep copy
+    }
+}</pre>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit2">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">13</span>
+      <span class="qa-q">What is the need for the Garbage Collector in Java?</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-java">Java</span>
+      <p>Java's Garbage Collector (GC) is a background process that <strong>automatically identifies and removes objects from heap memory that are no longer referenced</strong> by any active part of the program, then reclaims that memory space for future allocations.</p>
+      <h4>Why It Is Needed</h4>
+      <ul>
+        <li><strong>Prevents memory leaks:</strong> Without GC, unreferenced objects would accumulate and exhaust available heap memory.</li>
+        <li><strong>Eliminates manual memory management:</strong> Unlike C/C++ (where programmers call <code>free()</code>), Java automates deallocation, reducing bugs like dangling pointers and double-free errors.</li>
+        <li><strong>Improves productivity:</strong> Developers focus on application logic rather than memory lifecycle management.</li>
+      </ul>
+      <h4>finalize() Method</h4>
+      <p>Before an object is garbage collected, the JVM calls its <code>finalize()</code> method (if defined), allowing cleanup tasks like closing database connections or releasing network resources. However, its execution is <em>not guaranteed</em>.</p>
+      <pre>protected void finalize() {
+    // close DB connections, release locks, etc.
+}</pre>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit2">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">14</span>
+      <span class="qa-q">Give an example for Method Overloading and Method Overriding. State the differences.</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-java">Java</span>
+      <h4>Method Overloading (Compile-time Polymorphism)</h4>
+      <p>Multiple methods in the <em>same class</em> with the <em>same name</em> but <em>different parameter lists</em> (number or type of parameters).</p>
+      <pre>class Calculator {
+    int add(int a, int b)         { return a + b; }
+    double add(double a, double b){ return a + b; }
+    int add(int a, int b, int c)  { return a + b + c; }
+}</pre>
+      <h4>Method Overriding (Runtime Polymorphism)</h4>
+      <p>A subclass provides a specific implementation for a method already defined in the parent class. Same name, same parameters, same return type. The <code>@Override</code> annotation is recommended.</p>
+      <pre>class Animal   { void sound() { System.out.println("Generic sound"); } }
+class Dog extends Animal {
+    @Override
+    void sound() { System.out.println("Woof"); }
+}</pre>
+      <h4>Key Differences</h4>
+      <ul>
+        <li><strong>Location:</strong> Overloading — same class; Overriding — parent & child classes.</li>
+        <li><strong>Resolution:</strong> Overloading — compile time; Overriding — runtime.</li>
+        <li><strong>Parameters:</strong> Overloading — must differ; Overriding — must be identical.</li>
+        <li><strong>Inheritance:</strong> Overloading — not required; Overriding — requires inheritance.</li>
+        <li><strong>Return type:</strong> Overloading — can differ; Overriding — must be same (or covariant).</li>
+        <li><strong>Static methods:</strong> Static methods can be overloaded but not overridden (they are <em>hidden</em>).</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit2">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">15</span>
+      <span class="qa-q">State any six differences between an Abstract Class and an Interface in Java.</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-java">Java</span>
+      <ul>
+        <li><strong>Instantiation:</strong> Neither can be instantiated directly. An abstract class can have concrete (non-abstract) methods; an interface methods are all public and abstract by default (Java 8+ allows default/static methods).</li>
+        <li><strong>Multiple inheritance:</strong> A class can <em>implement</em> multiple interfaces (supported); a class can <em>extend</em> only one abstract class (not supported in Java).</li>
+        <li><strong>Constructor:</strong> Abstract classes <em>can</em> have constructors (called via <code>super()</code>); interfaces <em>cannot</em> have constructors.</li>
+        <li><strong>Variables:</strong> Abstract classes can have instance variables of any access modifier; interface variables are implicitly <code>public static final</code> (constants only).</li>
+        <li><strong>Access modifiers for methods:</strong> Abstract class methods can be <code>private</code>, <code>protected</code>, <code>public</code>; interface methods are always <code>public</code>.</li>
+        <li><strong>Purpose:</strong> Abstract class represents what an object <em>IS</em> (partial implementation, shared state); interface represents what an object <em>CAN DO</em> (a contract/capability).</li>
+        <li><strong>Speed:</strong> Abstract classes are slightly faster (no extra indirection); interfaces involve an extra lookup.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit2">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">16</span>
+      <span class="qa-q">What are Generic classes in Java? Write an example program demonstrating a generic class.</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-java">Java</span>
+      <p>Generics allow classes, interfaces, and methods to operate on objects of various types while providing <strong>compile-time type safety</strong>. A type parameter (e.g., <code>&lt;T&gt;</code>) is used as a placeholder for an actual type supplied when the class is instantiated.</p>
+      <h4>Benefits</h4>
+      <ul>
+        <li>Eliminates the need for explicit type casting.</li>
+        <li>Catches type errors at compile time, not runtime.</li>
+        <li>Enables code reuse across different data types.</li>
+      </ul>
+      <pre>// Generic Pair class
+class Pair&lt;T, U&gt; {
+    private T first;
+    private U second;
+
+    Pair(T first, U second) {
+        this.first = first;
+        this.second = second;
+    }
+    T getFirst()  { return first; }
+    U getSecond() { return second; }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Pair&lt;String, Integer&gt; p = new Pair&lt;&gt;("Age", 21);
+        System.out.println(p.getFirst() + ": " + p.getSecond());
+        // Output: Age: 21
+    }
+}</pre>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit2">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">17</span>
+      <span class="qa-q">Write about the three access specifiers in Java (private, protected, public) and their effects on member variables.</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-java">Java</span>
+      <ul>
+        <li><strong><code>private</code>:</strong> Accessible <em>only within the same class</em>. Strongest encapsulation. No external class (not even subclasses) can access it directly. Use for all sensitive data.</li>
+        <li><strong><code>protected</code>:</strong> Accessible within the same class, same package, and <em>subclasses</em> (even in different packages). Used to share data with child classes while hiding it from unrelated classes.</li>
+        <li><strong><code>public</code>:</strong> Accessible from <em>anywhere</em> — same class, same package, any package. Widest visibility. Used for methods/attributes that form the public API.</li>
+        <li><strong>(default / package-private):</strong> No keyword used; accessible only within the same package.</li>
+      </ul>
+      <pre>class Employee {
+    public    String name;      // accessible everywhere
+    protected String dept;      // accessible in subclasses
+    private   double salary;    // only within Employee class
+
+    public double getSalary() { return salary; } // getter for private
+}</pre>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit2">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">18</span>
+      <span class="qa-q">Explain different types of Inheritance in Java with examples.</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-java">Java</span>
+      <h4>1. Single Inheritance</h4>
+      <p>One class inherits from exactly one parent class.</p>
+      <pre>class Animal { void eat() { System.out.println("Eating"); } }
+class Dog extends Animal { void bark() { System.out.println("Woof"); } }</pre>
+      <h4>2. Multilevel Inheritance</h4>
+      <p>A chain: C extends B, B extends A.</p>
+      <pre>class A { void showA() {} }
+class B extends A { void showB() {} }
+class C extends B { void showC() {} }</pre>
+      <h4>3. Hierarchical Inheritance</h4>
+      <p>Multiple classes inherit from a single parent.</p>
+      <pre>class Vehicle { void start() {} }
+class Car     extends Vehicle {}
+class Truck   extends Vehicle {}</pre>
+      <h4>4. Multiple Inheritance (via Interfaces)</h4>
+      <p>Java does <em>not</em> support multiple class inheritance to avoid the diamond problem. However, a class can implement multiple interfaces.</p>
+      <pre>interface Flyable { void fly(); }
+interface Swimmable { void swim(); }
+class Duck implements Flyable, Swimmable {
+    public void fly()  { System.out.println("Flying"); }
+    public void swim() { System.out.println("Swimming"); }
+}</pre>
+      <div class="note"><strong>Note:</strong> Hybrid inheritance (combination of above) is also possible in Java through interfaces.</div>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit2">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">19</span>
+      <span class="qa-q">Write short notes on: Method Overloading, Static and Instance Members, Abstract Class.</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-java">Java</span>
+      <h4>Method Overloading</h4>
+      <p>Defining multiple methods in the same class with the same name but different parameter lists. Resolved at compile-time (compile-time polymorphism). The compiler distinguishes methods by number, type, or order of parameters — <em>not</em> by return type alone.</p>
+      <h4>Static vs Instance Members</h4>
+      <ul>
+        <li><strong>Static members</strong> belong to the <em>class</em>, not any individual object. Shared across all instances. Accessed via <code>ClassName.member</code>. Allocated once in memory when the class is loaded.</li>
+        <li><strong>Instance members</strong> belong to each <em>object</em> individually. Each object has its own copy. Accessed via <code>objectRef.member</code>.</li>
+      </ul>
+      <pre>class Counter {
+    static int count = 0; // shared by all
+    int id;               // unique per object
+    Counter() { count++; this.id = count; }
+}</pre>
+      <h4>Abstract Class</h4>
+      <p>A class declared with the <code>abstract</code> keyword that cannot be instantiated directly. It serves as a template for subclasses. May contain abstract methods (no body) that must be overridden by concrete subclasses, as well as concrete methods. Enables partial abstraction.</p>
+      <pre>abstract class Shape {
+    abstract double area();       // must be implemented
+    void display() {              // concrete method
+        System.out.println("Area: " + area());
+    }
+}</pre>
+    </div>
+  </div>
+
+  <!-- ══════════════ UNIT 3 ══════════════ -->
+  <div class="section-header unit3" data-unit="unit3">
+    <div class="section-dot"></div>
+    <h2>Unit 3 — Design Principles: GRASP & SOLID</h2>
+    <span class="unit-pill">Unit 3</span>
+  </div>
+
+  <div class="qa-card" data-unit="unit3">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">20</span>
+      <span class="qa-q">Explain the GRASP principles: Creator, Information Expert, Low Coupling, High Cohesion, Controller, Polymorphism, Indirection, and Pure Fabrication.</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-grasp">GRASP</span>
+      <h4>Creator</h4>
+      <p><strong>Problem:</strong> Who creates a new instance of class A?<br><strong>Solution:</strong> Assign creation responsibility to the class B that: contains A, aggregates A, has the initializing data for A, or records A. Promotes low coupling by keeping creation close to usage. Example: a <em>Sale</em> creates <em>SalesLineItem</em> objects.</p>
+      <h4>Information Expert</h4>
+      <p><strong>Problem:</strong> What is the basic principle for assigning responsibilities?<br><strong>Solution:</strong> Assign a responsibility to the class that has the information needed to fulfill it. Example: <em>Sale</em> is responsible for knowing the grand total because it has access to all <em>SalesLineItems</em>.</p>
+      <h4>Low Coupling</h4>
+      <p><strong>Problem:</strong> How to reduce the impact of change in one class on others?<br><strong>Solution:</strong> Assign responsibilities so that coupling (dependency) remains low. Prefer composition, dependency injection, and programming to interfaces. Low coupling leads to systems that are easier to maintain and reuse.</p>
+      <h4>High Cohesion</h4>
+      <p><strong>Problem:</strong> How to keep classes focused and manageable?<br><strong>Solution:</strong> Assign responsibilities so that cohesion remains high — a class should have a focused, related set of responsibilities. Highly cohesive classes are easier to understand, maintain, and reuse.</p>
+      <h4>Controller</h4>
+      <p><strong>Problem:</strong> Who handles system events from the UI layer?<br><strong>Solution:</strong> Assign system-event handling to either: (a) a <em>Façade Controller</em> representing the entire system/subsystem, or (b) a <em>Use-Case Controller</em> for a specific use-case scenario. The controller delegates work to domain objects rather than doing it itself. Prevents UI objects from being directly coupled to business logic.</p>
+      <h4>Polymorphism</h4>
+      <p><strong>Problem:</strong> How to handle alternative behaviours based on type?<br><strong>Solution:</strong> Assign behaviour variation to the types for which the behaviour varies, using polymorphism. Avoids large <code>if/switch</code> type-checking blocks. Example: different <em>Payment</em> subclasses override a common <em>process()</em> method.</p>
+      <h4>Indirection</h4>
+      <p><strong>Problem:</strong> How to avoid direct coupling between components?<br><strong>Solution:</strong> Assign responsibility to an intermediate object to mediate between other components. The intermediary decouples the original components. Example: a <em>Controller</em> class between UI and domain model.</p>
+      <h4>Pure Fabrication</h4>
+      <p><strong>Problem:</strong> When no domain class is a good fit for a responsibility (assigning it would violate high cohesion or low coupling), who gets it?<br><strong>Solution:</strong> Create a class that does not represent a concept in the problem domain — a "made-up" service class — solely to achieve a clean design. Example: a <em>DatabasePersistenceService</em> class to handle DB operations, keeping domain classes clean.</p>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit3">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">21</span>
+      <span class="qa-q">Explain the SOLID design principles with an example for each.</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-solid">SOLID</span>
+      <h4>S — Single Responsibility Principle (SRP)</h4>
+      <p>A class should have only <em>one reason to change</em> — i.e., one primary responsibility. Separating concerns makes classes more robust and reusable.</p>
+      <pre>// Violation: Invoice handles both business logic AND printing
+// Fix: Separate concerns
+class Invoice        { double calculate() { ... } }
+class InvoicePrinter { void print(Invoice i) { ... } }
+class InvoiceDB      { void save(Invoice i)  { ... } }</pre>
+      <h4>O — Open/Closed Principle (OCP)</h4>
+      <p>Software entities should be <em>open for extension</em> but <em>closed for modification</em>. Use abstraction (interfaces/abstract classes) to add new behaviour without changing existing code.</p>
+      <pre>interface Shape { double area(); }
+class Circle    implements Shape { public double area() { return Math.PI * r * r; } }
+class Rectangle implements Shape { public double area() { return w * h; } }
+// Adding a new shape requires no change to existing code</pre>
+      <h4>L — Liskov Substitution Principle (LSP)</h4>
+      <p>Objects of a subclass should be substitutable for objects of the superclass without altering program correctness. Subclasses must honour the contract of the parent class.</p>
+      <pre>// Violation: Square overrides setWidth() in a way that breaks Rectangle contract
+// Fix: Don't force Square to extend Rectangle if their contracts differ
+// OR make both implement a Shape interface independently</pre>
+      <h4>I — Interface Segregation Principle (ISP)</h4>
+      <p>A client should not be forced to depend on interfaces it does not use. Split large interfaces into smaller, more specific ones.</p>
+      <pre>// Violation: one fat interface Worker with work() + eat() + sleep()
+// Fix: separate interfaces
+interface Workable  { void work(); }
+interface Eatable   { void eat(); }
+class Robot implements Workable       { public void work() {} }
+class Human implements Workable, Eatable { ... }</pre>
+      <h4>D — Dependency Inversion Principle (DIP)</h4>
+      <p>High-level modules should not depend on low-level modules; both should depend on abstractions. Abstractions should not depend on details; details should depend on abstractions.</p>
+      <pre>// Violation: Service directly creates MySQLDatabase instance
+// Fix: inject the abstraction
+interface Database { void save(String data); }
+class MySQLDatabase implements Database { ... }
+class Service {
+    private Database db; // depends on abstraction
+    Service(Database db) { this.db = db; }
+}</pre>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit3">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">22</span>
+      <span class="qa-q">Explain the Liskov Substitution Principle using an example of violation and its correction.</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-solid">SOLID</span>
+      <p>LSP (introduced by Barbara Liskov in 1987) states: <em>"If S is a subtype of T, then objects of type T may be replaced with objects of type S without altering the correctness of the program."</em></p>
+      <h4>Classic Violation — Square extends Rectangle</h4>
+      <pre>class Rectangle {
+    int width, height;
+    void setWidth(int w)  { this.width = w; }
+    void setHeight(int h) { this.height = h; }
+    int area() { return width * height; }
+}
+class Square extends Rectangle {
+    @Override void setWidth(int s)  { width = height = s; } // changes both!
+    @Override void setHeight(int s) { width = height = s; }
+}
+// LSP test:
+Rectangle r = new Square();
+r.setWidth(5);
+r.setHeight(4);
+// Expected area: 20, Actual: 16 — VIOLATED!</pre>
+      <h4>Correction</h4>
+      <p>Both <code>Rectangle</code> and <code>Square</code> should implement a common <code>Shape</code> interface independently rather than forcing Square to inherit from Rectangle:</p>
+      <pre>interface Shape { int area(); }
+class Rectangle implements Shape {
+    int w, h;
+    Rectangle(int w, int h) { this.w = w; this.h = h; }
+    public int area() { return w * h; }
+}
+class Square implements Shape {
+    int side;
+    Square(int s) { this.side = s; }
+    public int area() { return side * side; }
+}</pre>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit3">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">23</span>
+      <span class="qa-q">State the Interface Segregation Principle with problem and solution using an example.</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-solid">SOLID</span>
+      <p><strong>ISP:</strong> Clients should not be forced to depend on interfaces they do not use. Many client-specific interfaces are better than one general-purpose interface.</p>
+      <h4>Problem (Fat Interface)</h4>
+      <pre>interface Worker {
+    void work();
+    void eat();
+    void sleep();
+}
+class Robot implements Worker {
+    public void work()  { ... }
+    public void eat()   { throw new UnsupportedOperationException(); } // forced!
+    public void sleep() { throw new UnsupportedOperationException(); }
+}</pre>
+      <h4>Solution (Segregated Interfaces)</h4>
+      <pre>interface Workable  { void work(); }
+interface Eatable   { void eat(); }
+interface Sleepable { void sleep(); }
+
+class Robot implements Workable { public void work() { ... } }
+class Human implements Workable, Eatable, Sleepable { ... }</pre>
+      <p>Now <code>Robot</code> only implements what it actually does. No forced unused methods.</p>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit3">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">24</span>
+      <span class="qa-q">Explain the Open-Closed Principle (OCP) with an example.</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-solid">SOLID</span>
+      <p>Proposed by Bertrand Meyer. Software entities (classes, modules, functions) should be <strong>open for extension</strong> (new behaviour can be added) but <strong>closed for modification</strong> (existing code is not changed).</p>
+      <h4>Violation</h4>
+      <pre>class AreaCalculator {
+    double calculate(Object shape) {
+        if (shape instanceof Circle) { ... }
+        else if (shape instanceof Rectangle) { ... }
+        // Adding a Triangle requires MODIFYING this class
+    }
+}</pre>
+      <h4>Correct Design</h4>
+      <pre>interface Shape { double area(); }
+class Circle    implements Shape { public double area() { return Math.PI*r*r; } }
+class Rectangle implements Shape { public double area() { return w*h; } }
+class Triangle  implements Shape { public double area() { return 0.5*b*h; } }
+
+class AreaCalculator {
+    double calculate(Shape shape) { return shape.area(); } // closed for modification
+}</pre>
+      <p>Adding a new shape only requires creating a new class — no modification to <code>AreaCalculator</code>.</p>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit3">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">25</span>
+      <span class="qa-q">Describe the Dependency Inversion Principle (DIP) with an example.</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-solid">SOLID</span>
+      <p>DIP has two rules: (1) High-level modules should not depend on low-level modules — both should depend on <em>abstractions</em>. (2) Abstractions should not depend on details — details should depend on abstractions. Violating DIP results in <strong>tight coupling</strong>.</p>
+      <pre>// VIOLATION — tight coupling
+class EmailNotifier {
+    void send(String msg) { System.out.println("Email: " + msg); }
+}
+class OrderService {
+    EmailNotifier notifier = new EmailNotifier(); // directly coupled
+    void placeOrder() { notifier.send("Order placed"); }
+}
+
+// CORRECT — depend on abstraction
+interface Notifier { void send(String msg); }
+class EmailNotifier implements Notifier { public void send(String m) {...} }
+class SMSNotifier  implements Notifier { public void send(String m) {...} }
+class OrderService {
+    private Notifier notifier;
+    OrderService(Notifier n) { this.notifier = n; } // injected
+    void placeOrder() { notifier.send("Order placed"); }
+}</pre>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit3">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">26</span>
+      <span class="qa-q">Explain the MVC (Model-View-Controller) Architecture Pattern with a flow diagram.</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-grasp">Architecture</span>
+      <h4>Components</h4>
+      <ul>
+        <li><strong>Model:</strong> Represents the application's data and business logic. Independent of the UI. Notifies the View when data changes.</li>
+        <li><strong>View:</strong> Renders the UI based on Model data. Multiple views can represent the same data in different formats. Sends user input to the Controller.</li>
+        <li><strong>Controller:</strong> Acts as an intermediary. Receives user actions from the View, processes them (possibly updating the Model), and selects which View to display.</li>
+      </ul>
+      <h4>Flow</h4>
+      <div class="diagram-placeholder">
+        User Action → [View] → [Controller] → updates [Model]<br>
+        [Model] → notifies → [View] → renders updated UI to User<br><br>
+        1. User interacts with the View (button click)<br>
+        2. View notifies the Controller<br>
+        3. Controller processes input, calls Model methods<br>
+        4. Model updates its state<br>
+        5. Model notifies View of changes<br>
+        6. View queries Model and re-renders
+      </div>
+      <h4>Benefits</h4>
+      <ul>
+        <li>Separation of concerns — UI logic separated from business logic.</li>
+        <li>Multiple views for same data (e.g., table vs chart).</li>
+        <li>Easier to test each component independently.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit3">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">27</span>
+      <span class="qa-q">What are Design Patterns? What are the different types? State pros and cons.</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-pattern">Design Patterns</span>
+      <p>A design pattern is a <strong>reusable, named solution to a commonly occurring problem</strong> in a given software design context. Introduced by the "Gang of Four" (Gamma, Helm, Johnson, Vlissides) in their classic book. A pattern has: <em>name</em>, <em>problem</em>, <em>solution</em>, and <em>consequences</em>.</p>
+      <h4>Three Categories (by GoF)</h4>
+      <ul>
+        <li><strong>Creational:</strong> Deal with object creation — Singleton, Factory Method, Abstract Factory, Builder, Prototype.</li>
+        <li><strong>Structural:</strong> Deal with class/object composition — Adapter, Facade, Proxy, Decorator, Composite, Bridge, Flyweight.</li>
+        <li><strong>Behavioral:</strong> Deal with communication between objects — Chain of Responsibility, Command, Iterator, Observer, Strategy, Template Method.</li>
+      </ul>
+      <h4>Pros</h4>
+      <ul>
+        <li>Provide tested, proven solutions to common problems.</li>
+        <li>Establish a common vocabulary for design communication.</li>
+        <li>Improve code reusability, flexibility, and maintainability.</li>
+        <li>Speed up the development process for experienced developers.</li>
+      </ul>
+      <h4>Cons</h4>
+      <ul>
+        <li>Can be over-used — applying a pattern where a simpler solution exists adds unnecessary complexity.</li>
+        <li>Require learning investment to recognise which pattern fits a problem.</li>
+        <li>Can make code harder to understand for developers unfamiliar with patterns.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit3">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">28</span>
+      <span class="qa-q">Explain the Singleton Pattern — intent, implementation, and benefits. How do you make a class singleton?</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-pattern">Creational</span>
+      <h4>Intent</h4>
+      <p>Ensure a class has <strong>only one instance</strong> and provide a <strong>global access point</strong> to it. Example: a configuration manager, a logging service, a connection pool.</p>
+      <h4>How to Implement Singleton in Java</h4>
+      <ol>
+        <li>Make the constructor <code>private</code> to prevent direct instantiation.</li>
+        <li>Declare a <code>private static</code> field to hold the single instance.</li>
+        <li>Provide a <code>public static</code> method (<code>getInstance()</code>) that creates the instance lazily on first call and returns the existing one on subsequent calls.</li>
+      </ol>
+      <pre>class Singleton {
+    private static Singleton obj; // one instance
+
+    private Singleton() {} // prevent external creation
+
+    public static Singleton getInstance() {
+        if (obj == null) {
+            obj = new Singleton(); // created only once
+        }
+        return obj;
+    }
+}</pre>
+      <h4>Thread-Safe Singleton</h4>
+      <pre>public static synchronized Singleton getInstance() {
+    if (obj == null) obj = new Singleton();
+    return obj;
+}</pre>
+      <h4>Benefits</h4>
+      <ul>
+        <li>Controlled access to the sole instance.</li>
+        <li>Reduced name space (improvement over global variables).</li>
+        <li>Permits refinement via subclassing.</li>
+        <li>The Singleton object is initialized only when first requested (lazy initialization).</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit3">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">29</span>
+      <span class="qa-q">Describe the Factory Method Pattern with an example, UML structure, and code snippet.</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-pattern">Creational</span>
+      <h4>Intent</h4>
+      <p>Define an interface for creating an object, but let subclasses decide which class to instantiate. Factory Method defers instantiation to subclasses. Also known as <em>Virtual Constructor</em>.</p>
+      <h4>UML Participants</h4>
+      <ul>
+        <li><strong>Creator (abstract):</strong> Declares the factory method (<code>createProduct()</code>). May also define a default implementation.</li>
+        <li><strong>ConcreteCreator:</strong> Overrides the factory method to return a specific product.</li>
+        <li><strong>Product (interface/abstract):</strong> Defines the interface of objects created.</li>
+        <li><strong>ConcreteProduct:</strong> Implements the Product interface.</li>
+      </ul>
+      <pre>// Product interface
+interface Notification {
+    void notifyUser();
+}
+// Concrete Products
+class EmailNotification implements Notification {
+    public void notifyUser() { System.out.println("Email sent"); }
+}
+class SMSNotification implements Notification {
+    public void notifyUser() { System.out.println("SMS sent"); }
+}
+// Creator
+abstract class NotificationFactory {
+    abstract Notification createNotification(); // factory method
+    void send() { createNotification().notifyUser(); }
+}
+// Concrete Creators
+class EmailFactory extends NotificationFactory {
+    Notification createNotification() { return new EmailNotification(); }
+}
+class SMSFactory extends NotificationFactory {
+    Notification createNotification() { return new SMSNotification(); }
+}
+// Client
+NotificationFactory f = new EmailFactory();
+f.send(); // Output: Email sent</pre>
+      <h4>When to Use</h4>
+      <p>When a class cannot anticipate the class of objects it must create, or when subclasses should decide which objects to create. More flexible than direct <code>new</code> calls.</p>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit3">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">30</span>
+      <span class="qa-q">Describe the Builder Pattern — intent, structure, and when to use it. State difference from Factory.</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-pattern">Creational</span>
+      <h4>Intent</h4>
+      <p>Separate the construction of a complex object from its representation, allowing the same construction process to create different representations step by step.</p>
+      <h4>Participants</h4>
+      <ul>
+        <li><strong>Builder (interface):</strong> Declares construction steps (<code>buildPart()</code> methods).</li>
+        <li><strong>ConcreteBuilder:</strong> Provides specific implementations of construction steps and tracks the product being built.</li>
+        <li><strong>Director:</strong> Orchestrates the build steps using the Builder interface.</li>
+        <li><strong>Product:</strong> The complex object being constructed.</li>
+      </ul>
+      <pre>class BurgerBuilder {
+    private String bun, patty, sauce;
+    BurgerBuilder setBun(String b)    { this.bun=b;    return this; }
+    BurgerBuilder setPatty(String p)  { this.patty=p;  return this; }
+    BurgerBuilder setSauce(String s)  { this.sauce=s;  return this; }
+    Burger build() { return new Burger(bun, patty, sauce); }
+}
+// Client
+Burger b = new BurgerBuilder().setBun("Sesame").setPatty("Beef").setSauce("Ketchup").build();</pre>
+      <h4>Builder vs Factory Method</h4>
+      <ul>
+        <li><strong>Factory Method</strong> creates objects in <em>one step</em>; <strong>Builder</strong> constructs complex objects <em>step by step</em>.</li>
+        <li>Abstract Factory returns the product <em>immediately</em>; Builder lets you run extra construction steps before fetching the product.</li>
+        <li>Use Builder when an object needs many optional parameters or complex initialization logic.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ══════════════ UNIT 4 ══════════════ -->
+  <div class="section-header unit4" data-unit="unit4">
+    <div class="section-dot"></div>
+    <h2>Unit 4 — Design Patterns & Anti-Patterns</h2>
+    <span class="unit-pill">Unit 4</span>
+  </div>
+
+  <div class="qa-card" data-unit="unit4">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">31</span>
+      <span class="qa-q">Briefly describe the Adapter Structural Design Pattern — intent, problem, solution, structure, and example.</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-pattern">Structural</span>
+      <h4>Intent</h4>
+      <p>Convert the interface of a class into another interface that clients expect. Adapter lets classes work together that couldn't otherwise because of incompatible interfaces. Also known as <em>Wrapper</em>.</p>
+      <h4>Participants</h4>
+      <ul>
+        <li><strong>Target:</strong> The interface the client expects.</li>
+        <li><strong>Adaptee:</strong> The existing class with the incompatible interface.</li>
+        <li><strong>Adapter:</strong> Wraps the Adaptee, implementing the Target interface by translating calls.</li>
+        <li><strong>Client:</strong> Collaborates with objects through the Target interface.</li>
+      </ul>
+      <h4>MediaPlayer Adapter Example (from exam)</h4>
+      <pre>// Target
+interface MediaPlayer { void play(String type, String file); }
+// Adaptee
+interface AdvancedMediaPlayer { void playVLC(String f); void playMP4(String f); }
+class VLCPlayer implements AdvancedMediaPlayer { void playVLC(String f) {...} void playMP4(String f){} }
+// Adapter
+class MediaAdapter implements MediaPlayer {
+    AdvancedMediaPlayer player;
+    MediaAdapter(String type) {
+        if(type.equals("vlc")) player = new VLCPlayer();
+    }
+    public void play(String type, String file) {
+        if(type.equals("vlc")) player.playVLC(file);
+    }
+}
+// AudioPlayer uses Adapter to support new formats
+class AudioPlayer implements MediaPlayer {
+    MediaAdapter adapter;
+    public void play(String type, String file) {
+        if(type.equals("mp3")) System.out.println("Playing MP3: " + file);
+        else { adapter = new MediaAdapter(type); adapter.play(type, file); }
+    }
+}</pre>
+      <h4>Object Adapter vs Class Adapter</h4>
+      <ul>
+        <li><strong>Object Adapter</strong> (composition): Adapter holds a reference to the Adaptee instance. More flexible — can work with Adaptee subclasses.</li>
+        <li><strong>Class Adapter</strong> (inheritance): Adapter inherits from both Target and Adaptee. Only possible in languages that support multiple inheritance (not Java).</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit4">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">32</span>
+      <span class="qa-q">Describe the Proxy Design Pattern — intent, three main variations, and an example.</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-pattern">Structural</span>
+      <h4>Intent</h4>
+      <p>Provide a surrogate or placeholder for another object to control access to it. The Proxy implements the same interface as the real object but intercepts calls, adding additional behavior (access control, lazy loading, caching).</p>
+      <h4>Three Variations</h4>
+      <ul>
+        <li><strong>Virtual Proxy (Lazy Initialization):</strong> Defers the creation of an expensive real object until it is actually needed. Example: loading high-resolution images only when displayed.</li>
+        <li><strong>Protection Proxy (Access Control):</strong> Controls access to the real object based on permissions. Example: a proxy that checks user roles before allowing database operations.</li>
+        <li><strong>Remote Proxy:</strong> Provides a local representative for an object in a different address space. Example: Java RMI stubs.</li>
+        <li><strong>Cache Proxy:</strong> Caches results of expensive operations and returns cached responses for repeated requests.</li>
+      </ul>
+      <h4>Song Library Example (from exam)</h4>
+      <pre>interface Song { void play(); String getTitle(); }
+
+class RealSong implements Song {    // heavy object — fetches media stream
+    private String title, artist, stream;
+    RealSong(String title) {
+        this.title = title;
+        this.stream = "...fetch from DB..."; // expensive
+    }
+    public void play()        { System.out.println("Playing: " + stream); }
+    public String getTitle()  { return title; }
+}
+class SongProxy implements Song {   // shown in listing, lazy loads stream
+    private RealSong real;
+    private String title;
+    SongProxy(String title) { this.title = title; }
+    public String getTitle() { return title; } // cheap
+    public void play() {
+        if (real == null) real = new RealSong(title); // load only on play
+        real.play();
+    }
+}</pre>
+      <p><em>This is a Virtual Proxy pattern</em> — ideal for the use-case described in the exam (display only title/artist in the list; load full media stream only when the song is selected).</p>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit4">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">33</span>
+      <span class="qa-q">Describe the Chain of Responsibility behavioral pattern — intent, structure, and benefits. Include a Logging System example.</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-pattern">Behavioral</span>
+      <h4>Intent</h4>
+      <p>Avoid coupling the sender of a request to its receiver by giving more than one object a chance to handle the request. Chain the receiving objects and pass the request along the chain until an object handles it.</p>
+      <h4>Participants</h4>
+      <ul>
+        <li><strong>Handler (abstract):</strong> Defines the interface for handling requests and holds a reference to the next handler in the chain.</li>
+        <li><strong>ConcreteHandler:</strong> Handles requests it is responsible for; otherwise forwards to the successor.</li>
+        <li><strong>Client:</strong> Initiates the request to the first handler in the chain.</li>
+      </ul>
+      <h4>Logging System Example (from exam)</h4>
+      <pre>abstract class Logger {
+    static final int INFO = 1, ERROR = 2, DEBUG = 3;
+    protected int level;
+    protected Logger next;
+    void setNext(Logger next) { this.next = next; }
+    void log(int level, String msg) {
+        if (this.level <= level) write(msg);
+        if (next != null) next.log(level, msg);
+    }
+    protected abstract void write(String msg);
+}
+class ConsoleLogger extends Logger {
+    ConsoleLogger(int level) { this.level = level; }
+    protected void write(String msg) { System.out.println("Console: " + msg); }
+}
+class ErrorLogger extends Logger {
+    ErrorLogger(int level) { this.level = level; }
+    protected void write(String msg) { System.err.println("Error log: " + msg); }
+}
+// Build chain: console -> error -> debug
+ConsoleLogger c = new ConsoleLogger(Logger.INFO);
+ErrorLogger   e = new ErrorLogger(Logger.ERROR);
+c.setNext(e); // chain
+c.log(Logger.INFO, "System started"); // handled by ConsoleLogger</pre>
+      <h4>Benefits</h4>
+      <ul>
+        <li>Reduced coupling between sender and receiver.</li>
+        <li>Flexible assignment of responsibilities — chain can be changed at runtime.</li>
+        <li>New handlers can be added without changing existing code.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit4">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">34</span>
+      <span class="qa-q">Describe the Façade Pattern — intent, when to use, and example.</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-pattern">Structural</span>
+      <h4>Intent</h4>
+      <p>Provide a <strong>simplified, unified interface</strong> to a complex subsystem. The Façade hides the complexity of the subsystem from clients while still allowing advanced users to access the subsystem directly if needed.</p>
+      <h4>Structure</h4>
+      <ul>
+        <li><strong>Façade:</strong> Knows which subsystem classes handle a request; delegates client requests to the appropriate subsystem objects.</li>
+        <li><strong>Subsystem classes:</strong> Implement subsystem functionality; have no knowledge of the façade.</li>
+        <li><strong>Client:</strong> Communicates with the subsystem through the façade.</li>
+      </ul>
+      <pre>// Complex subsystem
+class CPU        { void start()    {} }
+class Memory     { void load()     {} }
+class HardDrive  { void read()     {} }
+
+// Façade
+class ComputerFacade {
+    private CPU cpu = new CPU();
+    private Memory mem = new Memory();
+    private HardDrive hdd = new HardDrive();
+    void startComputer() { cpu.start(); mem.load(); hdd.read(); }
+}
+// Client only calls facade
+ComputerFacade pc = new ComputerFacade();
+pc.startComputer(); // hides subsystem complexity</pre>
+      <h4>Benefits</h4>
+      <ul>
+        <li>Shields clients from complex subsystem components.</li>
+        <li>Promotes loose coupling between clients and the subsystem.</li>
+        <li>Doesn't prevent clients from using subsystem classes directly when needed.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit4">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">35</span>
+      <span class="qa-q">Describe the structure of the Iterator Pattern.</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-pattern">Behavioral</span>
+      <h4>Intent</h4>
+      <p>Provide a way to sequentially access elements of a collection (aggregate object) without exposing its underlying representation.</p>
+      <h4>Participants</h4>
+      <ul>
+        <li><strong>Iterator (interface):</strong> Defines the traversal interface: <code>hasNext()</code>, <code>next()</code>, optionally <code>remove()</code>.</li>
+        <li><strong>ConcreteIterator:</strong> Implements the Iterator interface, tracking the current position in the traversal.</li>
+        <li><strong>Aggregate (interface):</strong> Defines method to create an Iterator (<code>createIterator()</code>).</li>
+        <li><strong>ConcreteAggregate:</strong> Implements the Aggregate interface, returning an instance of the appropriate ConcreteIterator.</li>
+      </ul>
+      <pre>interface Iterator&lt;T&gt; { boolean hasNext(); T next(); }
+class NumberCollection {
+    private int[] nums;
+    NumberCollection(int[] n) { this.nums = n; }
+    Iterator&lt;Integer&gt; iterator() {
+        return new Iterator&lt;Integer&gt;() {
+            int i = 0;
+            public boolean hasNext() { return i &lt; nums.length; }
+            public Integer next()    { return nums[i++]; }
+        };
+    }
+}</pre>
+      <h4>Benefits</h4>
+      <ul>
+        <li>Supports multiple simultaneous traversals.</li>
+        <li>Simplifies the aggregate interface — traversal logic is moved to the Iterator.</li>
+        <li>Supports different traversal strategies without changing the aggregate.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit4">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">36</span>
+      <span class="qa-q">What is an Anti-pattern? Differentiate between a Pattern and an Anti-pattern.</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-anti">Anti-Patterns</span>
+      <h4>What is an Anti-Pattern?</h4>
+      <p>An anti-pattern is a <strong>commonly used but counterproductive solution</strong> to a recurring problem — it appears to be a good idea but typically produces negative results (technical debt, maintenance problems, poor performance). Unlike design patterns, anti-patterns document <em>bad practice</em> and provide a refactored solution (how to escape the anti-pattern).</p>
+      <h4>Pattern vs Anti-Pattern</h4>
+      <ul>
+        <li><strong>Design Pattern:</strong> A proven, reusable solution that results in better software quality. Examples: Singleton, Factory, Observer.</li>
+        <li><strong>Anti-Pattern:</strong> A frequently used poor solution that typically makes things worse. Examples: The Blob, Lava Flow, Vendor Lock-In, Analysis Paralysis.</li>
+        <li><strong>Anti-patterns include:</strong> A description of the problem, the bad solution (anti-pattern itself), consequences/symptoms, typical causes, and the <em>refactored solution</em> (how to fix it).</li>
+      </ul>
+      <h4>Why Study Anti-Patterns?</h4>
+      <ul>
+        <li>Provide easily identifiable templates for common problems and their fixes.</li>
+        <li>Real-world experience in recognising recurring design mistakes.</li>
+        <li>Common vocabulary for discussing and resolving problems.</li>
+        <li>Ensure common mistakes are not repeated within an organization.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit4">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">37</span>
+      <span class="qa-q">Describe the Blob (God Object) Anti-pattern — symptoms, causes, and refactored solution.</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-anti">Anti-Patterns</span>
+      <h4>What is the Blob?</h4>
+      <p>A Blob is found in procedural-style designs where <strong>one class monopolizes the processing</strong> while most other classes only hold data or execute simple processes. The single complex controller class surrounded by simple data classes violates high cohesion.</p>
+      <h4>Symptoms & Consequences</h4>
+      <ul>
+        <li>A single class with a large number of attributes and operations (60+ usually indicates Blob).</li>
+        <li>A disparate collection of <em>unrelated</em> attributes and operations — overall lack of cohesion.</li>
+        <li>The Blob class is too complex for reuse and testing.</li>
+        <li>May be expensive to load into memory, using excessive resources even for simple operations.</li>
+      </ul>
+      <h4>Typical Causes</h4>
+      <ul>
+        <li>Lack of object-oriented architecture (procedural mindset applied to OO code).</li>
+        <li>Lack of any architecture or architecture enforcement.</li>
+        <li>Too limited design review (problems not caught early).</li>
+      </ul>
+      <h4>Refactored Solution (3 Steps)</h4>
+      <ol>
+        <li><strong>Categorize:</strong> Identify and group related attributes and operations by cohesive contracts/responsibilities.</li>
+        <li><strong>Migrate:</strong> Find "natural homes" for each contract-based group and move them to appropriate classes. (e.g., catalog-related operations from LIBRARY class move to CATALOG class.)</li>
+        <li><strong>Remove redundancies:</strong> Remove "far-coupled" or redundant indirect associations. Migrate associations to derived classes at the appropriate base class level. Replace transient associations with type specifiers.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit4">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">38</span>
+      <span class="qa-q">Describe the Analysis Paralysis Anti-pattern — symptoms and typical causes.</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-anti">Anti-Patterns</span>
+      <h4>What is Analysis Paralysis?</h4>
+      <p>A project management anti-pattern where an over-emphasis on analysis prevents actual progress, creating an unproductive cycle of repeated analysis and model rework without moving to design or implementation.</p>
+      <h4>Symptoms & Consequences</h4>
+      <ul>
+        <li>Multiple project restarts and much model rework, due to personnel changes or project direction changes.</li>
+        <li>Design and implementation issues are continually reintroduced in the analysis phase.</li>
+        <li>Cost of analysis exceeds expectation without a predictable end point.</li>
+        <li>The analysis phase no longer involves user interaction — much analysis is speculative.</li>
+        <li>Complexity of analysis models results in intricate implementations, making the system difficult to develop, document, and test.</li>
+      </ul>
+      <h4>Typical Causes</h4>
+      <ul>
+        <li>Management assumes a strict waterfall progression; insists on completing all analysis before design begins.</li>
+        <li>Management has more confidence in analyzing than in designing and implementing.</li>
+        <li>Goals in the analysis phase are not well defined.</li>
+        <li>Management is unwilling to make firm decisions when parts of the domain are sufficiently described.</li>
+        <li>Project vision and focus on the deliverable is diffused — analysis goes beyond providing meaningful value.</li>
+      </ul>
+      <h4>Refactored Solution</h4>
+      <p>Adopt <strong>incremental development</strong>. Use internal increments (infrastructure, data access) and external increments (user-visible functionality) to build the system progressively, learning details of the problem as you go rather than assuming full upfront knowledge.</p>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit4">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">39</span>
+      <span class="qa-q">Describe the Vendor Lock-In Anti-pattern — symptoms, causes, and refactored solution.</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-anti">Anti-Patterns</span>
+      <h4>What is Vendor Lock-In?</h4>
+      <p>A software project becomes <strong>completely dependent on a specific vendor's technology</strong>. When vendor upgrades occur, software changes and interoperability problems result in continuous maintenance. Expected features are delayed, causing schedule slips.</p>
+      <h4>Symptoms & Consequences</h4>
+      <ul>
+        <li>Commercial product upgrades drive the entire application maintenance cycle.</li>
+        <li>Promised product features are delayed or never delivered.</li>
+        <li>The product varies significantly from advertised open standards.</li>
+        <li>Missing a product upgrade entirely may require full product repurchase and reintegration.</li>
+      </ul>
+      <h4>Typical Causes</h4>
+      <ul>
+        <li>Product selected based entirely on marketing/sales information, not technical inspection.</li>
+        <li>No technical approach for isolating application software from direct vendor dependency.</li>
+        <li>Application programming requires in-depth product-specific knowledge.</li>
+        <li>Complexity of product technology exceeds application needs.</li>
+      </ul>
+      <h4>Refactored Solution — Isolation Layer</h4>
+      <p>Introduce an <strong>isolation layer</strong> that separates the application from vendor-specific details. The application interacts only with the isolation layer's abstract API; the isolation layer maps those calls to vendor-specific implementations. Benefits:</p>
+      <ul>
+        <li>Changing the underlying vendor requires only changing the isolation layer, not the entire application.</li>
+        <li>Supports multiple concurrent infrastructures.</li>
+        <li>Provides a more convenient programming interface at the right level of abstraction.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit4">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">40</span>
+      <span class="qa-q">Describe the Lava Flow Anti-pattern.</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-anti">Anti-Patterns</span>
+      <h4>What is Lava Flow?</h4>
+      <p>Lava Flow describes the presence of <strong>dead code, unused or barely-used classes, and unnecessary complexity</strong> that remain in a system because developers are afraid to remove them — unsure if something depends on them. Like lava that solidifies into immovable rock, this code "hardens" in place.</p>
+      <h4>Symptoms</h4>
+      <ul>
+        <li>Large sections of commented-out code with no clear explanation.</li>
+        <li>Unused variables, undocumented classes, and dead methods lingering in the codebase.</li>
+        <li>Developers say "I'm not sure what that class does, but don't touch it — it might break something."</li>
+        <li>Inconsistent design approaches across the codebase due to evolved-but-unclean development.</li>
+      </ul>
+      <h4>Typical Causes</h4>
+      <ul>
+        <li>Rapid prototyping code that was promoted to production without cleanup.</li>
+        <li>Single developer who wrote critical code but has since left; no documentation.</li>
+        <li>Architectural experiments that were abandoned but not removed.</li>
+      </ul>
+      <h4>Refactored Solution</h4>
+      <p>Conduct systematic code reviews and use refactoring tools to identify and safely remove dead code. Establish clear documentation and architecture standards from the start of development. Use automated tests to gain confidence before removing suspect code.</p>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit4">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">41</span>
+      <span class="qa-q">A pizza store design has issues — identify violations and suggest corrections. (Design principle application)</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-solid">SOLID</span>
+      <h4>Common Violations in a Pizza Store Design</h4>
+      <p>A typical problematic pizza store design often violates OCP and DIP by having a single class (e.g., <code>PizzaStore</code>) with large <code>if/else</code> or <code>switch</code> blocks for each pizza type.</p>
+      <h4>Identified Violations</h4>
+      <ul>
+        <li><strong>OCP Violation:</strong> Adding a new pizza type requires modifying the existing <code>PizzaStore</code> class.</li>
+        <li><strong>SRP Violation:</strong> A single class handles both ordering logic AND pizza creation.</li>
+        <li><strong>DIP Violation:</strong> High-level ordering logic directly depends on low-level concrete pizza classes.</li>
+      </ul>
+      <h4>Corrected Design (using Factory Method + OCP)</h4>
+      <pre>abstract class Pizza { abstract void prepare(); abstract void bake(); }
+class CheesePizza extends Pizza { ... }
+class PepperoniPizza extends Pizza { ... }
+
+abstract class PizzaStore {
+    abstract Pizza createPizza(String type); // factory method
+    final Pizza orderPizza(String type) {
+        Pizza p = createPizza(type); // delegate creation to subclass
+        p.prepare(); p.bake(); return p;
+    }
+}
+class NYPizzaStore extends PizzaStore {
+    Pizza createPizza(String type) {
+        if(type.equals("cheese")) return new CheesePizza();
+        return new PepperoniPizza();
+    }
+}</pre>
+      <p>Adding a new pizza type now only requires creating a new subclass of <code>Pizza</code> — no modification to existing code.</p>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit4">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">42</span>
+      <span class="qa-q">Fill in the blanks: SOLID / Design Patterns questions.</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-solid">SOLID</span><span class="tag tag-pattern">Patterns</span>
+      <ul>
+        <li>i. Violating Dependency Inversion Principle will result in code with <strong>tight</strong> coupling.</li>
+        <li>ii. Liskov Substitution Principle states that the designer should be able to replace objects of the <strong>superclass / parent class</strong> with objects of the <strong>subclass / derived class</strong> without affecting correctness.</li>
+        <li>iii. <strong>Open-Closed</strong> Principle states that design should be extensible but modifying existing design should be avoided.</li>
+        <li>iv. The pattern that hides complexity related to creation of objects from the client is the <strong>Factory Method (or Abstract Factory / Builder)</strong> pattern.</li>
+        <li>v. The <strong>Prototype</strong> pattern refers to creating duplicate objects while keeping performance in mind (cloning).</li>
+        <li>vi. The <strong>Adapter</strong> pattern provides the interface according to client requirements while using services of a class with a different interface.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit4">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">43</span>
+      <span class="qa-q">Match GRASP design principles to their definitions (Information Expert, High Cohesion, Indirection, Protected Variation).</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-grasp">GRASP</span>
+      <ul>
+        <li><strong>Information Expert</strong> → c. Assign responsibility to the class that has the required data to fulfill that responsibility.</li>
+        <li><strong>High Cohesion</strong> → a. Combine related responsibilities into one manageable unit (keep classes focused).</li>
+        <li><strong>Indirection</strong> → d. Introduce an intermediate unit to communicate between other units, so that the other units are not directly coupled.</li>
+        <li><strong>Protected Variation</strong> → b. Provide a well-defined interface so that variations in implementation do not impact other elements (wrap instabilities behind a stable interface).</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit4">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">44</span>
+      <span class="qa-q">Draw an Activity Diagram for a ticket purchase / ATM login-logout / dining philosophers scenario.</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-uml">Activity Diagram</span>
+      <h4>Activity Diagram Notations (Recap)</h4>
+      <ul>
+        <li><strong>Start:</strong> Filled black circle (●)</li>
+        <li><strong>Activity/Action:</strong> Rounded rectangle</li>
+        <li><strong>Decision:</strong> Diamond (◇) with guard conditions on outgoing edges</li>
+        <li><strong>Fork (parallel split):</strong> Heavy bar splitting into multiple flows</li>
+        <li><strong>Join (synchronization):</strong> Heavy bar merging multiple flows</li>
+        <li><strong>End:</strong> Filled circle inside a larger circle (⊙)</li>
+        <li><strong>Swimlanes:</strong> Vertical or horizontal lanes to assign activities to actors/roles</li>
+      </ul>
+      <h4>Ticket Purchase Activity (from exam)</h4>
+      <div class="diagram-placeholder">
+        Swimlanes: Commuter | Ticket Vending Machine | Bank<br><br>
+        [Commuter] ● → Request to buy ticket<br>
+        [TVM] → Request trip information → [Commuter] provides trip info<br>
+        [TVM] → Calculate payment due → Request payment option<br>
+        [Commuter] ◇ cash or card?<br>
+        [cash] → [TVM] collect cash → Issue ticket → ⊙<br>
+        [card] → [Bank] Authorize payment → [authorized?]<br>
+        [yes] → [TVM] Issue ticket → ⊙<br>
+        [no] → [TVM] Show error → ⊙
+      </div>
+      <h4>Login/Logout Activity (for web application)</h4>
+      <div class="diagram-placeholder">
+        ● → Open website → Enter credentials → [valid?]<br>
+        [yes] → Access dashboard → (use system) → Logout → ⊙<br>
+        [no] → Show error → [retry?] → [yes] back to Enter credentials<br>
+        [no] → ⊙
+      </div>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit1">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">45</span>
+      <span class="qa-q">Describe the approaches for identifying classes (Noun Phrase, Common Class Patterns, CRC, Use Case Driven).</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-uml">OO Analysis</span>
+      <h4>1. Noun Phrase Approach</h4>
+      <p>Read the requirements document and identify all nouns and noun phrases. Treat nouns as candidate classes and verbs as methods. Classify nouns into: <strong>Relevant</strong> (core domain concepts), <strong>Fuzzy</strong> (might become attributes or enums), and <strong>Irrelevant</strong> (outside scope, UI elements). Remove duplicates, attributes masquerading as classes, and vague/overly-specific nouns.</p>
+      <h4>2. Common Class Patterns Approach</h4>
+      <p>Use recurring patterns for class types (Shlaer & Mellor):</p>
+      <ul>
+        <li><strong>Concept class:</strong> Intangible business concepts — Account, Customer.</li>
+        <li><strong>Event class:</strong> Time-stamped occurrences — Transaction, Withdrawal.</li>
+        <li><strong>Organization class:</strong> Group of people/resources — Bank, Branch.</li>
+        <li><strong>People class:</strong> Roles users play — Clerk, Beneficiary.</li>
+        <li><strong>Place class:</strong> Physical locations — Branch, Office.</li>
+        <li><strong>Tangible things/devices:</strong> Physical objects — Sensor, Terminal.</li>
+      </ul>
+      <h4>3. CRC Cards (Class, Responsibility, Collaborators)</h4>
+      <p>Index cards listing: class name, responsibilities (what it knows/does), and collaborating classes. Used in brainstorming sessions; helps identify interactions and assign responsibilities early.</p>
+      <h4>4. Use Case Driven Approach</h4>
+      <p>Analyse use cases — actors and use-case descriptions contain candidate classes. Nouns that appear in use-case flows are candidate classes; verbs become operations. Combined with the noun-phrase approach for completeness.</p>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit3">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">46</span>
+      <span class="qa-q">Identify SOLID principles violated in a given design and suggest corrections.</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-solid">SOLID</span>
+      <h4>Typical Violations to Look For</h4>
+      <ul>
+        <li><strong>SRP violation:</strong> A class handling multiple unrelated concerns (e.g., data storage + business logic + UI rendering in one class). Fix: Split into separate classes each with a single responsibility.</li>
+        <li><strong>OCP violation:</strong> Existing code must be modified every time new behaviour is added (e.g., <code>if/else</code> type checks). Fix: Use polymorphism — abstract class/interface with subclasses per behaviour.</li>
+        <li><strong>LSP violation:</strong> A subclass overrides methods in a way that breaks the parent class contract, or throws exceptions for methods it doesn't support. Fix: Rethink inheritance hierarchy; use interfaces instead of deep inheritance.</li>
+        <li><strong>ISP violation:</strong> A large interface forces implementing classes to provide stub implementations for methods they don't use. Fix: Split the interface into smaller, role-specific interfaces.</li>
+        <li><strong>DIP violation:</strong> High-level class directly instantiates low-level concrete classes. Fix: Introduce an interface/abstraction; inject the dependency through constructor or setter.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit4">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">47</span>
+      <span class="qa-q">What is the Composite / Decorator structural pattern? (from exam context — identify structural pattern in given design)</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-pattern">Structural</span>
+      <h4>Composite Pattern</h4>
+      <p><strong>Intent:</strong> Compose objects into tree structures to represent part-whole hierarchies. Lets clients treat individual objects and compositions of objects uniformly.</p>
+      <ul>
+        <li><strong>Component (interface/abstract):</strong> Common interface for leaf and composite objects.</li>
+        <li><strong>Leaf:</strong> Has no children; defines behavior for primitive objects.</li>
+        <li><strong>Composite:</strong> Has children; implements child-related operations (add, remove, getChild).</li>
+      </ul>
+      <pre>interface FileSystemItem { void display(String indent); }
+class File      implements FileSystemItem { public void display(String i) { System.out.println(i + name); } }
+class Directory implements FileSystemItem {
+    List&lt;FileSystemItem&gt; children = new ArrayList&lt;&gt;();
+    void add(FileSystemItem f) { children.add(f); }
+    public void display(String i) { for(FileSystemItem f : children) f.display(i + "  "); }
+}</pre>
+      <h4>Decorator Pattern</h4>
+      <p><strong>Intent:</strong> Attach additional responsibilities to an object dynamically. Provides a flexible alternative to subclassing for extending functionality.</p>
+      <pre>interface Coffee { double getCost(); }
+class SimpleCoffee implements Coffee { public double getCost() { return 1.0; } }
+abstract class CoffeeDecorator implements Coffee {
+    protected Coffee coffee;
+    CoffeeDecorator(Coffee c) { this.coffee = c; }
+}
+class MilkDecorator extends CoffeeDecorator {
+    MilkDecorator(Coffee c) { super(c); }
+    public double getCost() { return coffee.getCost() + 0.25; }
+}</pre>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit2">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">48</span>
+      <span class="qa-q">Is the statement <code>Object o = new ArrayList&lt;String&gt;();</code> valid in Java? Justify.</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-java">Java</span>
+      <p><strong>Yes, this statement is valid in Java.</strong></p>
+      <p>In Java, every class ultimately extends <code>Object</code>. <code>ArrayList&lt;String&gt;</code> extends <code>AbstractList</code> which extends <code>AbstractCollection</code> which implements <code>Collection</code> which extends <code>Iterable</code> — and all of these ultimately inherit from <code>Object</code>.</p>
+      <p>Therefore, <code>ArrayList&lt;String&gt;</code> IS-A <code>Object</code>. This is a case of <strong>upcasting</strong> — storing a more specific type in a variable of a more general type. This is allowed in Java (and is the basis of polymorphism).</p>
+      <pre>Object o = new ArrayList&lt;String&gt;(); // valid — upcasting
+// However, to use ArrayList-specific methods, you'd need to downcast:
+((ArrayList&lt;String&gt;) o).add("Hello");</pre>
+      <div class="note"><strong>Note:</strong> While valid, this is generally bad practice as it loses type information. Prefer <code>List&lt;String&gt; list = new ArrayList&lt;&gt;();</code> for programming to an interface.</div>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit1">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">49</span>
+      <span class="qa-q">Draw a Use Case Diagram for the Passport Automation System.</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-uml">Use Case</span>
+      <h4>Actors</h4>
+      <ul>
+        <li><strong>Applicant</strong> — primary actor.</li>
+        <li><strong>Passport Administrator</strong> — processes applications, ECNR status.</li>
+        <li><strong>Regional Administrator (Ministry of External Affairs)</strong> — reviews forwarded applications.</li>
+        <li><strong>Police</strong> — conducts separate verification.</li>
+      </ul>
+      <h4>Use Cases & Relationships</h4>
+      <ul>
+        <li>Applicant → Login to System</li>
+        <li>Applicant → Submit Application Details → «include» Verify Against Database</li>
+        <li>Applicant → Apply for ECNR Status (optional) → «extend» Submit Application</li>
+        <li>System → Forward to Regional Administrator → «include» Regional Administrator: Review</li>
+        <li>System → Forward Details to Police → «include» Police: Conduct Verification</li>
+        <li>Passport Administrator → Process ECNR Status</li>
+        <li>Passport Administrator → Issue Passport (after all verifications)</li>
+        <li>Passport Administrator → Apply Penalty (if forgery detected)</li>
+        <li>System → Add to Database (after passport issued)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit3">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">50</span>
+      <span class="qa-q">What is wrong with a GRASP design where responsibilities are poorly assigned? Show improvement with a structural diagram.</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-grasp">GRASP</span>
+      <h4>Common GRASP Violations</h4>
+      <ul>
+        <li><strong>Violation of Information Expert:</strong> Assigning the responsibility to compute a total to a class that doesn't have the required data (e.g., assigning <code>calculateTotal()</code> to <code>Register</code> when only <code>Sale</code> has <code>SalesLineItems</code>). <em>Fix:</em> Assign to <code>Sale</code> which has all the line items.</li>
+        <li><strong>Violation of Creator:</strong> Having a class create objects it has no logical connection to. <em>Fix:</em> Let <code>Sale</code> create <code>SalesLineItem</code> since it aggregates them.</li>
+        <li><strong>Low Cohesion violation (Bloated class):</strong> A single class with many unrelated methods — similar to the Blob anti-pattern. <em>Fix:</em> Refactor into multiple focused classes.</li>
+        <li><strong>High Coupling violation:</strong> A class depending on many other classes directly. <em>Fix:</em> Use indirection/intermediary, dependency injection, or program to interfaces.</li>
+      </ul>
+      <h4>Information Expert — Fix Example (from exam: Test marks)</h4>
+      <p>If a <code>Test</code> consists of multiple <code>Question</code> objects each with a <code>marks</code> attribute, then responsibility to compute total marks should be assigned to <code>Test</code>, because <code>Test</code> is the Information Expert — it aggregates all <code>Question</code> objects and has access to their marks.</p>
+      <pre>class Question { int marks; }
+class Test {
+    List&lt;Question&gt; questions;
+    // Information Expert: Test computes its own total
+    int computeTotalMarks() {
+        return questions.stream().mapToInt(q -> q.marks).sum();
+    }
+}</pre>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit4">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">51</span>
+      <span class="qa-q">Specify when to use the Builder Pattern and state the difference between Factory Method and Abstract Factory.</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-pattern">Creational</span>
+      <h4>When to Use Builder</h4>
+      <ul>
+        <li>When an object requires many optional parameters or configurations (avoids telescoping constructors).</li>
+        <li>When construction involves multiple steps that should be executed in a specific order.</li>
+        <li>When the same construction process should produce different representations of an object (e.g., building a house in stone vs wood).</li>
+      </ul>
+      <h4>Factory Method vs Abstract Factory</h4>
+      <ul>
+        <li><strong>Factory Method:</strong> Creates <em>one product</em>. Defines a method in a creator class that subclasses override to produce specific products. Focus: <em>one type of object</em>, deferred to subclasses.</li>
+        <li><strong>Abstract Factory:</strong> Creates <em>families of related objects</em> without specifying their concrete classes. Provides multiple factory methods for different product types in a family. Focus: <em>ensuring compatibility among related products</em>.</li>
+        <li><strong>Example:</strong> Factory Method: <code>createButton()</code> in a UI framework. Abstract Factory: <code>createButton()</code> + <code>createTextBox()</code> + <code>createCheckbox()</code> all in a <code>WindowsUIFactory</code> that ensures consistent Windows-style UI components.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="qa-card" data-unit="unit4">
+    <div class="qa-header" onclick="toggle(this)">
+      <span class="qa-num">52</span>
+      <span class="qa-q">Describe the essential elements of a Design Pattern and identify the essential elements (Name, Problem, Solution, Consequences).</span>
+      <svg class="qa-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="qa-body">
+      <span class="tag tag-pattern">Design Patterns</span>
+      <p>According to the Gang of Four, a design pattern has four essential elements:</p>
+      <ul>
+        <li><strong>Pattern Name:</strong> A handle used to describe the design problem, its solution, and consequences in a word or two. Building a vocabulary of patterns (e.g., "Singleton", "Observer") aids communication.</li>
+        <li><strong>Problem:</strong> Describes when to apply the pattern — the context and the problem it solves. May describe specific design problems such as how to represent algorithms as objects, or conditions that must exist before the pattern makes sense.</li>
+        <li><strong>Solution:</strong> Describes the elements that make up the design — their relationships, responsibilities, and collaborations. The solution is described abstractly, not as a specific concrete design or implementation.</li>
+        <li><strong>Consequences:</strong> The results, trade-offs, and costs of applying the pattern. Includes space and time trade-offs, language and implementation issues, and impact on system flexibility, extensibility, or portability.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="no-results">
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    No questions match your search. Try a different keyword.
+  </div>
+
+</div>
+
+<div class="footer">
+  OOAD Q&A — Built from UE19CS353 / UE20CS352 official slides · Units 1–4 · 2026
+</div>
+
+<script>
+  let allExpanded = false;
+
+  function toggle(header) {
+    const card = header.parentElement;
+    card.classList.toggle('open');
+  }
+
+  function toggleAll() {
+    allExpanded = !allExpanded;
+    document.querySelectorAll('.qa-card:not(.hidden)').forEach(c => {
+      c.classList.toggle('open', allExpanded);
+    });
+    document.querySelector('.expand-btn').textContent = allExpanded ? 'Collapse All' : 'Expand All';
+  }
+
+  let currentUnit = 'all';
+
+  function filterUnit(unit, btn) {
+    currentUnit = unit;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    applyFilters();
+  }
+
+  function filterCards() {
+    applyFilters();
+  }
+
+  function applyFilters() {
+    const query = document.getElementById('searchInput').value.toLowerCase().trim();
+    let visibleCount = 0;
+
+    document.querySelectorAll('.qa-card').forEach(card => {
+      const unitMatch = currentUnit === 'all' || card.dataset.unit === currentUnit;
+      const text = card.innerText.toLowerCase();
+      const searchMatch = !query || text.includes(query);
+      const visible = unitMatch && searchMatch;
+      card.classList.toggle('hidden', !visible);
+      if (visible) visibleCount++;
+    });
+
+    // Show/hide section headers
+    document.querySelectorAll('.section-header').forEach(header => {
+      const unit = header.dataset.unit;
+      const hasVisible = [...document.querySelectorAll(`.qa-card[data-unit="${unit}"]`)]
+        .some(c => !c.classList.contains('hidden'));
+      header.style.display = hasVisible ? '' : 'none';
+    });
+
+    document.getElementById('no-results').style.display = visibleCount === 0 ? 'block' : 'none';
+  }
+</script>
+</body>
+</html>

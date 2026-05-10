@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Database Technologies – Complete Study Notes</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+
+:root {
+  --bg: #0c0e12;
+  --surface: #13161d;
+  --card: #181c26;
+  --border: #232840;
+  --a1: #4fc3f7;   /* unit 3: teal-blue */
+  --a2: #ffb347;   /* unit 4: amber */
+  --a3: #69f0ae;   /* green */
+  --a4: #ce93d8;   /* purple */
+  --a5: #ef5350;   /* red */
+  --text: #dde3f0;
+  --muted: #6b7899;
+  --code: #0d1117;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+
+/* HEADER */
+.hdr{background:linear-gradient(160deg,#0c0e12 0%,#111828 60%,#0c0e12 100%);padding:44px 24px 36px;text-align:center;border-bottom:1px solid var(--border);position:relative;overflow:hidden}
+.hdr::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% -10%,rgba(79,195,247,.09),transparent 70%)}
+.hdr-badge{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--a1);border:1px solid rgba(79,195,247,.3);padding:5px 14px;border-radius:20px;margin-bottom:18px}
+.hdr h1{font-family:'IBM Plex Mono',monospace;font-size:clamp(24px,4.5vw,46px);font-weight:700;line-height:1.1;margin-bottom:12px}
+.hdr h1 .u3c{color:var(--a1)}.hdr h1 .u4c{color:var(--a2)}
+.hdr p{color:var(--muted);font-size:14px;max-width:520px;margin:0 auto 24px}
+.unit-tabs{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.utab{font-family:'IBM Plex Mono',monospace;font-size:12px;padding:9px 22px;border-radius:6px;cursor:pointer;border:none;font-weight:700;letter-spacing:.5px;transition:all .2s}
+.utab.u3{background:rgba(79,195,247,.12);color:var(--a1);border:1px solid rgba(79,195,247,.3)}
+.utab.u4{background:rgba(255,179,71,.12);color:var(--a2);border:1px solid rgba(255,179,71,.3)}
+.utab.active.u3,.utab.u3:hover{background:var(--a1);color:#000}
+.utab.active.u4,.utab.u4:hover{background:var(--a2);color:#000}
+
+/* TOC */
+.toc{background:var(--surface);border-bottom:1px solid var(--border);display:flex;overflow-x:auto;scrollbar-width:none;position:sticky;top:0;z-index:100}
+.toc::-webkit-scrollbar{display:none}
+.toc-i{font-family:'IBM Plex Mono',monospace;font-size:11px;padding:14px 15px;cursor:pointer;white-space:nowrap;color:var(--muted);border-bottom:2px solid transparent;transition:all .2s;letter-spacing:.3px}
+.toc-i:hover,.toc-i.active{color:var(--a1);border-bottom-color:var(--a1)}
+.toc-i.u4h:hover,.toc-i.u4h.active{color:var(--a2);border-bottom-color:var(--a2)}
+
+/* LAYOUT */
+.wrap{max-width:1020px;margin:0 auto;padding:32px 20px 80px}
+.unit-s{display:none}.unit-s.active{display:block}
+
+/* SECTION HEADER */
+.sec-hdr{display:flex;align-items:center;gap:14px;margin-bottom:26px;padding-top:44px;border-top:1px solid var(--border)}
+.sec-hdr:first-child{border-top:none;padding-top:0}
+.sec-num{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);background:var(--card);border:1px solid var(--border);padding:4px 10px;border-radius:4px;white-space:nowrap}
+.sec-ttl{font-family:'IBM Plex Mono',monospace;font-size:clamp(16px,2.8vw,24px);font-weight:700}
+.sec-ttl.u3{color:var(--a1)}.sec-ttl.u4{color:var(--a2)}
+
+/* CARD */
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px 22px;margin-bottom:14px}
+.card-ttl{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:700;margin-bottom:11px}
+.card-ttl.blue{color:var(--a1)}.card-ttl.amber{color:var(--a2)}.card-ttl.green{color:var(--a3)}.card-ttl.purple{color:var(--a4)}.card-ttl.red{color:var(--a5)}
+.card p{font-size:14px;line-height:1.7;color:var(--text);margin-bottom:9px}.card p:last-child{margin-bottom:0}
+
+/* LISTS */
+.nl{list-style:none;padding:0}
+.nl li{padding:7px 0 7px 20px;position:relative;font-size:14px;line-height:1.65;border-bottom:1px solid rgba(255,255,255,.04)}
+.nl li:last-child{border-bottom:none}
+.nl li::before{content:'▸';position:absolute;left:0;color:var(--a1);font-size:11px}
+.nl.amb li::before{color:var(--a2)}.nl.grn li::before{color:var(--a3)}.nl.pur li::before{color:var(--a4)}.nl.red li::before{color:var(--a5)}
+.nl li strong{color:var(--a1);font-weight:600}
+.nl.amb li strong{color:var(--a2)}
+
+/* CODE */
+.code{background:var(--code);border:1px solid var(--border);border-left:3px solid var(--a1);border-radius:8px;padding:16px 18px;font-family:'IBM Plex Mono',monospace;font-size:12.5px;line-height:1.7;overflow-x:auto;white-space:pre;color:#a9d1f7;margin:12px 0}
+.code.amb{border-left-color:var(--a2)}.code.grn{border-left-color:var(--a3)}
+
+/* CALLOUT */
+.cbox{border-radius:8px;padding:13px 16px;margin:12px 0;font-size:13.5px;line-height:1.6;display:flex;gap:11px;align-items:flex-start}
+.cbox.info{background:rgba(79,195,247,.07);border:1px solid rgba(79,195,247,.2)}
+.cbox.warn{background:rgba(255,107,53,.07);border:1px solid rgba(255,107,53,.2)}
+.cbox.ok{background:rgba(105,240,174,.07);border:1px solid rgba(105,240,174,.2)}
+.cbox.pur{background:rgba(206,147,216,.07);border:1px solid rgba(206,147,216,.2)}
+.cbox.amb{background:rgba(255,179,71,.07);border:1px solid rgba(255,179,71,.2)}
+.cicon{font-size:17px;flex-shrink:0;line-height:1.4}
+.cbox strong{display:block;margin-bottom:3px}
+
+/* TABLE */
+.tw{overflow-x:auto;margin:12px 0;border-radius:8px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:rgba(79,195,247,.07);color:var(--a1);font-family:'IBM Plex Mono',monospace;font-size:11px;padding:11px 14px;text-align:left;border-bottom:1px solid var(--border)}
+th.u4h{background:rgba(255,179,71,.07);color:var(--a2)}
+td{padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.04);vertical-align:top;line-height:1.5;font-size:13px}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.02)}
+td code{font-family:'IBM Plex Mono',monospace;font-size:11px;background:var(--code);padding:2px 5px;border-radius:3px;color:var(--a1)}
+
+/* GRID */
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:13px;margin-bottom:13px}
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:13px;margin-bottom:13px}
+
+/* STEPS */
+.steps{display:flex;flex-direction:column;gap:9px}
+.step{display:flex;gap:13px;align-items:flex-start;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:13px 15px}
+.snum{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:700;color:#000;background:var(--a1);min-width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.snum.amb{background:var(--a2)}.snum.grn{background:var(--a3)}
+.sc strong{display:block;font-size:13.5px;margin-bottom:3px}
+.sc p{font-size:12.5px;color:var(--muted);line-height:1.5}
+
+/* DIVIDER */
+.div{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:34px 0}
+
+/* MCQ */
+.mcq-hdr{font-family:'IBM Plex Mono',monospace;font-size:19px;font-weight:700;color:var(--a3);margin-bottom:22px;display:flex;align-items:center;gap:10px}
+.mcard{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px 22px;margin-bottom:14px;transition:border-color .2s}
+.mcard:hover{border-color:rgba(79,195,247,.3)}
+.mq{font-size:14.5px;font-weight:600;margin-bottom:13px;line-height:1.5}
+.mq .qn{font-family:'IBM Plex Mono',monospace;color:var(--a1);font-size:11px;margin-right:7px}
+.mq .qn.u4{color:var(--a2)}
+.mopts{display:flex;flex-direction:column;gap:7px}
+.mopt{display:flex;align-items:flex-start;gap:9px;padding:9px 13px;border-radius:7px;border:1px solid var(--border);cursor:pointer;transition:all .2s;font-size:13.5px;line-height:1.4;background:var(--surface);user-select:none}
+.mopt:hover{border-color:var(--a1);color:var(--a1)}
+.mopt.correct{background:rgba(105,240,174,.1);border-color:#69f0ae;color:#69f0ae}
+.mopt.wrong{background:rgba(239,83,80,.08);border-color:#ef5350;color:#ef5350}
+.mopt.rev-ok{background:rgba(105,240,174,.06);border-color:rgba(105,240,174,.35);color:#69f0ae}
+.oletter{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;min-width:18px;opacity:.55}
+.mexp{display:none;margin-top:10px;padding:11px 13px;background:rgba(105,240,174,.05);border:1px solid rgba(105,240,174,.2);border-radius:7px;font-size:12.5px;color:var(--a3);line-height:1.6}
+.mexp.show{display:block}
+.sbar{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 18px;margin-bottom:18px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.slabel{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted)}
+.sval{font-family:'IBM Plex Mono',monospace;font-size:20px;font-weight:700;color:var(--a3)}
+.rbtn{margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:11px;padding:7px 15px;border-radius:5px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;transition:all .2s}
+.rbtn:hover{border-color:var(--a1);color:var(--a1)}
+
+/* FAB */
+.fab{position:fixed;bottom:26px;right:26px;width:42px;height:42px;background:var(--a1);color:#000;border:none;border-radius:50%;font-size:19px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 18px rgba(79,195,247,.4);transition:transform .2s;z-index:200}
+.fab:hover{transform:scale(1.1)}
+
+@keyframes fu{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.card,.mcard,.step{animation:fu .35s ease both}
+
+@media(max-width:640px){
+  .wrap{padding:18px 13px 60px}
+  .hdr{padding:26px 13px 22px}
+  .code{font-size:11px}
+  .g2,.g3{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-badge">PES University · Database Technologies</div>
+  <h1><span class="u3c">Unit 3</span> &amp; <span class="u4c">Unit 4</span><br>Complete Study Notes</h1>
+  <p>Parallel &amp; Distributed Databases · Stream Processing · Data Mining · Data Lakes &amp; more</p>
+  <div class="unit-tabs">
+    <button type="button" class="utab u3 active" data-unit="u3">UNIT 3 — PARALLEL &amp; DISTRIBUTED DB</button>
+    <button type="button" class="utab u4" data-unit="u4">UNIT 4 — STREAM PROCESSING &amp; BEYOND</button>
+  </div>
+</div>
+
+<div class="toc" id="tocBar"></div>
+
+<div class="wrap">
+
+<!-- ═══════════════ UNIT 3 ═══════════════ -->
+<div id="u3" class="unit-s active">
+
+<!-- 3.1 Parallel Databases -->
+<div id="u3-s1">
+  <div class="sec-hdr"><span class="sec-num">3.1</span><h2 class="sec-ttl u3">Parallel Databases</h2></div>
+  <div class="card">
+    <div class="card-ttl blue">What is a Parallel Database?</div>
+    <p>A parallel database system seeks to improve performance through parallelization of operations such as loading data, building indexes, and evaluating queries. It improves processing and I/O speeds by using <strong>multiple CPUs and disks in parallel</strong>.</p>
+  </div>
+  <div class="card">
+    <div class="card-ttl blue">Models of Parallelism</div>
+    <div class="g3">
+      <div class="cbox info"><span class="cicon">🧠</span><div><strong>Shared-Memory</strong> Single physical address space across all processors. Each processor can directly access others' memory. Large machines use NUMA (Non-Uniform Memory Access) type. Cache access is critical bottleneck.</div></div>
+      <div class="cbox info"><span class="cicon">💾</span><div><strong>Shared-Disk</strong> Each processor has its own private memory, but all share the disks via a communication network. Appears as NAS (file-level) or SAN (block-level). Controllers manage competing requests.</div></div>
+      <div class="cbox info"><span class="cicon">🔗</span><div><strong>Shared-Nothing</strong> All processors have their own memory AND disks. All communication is via the network. Most commonly used architecture. Inexpensive (commodity racks) but data transfer between processors is costly.</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-ttl blue">Query Parallelism</div>
+    <div class="tw"><table>
+      <tr><th>Type</th><th>Focus</th><th>Goal</th><th>Use Case</th></tr>
+      <tr><td><strong>Intra-Query</strong></td><td>Single query, broken into parallel sub-tasks</td><td>Reduce response time for one complex query</td><td>OLAP (Online Analytical Processing)</td></tr>
+      <tr><td><strong>Inter-Query</strong></td><td>Multiple independent queries run simultaneously</td><td>Increase overall system throughput</td><td>OLTP (Online Transaction Processing)</td></tr>
+    </table></div>
+    <div class="g2" style="margin-top:12px">
+      <div class="cbox info"><span class="cicon">⚙️</span><div><strong>Intra-Operation Parallelism</strong> — Same operation (scan, sort, join) split and run on different data subsets simultaneously</div></div>
+      <div class="cbox info"><span class="cicon">🔀</span><div><strong>Inter-Operation Parallelism</strong> — Different operations within the same query plan run concurrently (pipeline or bushy-tree parallelism)</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-ttl blue">Parallel Algorithms</div>
+    <ul class="nl">
+      <li><strong>Selection σ(R):</strong> Each of p processors examines its local tuples; result distributed same as R — achieves 1/p of uniprocessor time</li>
+      <li><strong>Duplicate Elimination δ(R):</strong> Use a hash function to distribute — duplicate tuples land at same processor; apply elimination locally</li>
+      <li><strong>Join R⋈S:</strong> Hash tuples of R and S by join attribute Y across p processors; each processor performs a local join on its bucket</li>
+      <li><strong>Aggregation:</strong> Hash by grouping attributes across processors; aggregate locally</li>
+      <li><strong>Performance of Join:</strong> Total disk I/O = 5(B(R)+B(S))/p per processor vs 3(B(R)+B(S)) on a uniprocessor</li>
+    </ul>
+  </div>
+</div>
+
+<!-- 3.2 MapReduce -->
+<div id="u3-s2">
+  <div class="sec-hdr"><span class="sec-num">3.2</span><h2 class="sec-ttl u3">MapReduce &amp; Hadoop</h2></div>
+  <div class="card">
+    <div class="card-ttl blue">MapReduce Framework</div>
+    <p>A high-level programming model that achieves parallelism by dividing large datasets into smaller independent chunks. User writes only two functions: <strong>map()</strong> and <strong>reduce()</strong>. The framework handles scheduling, monitoring, and inter-machine communication automatically.</p>
+    <div class="steps" style="margin-top:14px">
+      <div class="step"><div class="snum">1</div><div class="sc"><strong>Map Phase</strong><p>Indexing and sorting data into key-value pairs. A master controller divides input into chunks; different processors run map() on each chunk.</p></div></div>
+      <div class="step"><div class="snum">2</div><div class="sc"><strong>Shuffle Phase</strong><p>Redistribute mapper output across nodes depending on the key. All values for a given key are sent to the same reducer.</p></div></div>
+      <div class="step"><div class="snum">3</div><div class="sc"><strong>Reduce Phase</strong><p>Produces a summary of previously mapped and shuffled data. Combine/aggregate all values for each key.</p></div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-ttl blue">Storage Model (HDFS)</div>
+    <ul class="nl">
+      <li>Massively parallel shared-nothing machines (commodity computers in racks)</li>
+      <li>Data stored in very large files divided into <strong>chunks</strong> (typically ~128 MB)</li>
+      <li>Each chunk is <strong>replicated several times</strong> for resiliency against disk failure</li>
+      <li><strong>NameNode:</strong> Master node — stores metadata (file names, block locations, permissions). Does NOT store actual data.</li>
+      <li><strong>DataNode:</strong> Worker nodes — store actual data blocks; each file divided into blocks distributed across multiple DataNodes</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="card-ttl blue">Hadoop Ecosystem</div>
+    <div class="tw"><table>
+      <tr><th>Layer</th><th>Component</th><th>Function</th></tr>
+      <tr><td>Management</td><td>Ambari</td><td>Cluster monitoring</td></tr>
+      <tr><td>Analytics</td><td>Pig, Hive, Mahout</td><td>Data analysis and ML</td></tr>
+      <tr><td>Processing</td><td>MapReduce</td><td>Parallel data processing</td></tr>
+      <tr><td>Storage</td><td>HDFS</td><td>Distributed file storage</td></tr>
+      <tr><td>Database</td><td>HBase</td><td>NoSQL big data storage</td></tr>
+      <tr><td>Workflow</td><td>Oozie</td><td>Job scheduling</td></tr>
+      <tr><td>Coordination</td><td>ZooKeeper</td><td>Distributed coordination</td></tr>
+      <tr><td>Integration</td><td>Sqoop</td><td>Data transfer</td></tr>
+    </table></div>
+  </div>
+  <div class="card">
+    <div class="card-ttl blue">MapReduce Execution Flow</div>
+    <ul class="nl">
+      <li>Client submits job (JAR file + Mapper/Reducer logic + input/output paths) to Hadoop JobTracker</li>
+      <li>JobTracker splits job into tasks and assigns to <strong>TaskTrackers</strong> based on <em>data locality</em> (tasks run where data already exists)</li>
+      <li>TaskTrackers execute Map Tasks on local input splits</li>
+      <li>Intermediate results are <strong>shuffled and sorted</strong></li>
+      <li>Reduce Tasks process grouped results → final output written to HDFS</li>
+    </ul>
+    <div class="g2" style="margin-top:12px">
+      <div class="cbox ok"><span class="cicon">✅</span><div><strong>Advantages:</strong> Parallelism, Scalability, Fault Tolerance, Data Locality, Simplicity (only map/reduce needed)</div></div>
+      <div class="cbox warn"><span class="cicon">⚠️</span><div><strong>Problems with MapReduce:</strong> Slow (hours for queries), Complex programming model, Hundreds of config params, Supports batch only — no real-time streaming</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- 3.3 Distributed Databases -->
+<div id="u3-s3">
+  <div class="sec-hdr"><span class="sec-num">3.3</span><h2 class="sec-ttl u3">Distributed Databases</h2></div>
+  <div class="card">
+    <div class="card-ttl blue">Key Definitions</div>
+    <ul class="nl">
+      <li><strong>DDB (Distributed Database):</strong> A collection of multiple logically related databases distributed over a computer network</li>
+      <li><strong>DDBMS:</strong> Software that manages a DDB while making the distribution <em>transparent</em> to the user</li>
+      <li><strong>Parallel DB:</strong> Data at a single site — uses parallel processing for performance</li>
+      <li><strong>Distributed DB:</strong> Data across multiple sites, each managed independently by its own DBMS</li>
+    </ul>
+  </div>
+  <div class="tw">
+    <table>
+      <tr><th>Feature</th><th>Shared-Nothing Parallel</th><th>Distributed System</th></tr>
+      <tr><td>Location</td><td>Same room / data center</td><td>Physically distant</td></tr>
+      <tr><td>Network Speed</td><td>Very high-speed internal</td><td>Slower (Internet/LAN/WAN)</td></tr>
+      <tr><td>Communication Cost</td><td>Low vs disk access</td><td>High vs computation</td></tr>
+      <tr><td>Usage</td><td>Parallel DBs, HPC</td><td>Cloud, distributed apps</td></tr>
+    </table>
+  </div>
+  <div class="g2">
+    <div class="card">
+      <div class="card-ttl blue">Homogeneous DDB</div>
+      <ul class="nl">
+        <li>All sites have <strong>identical software</strong></li>
+        <li>Sites are aware of each other and cooperate</li>
+        <li>Appears as a single system to users</li>
+        <li>Each site surrenders some autonomy (schema/software changes)</li>
+        <li>Example: All sites use MySQL</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-ttl amber">Heterogeneous DDB</div>
+      <ul class="nl amb">
+        <li>Different sites use <strong>different schemas and software</strong></li>
+        <li>Schema differences → major problem for query processing</li>
+        <li>Software differences → major problem for transaction processing</li>
+        <li>Sites may not even be aware of each other</li>
+        <li>Example: Manufacturing→Oracle, Sales→MySQL, HQ→SQL Server</li>
+      </ul>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-ttl blue">Data Fragmentation</div>
+    <ul class="nl">
+      <li><strong>Horizontal Fragment:</strong> A subset of tuples (rows) — e.g., all records where DNO=5</li>
+      <li><strong>Vertical Fragment:</strong> Keeps only a subset of attributes (columns) — e.g., only SSN and AGE</li>
+      <li><strong>Mixed (Hybrid) Fragment:</strong> Combination of both horizontal and vertical fragmentation</li>
+      <li>Fragmentation info stored in a <strong>global directory</strong> accessed by DDB applications</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="card-ttl blue">Data Replication</div>
+    <p>Storing fragments of data in more than one site. Improves availability; if one site fails, other copies remain accessible.</p>
+    <div class="tw"><table>
+      <tr><th>Type</th><th>How it Works</th><th>Best For</th></tr>
+      <tr><td><strong>Transactional Replication</strong></td><td>Sites receive full initial copy, then receive updates as data changes. Consistently replicates each change.</td><td>Server-to-server environments</td></tr>
+      <tr><td><strong>Snapshot Replication</strong></td><td>Distributes data exactly as it appears at a specific moment. Does not monitor for updates.</td><td>Infrequently changed data</td></tr>
+      <tr><td><strong>Merge Replication</strong></td><td>Data from two or more databases combined. Both publisher AND subscriber can independently make changes.</td><td>Server-to-client, multiple subscribers</td></tr>
+    </table></div>
+  </div>
+  <div class="card">
+    <div class="card-ttl blue">Advantages of DDBs &amp; Transparency Types</div>
+    <div class="g2">
+      <ul class="nl">
+        <li><strong>Distribution Transparency:</strong> User doesn't know where data is stored</li>
+        <li><strong>Location Transparency:</strong> User writes <code>SELECT * FROM Employee</code> — system finds it</li>
+        <li><strong>Naming Transparency:</strong> Unique names across system — no need to specify site</li>
+        <li><strong>Replication Transparency:</strong> User unaware copies exist</li>
+      </ul>
+      <ul class="nl">
+        <li><strong>Fragmentation Transparency:</strong> User unaware of fragments</li>
+        <li><strong>Increased Reliability/Availability:</strong> Data replicated at multiple sites</li>
+        <li><strong>Improved Performance:</strong> Data kept closer to where it's needed (data localization)</li>
+        <li><strong>Easier Expansion:</strong> Adding more data/processors is simpler</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- 3.4 Distributed Query Processing -->
+<div id="u3-s4">
+  <div class="sec-hdr"><span class="sec-num">3.4</span><h2 class="sec-ttl u3">Distributed Query Processing</h2></div>
+  <div class="card">
+    <div class="card-ttl blue">DQP Pipeline</div>
+    <div class="steps">
+      <div class="step"><div class="snum">1</div><div class="sc"><strong>User Query Submission</strong><p>User submits SQL without worrying about data location</p></div></div>
+      <div class="step"><div class="snum">2</div><div class="sc"><strong>Query Parsing &amp; Validation</strong><p>DBMS checks SQL syntax, relation names, attributes</p></div></div>
+      <div class="step"><div class="snum">3</div><div class="sc"><strong>Query Decomposition</strong><p>Convert to relational algebra; break into smaller operations. Uses global conceptual schema — no distribution info yet.</p></div></div>
+      <div class="step"><div class="snum">4</div><div class="sc"><strong>Localization</strong><p>Map distributed query to separate queries on individual fragments using data distribution/replication info</p></div></div>
+      <div class="step"><div class="snum">5</div><div class="sc"><strong>Global Query Optimization</strong><p>Select strategy with minimum communication cost. Often network communication cost dominates.</p></div></div>
+      <div class="step"><div class="snum">6</div><div class="sc"><strong>Local Query Optimization</strong><p>Each site optimizes its local execution (indexes, join methods, disk reduction)</p></div></div>
+      <div class="step"><div class="snum">7</div><div class="sc"><strong>Query Execution</strong><p>Each server executes its part; results combined and returned to user</p></div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-ttl blue">Distributed Join Problem</div>
+    <p>When R and S reside at different nodes, costs must be evaluated carefully:</p>
+    <div class="cbox amb">
+      <span class="cicon">📊</span>
+      <div><strong>Example (EMPLOYEE at Site 1, DEPARTMENT at Site 2, Result needed at Site 3):</strong><br>
+      Option 1: Transfer both to Site 3 → 1,003,500 bytes<br>
+      Option 2: Transfer EMPLOYEE to Site 2, join, send result to Site 3 → 1,400,000 bytes<br>
+      Option 3 (BEST): Transfer DEPARTMENT to Site 1, join at Site 1, send result to Site 3 → only 403,500 bytes</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-ttl green">Semi-Join Optimization</div>
+    <p>Only the <strong>relevant part</strong> of each relation is shipped to the other site. Eliminates "dangling tuples" before full transfer.</p>
+    <div class="steps" style="margin-top:12px">
+      <div class="step"><div class="snum grn">1</div><div class="sc"><strong>Project join attributes of S</strong><p>Send only πY(S) to the site of R — much smaller than full S</p></div></div>
+      <div class="step"><div class="snum grn">2</div><div class="sc"><strong>Compute semi-join at site of R</strong><p>R ⋉ πY(S) — eliminates all R tuples that won't match</p></div></div>
+      <div class="step"><div class="snum grn">3</div><div class="sc"><strong>Transfer reduced R result to site of S</strong><p>Only relevant tuples shipped — then perform final join</p></div></div>
+    </div>
+    <div class="cbox ok" style="margin-top:12px">
+      <span class="cicon">✅</span>
+      <div><strong>Semi-join Example Cost:</strong> Instead of 403,500 bytes (best direct), semi-join achieves only 340,400 bytes. More efficient when many tuples in R don't participate in join.</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-ttl blue">Chord Circle (DHT)</div>
+    <p>For P2P distributed search, nodes are arranged in a virtual circle. Each key K is mapped to the lowest-numbered node Nj where h(K) ≤ j.</p>
+    <ul class="nl">
+      <li><strong>Finger Table:</strong> Each node stores links to nodes at exponentially growing distances (+1, +2, +4, +8, ... steps)</li>
+      <li>Allows lookup in at most <strong>m+1 messages</strong> (where m = bits in hash) instead of contacting all N nodes</li>
+      <li><strong>Adding a node:</strong> Find successor, change predecessor/successor links, redistribute data</li>
+      <li><strong>Node leaving gracefully:</strong> Notify predecessor and successor; transfer data to successor</li>
+      <li><strong>Node failure:</strong> Replicate data at predecessor and successor; or use clustering (3+ node groups)</li>
+    </ul>
+  </div>
+</div>
+
+<!-- 3.5 Distributed Transactions -->
+<div id="u3-s5">
+  <div class="sec-hdr"><span class="sec-num">3.5</span><h2 class="sec-ttl u3">Distributed Transactions &amp; Commit Protocols</h2></div>
+  <div class="card">
+    <div class="card-ttl blue">Distributed Transactions</div>
+    <p>In a distributed database, a single transaction may involve operations at <strong>several sites</strong>. Each component executes at a different site with its own scheduler and log manager.</p>
+    <div class="g2" style="margin-top:12px">
+      <div class="cbox info"><span class="cicon">👨‍💼</span><div><strong>Transaction Manager (TM)</strong> at each site: maintains log, participates in concurrent execution coordination, ensures serializability locally, executes sub-transactions</div></div>
+      <div class="cbox info"><span class="cicon">🎯</span><div><strong>Transaction Coordinator (TC)</strong> at each site: starts transactions, distributes sub-transactions to appropriate sites, coordinates final commit/abort decision</div></div>
+    </div>
+    <div class="cbox warn" style="margin-top:12px">
+      <span class="cicon">⚠️</span>
+      <div><strong>Key Issue:</strong> All sites must agree on the SAME final decision. Either ALL commit or ALL abort. Partial completion is NOT allowed — it would make the database inconsistent.</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-ttl blue">Two-Phase Commit (2PC)</div>
+    <div class="g2">
+      <div class="card" style="background:rgba(79,195,247,.04);border-color:rgba(79,195,247,.2);margin-bottom:0">
+        <div class="card-ttl blue">Phase 1 — Prepare</div>
+        <ul class="nl">
+          <li>Coordinator logs &lt;Prepare T&gt; and sends "prepare T" to all sites</li>
+          <li>Each site decides to commit or abort its component</li>
+          <li>To commit → enters "pre-committed" state → logs &lt;Ready T&gt; → sends "ready T"</li>
+          <li>To abort → logs &lt;Don't Commit T&gt; → sends "don't commit T"</li>
+        </ul>
+      </div>
+      <div class="card" style="background:rgba(105,240,174,.04);border-color:rgba(105,240,174,.2);margin-bottom:0">
+        <div class="card-ttl green">Phase 2 — Commit/Abort</div>
+        <ul class="nl grn">
+          <li>If ALL sites sent "ready T" → coordinator logs &lt;Commit T&gt; → sends "commit T"</li>
+          <li>If ANY site sent "don't commit T" → coordinator logs &lt;Abort T&gt; → sends "abort T"</li>
+          <li>Timeout = site treated as if it sent "don't commit"</li>
+          <li>Each site executes its part and logs accordingly</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-ttl amber">Three-Phase Commit (3PC)</div>
+    <p>Solves the <strong>blocking problem</strong> of 2PC (where participants are stuck if coordinator crashes after Phase 1).</p>
+    <div class="g3">
+      <div class="cbox info"><span class="cicon">1️⃣</span><div><strong>Phase 1: Prepare</strong><br>Identical to 2PC Phase 1. Sites vote ready/don't-commit.</div></div>
+      <div class="cbox amb"><span class="cicon">2️⃣</span><div><strong>Phase 2: Pre-Commit</strong><br>All TMs send votes. Pre-commit state established. Extra safety checkpoint.</div></div>
+      <div class="cbox ok"><span class="cicon">3️⃣</span><div><strong>Phase 3: DoCommit</strong><br>Coordinator sends final commit/abort. TMs can decide independently after timeout → non-blocking.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- 3.6 Distributed Locking -->
+<div id="u3-s6">
+  <div class="sec-hdr"><span class="sec-num">3.6</span><h2 class="sec-ttl u3">Distributed Locking &amp; Concurrency</h2></div>
+  <div class="card">
+    <div class="card-ttl blue">Concurrency Control in DDBs</div>
+    <p>Ensures multiple transactions across different sites don't interfere with each other. Must be resilient to failures, allow parallelism, minimize communication delays, and preserve data consistency.</p>
+    <div class="cbox warn"><span class="cicon">⚠️</span><div>Without proper control: Lost updates, Dirty reads, Inconsistent retrieval can all occur.</div></div>
+  </div>
+  <div class="g3">
+    <div class="card">
+      <div class="card-ttl blue">Fully Distributed Locking</div>
+      <ul class="nl">
+        <li>Each site manages its own lock table</li>
+        <li>Component at a site can only request locks on data at that site</li>
+        <li><strong>Pros:</strong> No single point of failure, better scalability, parallel processing</li>
+        <li><strong>Cons:</strong> Complex coordination, global deadlock detection is hard, more communication overhead</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-ttl amber">Centralized Lock Systems</div>
+      <ul class="nl amb">
+        <li>One site designated as the <strong>lock site</strong> for all logical elements</li>
+        <li>Cost: <strong>3 messages per lock</strong> (request, grant, release)</li>
+        <li><strong>Cons:</strong> Single point of failure; bottleneck under load; if lock site crashes = entire system halts</li>
+        <li><strong>Pros:</strong> Simple, easy deadlock detection</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-ttl green">Primary-Copy Locking</div>
+      <ul class="nl grn">
+        <li>Each logical element X has one copy designated as the <strong>primary copy</strong></li>
+        <li>To lock X, transaction sends request to primary copy's site</li>
+        <li>Avoids central bottleneck while keeping simplicity</li>
+        <li>Same 3-message cost per lock (except when transaction and primary copy at same site)</li>
+        <li>Changes at primary site propagate to replicated copies</li>
+      </ul>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-ttl blue">Quorum Locking (Majority Locking)</div>
+    <p>When no primary copy exists — all copies are symmetric. Transactions must acquire a certain number of local locks before assuming a global lock.</p>
+    <div class="g2">
+      <div class="cbox info"><span class="cicon">📖</span><div><strong>s (Shared quorum)</strong> — Minimum number of copies that must be locked in shared mode to obtain a global shared lock</div></div>
+      <div class="cbox amb"><span class="cicon">✏️</span><div><strong>x (Exclusive quorum)</strong> — Minimum number of copies that must be locked in exclusive mode to obtain a global exclusive lock</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-ttl blue">Distributed Catalog Management</div>
+    <div class="tw"><table>
+      <tr><th>Scheme</th><th>How it Works</th><th>Problem</th></tr>
+      <tr><td><strong>Centralized</strong></td><td>Entire catalog at one site</td><td>Single point of failure, availability, bottleneck</td></tr>
+      <tr><td><strong>Fully Replicated</strong></td><td>Complete catalog at every site; fast local reads</td><td>All updates broadcast everywhere; complex update management</td></tr>
+      <tr><td><strong>Partially Replicated</strong></td><td>Each site stores complete info for local data; may cache remote entries</td><td>Cached copies may be stale; no consistency guarantee</td></tr>
+    </table></div>
+  </div>
+</div>
+
+<!-- 3.7 P2P Search -->
+<div id="u3-s7">
+  <div class="sec-hdr"><span class="sec-num">3.7</span><h2 class="sec-ttl u3">Peer-to-Peer Distributed Search</h2></div>
+  <div class="card">
+    <div class="card-ttl blue">P2P Networks</div>
+    <p>A P2P distributed database is <strong>fully decentralized</strong> — all nodes are equal peers with no central authority. Each node stores data and acts as both client and server.</p>
+    <div class="tw"><table>
+      <tr><th>Feature</th><th>Traditional Distributed DB</th><th>P2P DB</th></tr>
+      <tr><td>Control</td><td>Head office controls branches</td><td>Independent peers working together</td></tr>
+      <tr><td>Consistency</td><td>Stronger consistency</td><td>Often eventual consistency</td></tr>
+      <tr><td>Scalability</td><td>Good</td><td>Highly scalable</td></tr>
+      <tr><td>Fault tolerance</td><td>Moderate</td><td>High (decentralized)</td></tr>
+      <tr><td>Examples</td><td>Company databases</td><td>BitTorrent, Blockchain</td></tr>
+    </table></div>
+  </div>
+  <div class="card">
+    <div class="card-ttl blue">Chord DHT (Distributed Hash Table)</div>
+    <p>Nodes arranged in a virtual circle. Each key K is hashed to a value between 0 and 2ᵐ-1. The key-value pair (K,V) is stored at the <strong>lowest-numbered node Nj such that h(K) ≤ j</strong>.</p>
+    <div class="g2" style="margin-top:12px">
+      <ul class="nl">
+        <li><strong>Finger Table:</strong> Each node knows nodes at distances +1, +2, +4, +8, +16 ... steps around circle</li>
+        <li><strong>Predecessor &amp; Successor:</strong> Each node knows neighbors for simple traversal</li>
+        <li><strong>Lookup complexity:</strong> At most m+1 messages for any key (O(log N))</li>
+      </ul>
+      <div class="cbox info"><span class="cicon">🔍</span><div><strong>Search Example:</strong> N8 wants h(K)=54. Checks finger table, finds N42 is largest below 54. Sends to N42 → N42 finds N51 → N51 finds N56 has the key. Only ~3 hops vs checking all nodes!</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Unit 3 MCQs -->
+<div id="u3-mcq">
+  <div class="div"></div>
+  <div class="mcq-hdr">📝 Unit 3 — Practice MCQs</div>
+  <div class="sbar"><div><div class="slabel">SCORE</div><div class="sval" id="u3-score">0 / 0</div></div><button class="rbtn" onclick="resetMCQ('u3')">↺ Reset</button></div>
+
+  <div class="mcard" data-correct="c" data-unit="u3">
+    <div class="mq"><span class="qn">Q1.</span>In a Shared-Nothing parallel machine architecture:</div>
+    <div class="mopts">
+      <div class="mopt" data-opt="a"><span class="oletter">A</span>All processors share a single common memory</div>
+      <div class="mopt" data-opt="b"><span class="oletter">B</span>Processors have private memory but share disks</div>
+      <div class="mopt" data-opt="c"><span class="oletter">C</span>Each processor has its own private memory and its own disk(s); all communication is via the network</div>
+      <div class="mopt" data-opt="d"><span class="oletter">D</span>Processors share both memory and disks</div>
+    </div>
+    <div class="mexp">Shared-Nothing: each processor has its own memory AND its own disk(s). All communication is network-based, making data transfer between processors costly. This is the most commonly used architecture for database systems.</div>
+  </div>
+
+  <div class="mcard" data-correct="b" data-unit="u3">
+    <div class="mq"><span class="qn">Q2.</span>What are the three phases of MapReduce?</div>
+    <div class="mopts">
+      <div class="mopt" data-opt="a"><span class="oletter">A</span>Read, Process, Write</div>
+      <div class="mopt" data-opt="b"><span class="oletter">B</span>Mapping, Shuffling, Reducing</div>
+      <div class="mopt" data-opt="c"><span class="oletter">C</span>Extract, Transform, Load</div>
+      <div class="mopt" data-opt="d"><span class="oletter">D</span>Parse, Execute, Output</div>
+    </div>
+    <div class="mexp">MapReduce has three phases: Mapping (indexing/sorting data into key-value pairs), Shuffling (redistributing mapper output across nodes by key), and Reducing (producing summary of mapped/shuffled data).</div>
+  </div>
+
+  <div class="mcard" data-correct="a" data-unit="u3">
+    <div class="mq"><span class="qn">Q3.</span>Which type of data fragmentation keeps only a subset of attributes of a relation?</div>
+    <div class="mopts">
+      <div class="mopt" data-opt="a"><span class="oletter">A</span>Vertical fragmentation</div>
+      <div class="mopt" data-opt="b"><span class="oletter">B</span>Horizontal fragmentation</div>
+      <div class="mopt" data-opt="c"><span class="oletter">C</span>Mixed fragmentation</div>
+      <div class="mopt" data-opt="d"><span class="oletter">D</span>Replication fragmentation</div>
+    </div>
+    <div class="mexp">Vertical fragmentation keeps only a subset of columns/attributes (e.g., only SSN and AGE). Horizontal fragmentation keeps a subset of rows/tuples (e.g., all records where DNO=5).</div>
+  </div>
+
+  <div class="mcard" data-correct="d" data-unit="u3">
+    <div class="mq"><span class="qn">Q4.</span>In the Two-Phase Commit protocol, if the coordinator receives a "don't commit T" from any site, it:</div>
+    <div class="mopts">
+      <div class="mopt" data-opt="a"><span class="oletter">A</span>Waits for all other sites to respond first</div>
+      <div class="mopt" data-opt="b"><span class="oletter">B</span>Commits the transaction at sites that are ready</div>
+      <div class="mopt" data-opt="c"><span class="oletter">C</span>Retries the commit after a timeout period</div>
+      <div class="mopt" data-opt="d"><span class="oletter">D</span>Logs &lt;Abort T&gt; and sends abort T message to all participating sites</div>
+    </div>
+    <div class="mexp">If ANY site sends "don't commit T", the coordinator logs &lt;Abort T&gt; and sends an "abort T" message to ALL participating sites. All sites must make the same decision — partial completion is not allowed.</div>
+  </div>
+
+  <div class="mcard" data-correct="c" data-unit="u3">
+    <div class="mq"><span class="qn">Q5.</span>What is the typical message cost per lock in a Centralized Locking system?</div>
+    <div class="mopts">
+      <div class="mopt" data-opt="a"><span class="oletter">A</span>1 message (just request)</div>
+      <div class="mopt" data-opt="b"><span class="oletter">B</span>2 messages (request and grant)</div>
+      <div class="mopt" data-opt="c"><span class="oletter">C</span>3 messages (request, grant, release)</div>
+      <div class="mopt" data-opt="d"><span class="oletter">D</span>5 messages (negotiate, request, grant, acknowledge, release)</div>
+    </div>
+    <div class="mexp">Centralized locking requires 3 messages per lock: request (to lock site), grant (from lock site), and release (when done). This is unless the transaction happens to be running at the lock site itself.</div>
+  </div>
+
+  <div class="mcard" data-correct="b" data-unit="u3">
+    <div class="mq"><span class="qn">Q6.</span>In a Chord DHT, where is a key-value pair (K,V) stored when h(K)=54 and nodes exist at N48 and N56?</div>
+    <div class="mopts">
+      <div class="mopt" data-opt="a"><span class="oletter">A</span>At N48 (the highest node below h(K))</div>
+      <div class="mopt" data-opt="b"><span class="oletter">B</span>At N56 (the lowest-numbered node ≥ h(K))</div>
+      <div class="mopt" data-opt="c"><span class="oletter">C</span>Replicated at both N48 and N56</div>
+      <div class="mopt" data-opt="d"><span class="oletter">D</span>At the node closest to h(K) by absolute distance</div>
+    </div>
+    <div class="mexp">In Chord DHT, (K,V) is stored at the lowest-numbered node Nj such that h(K) ≤ j. Since h(K)=54 and 54 ≤ 56, the pair is stored at N56. N48 is too small (48 < 54).</div>
+  </div>
+
+  <div class="mcard" data-correct="a" data-unit="u3">
+    <div class="mq"><span class="qn">Q7.</span>What is "data locality" in Hadoop MapReduce?</div>
+    <div class="mopts">
+      <div class="mopt" data-opt="a"><span class="oletter">A</span>Assigning tasks to nodes where the required data already resides to reduce network transfer</div>
+      <div class="mopt" data-opt="b"><span class="oletter">B</span>Storing all data in the same geographic location</div>
+      <div class="mopt" data-opt="c"><span class="oletter">C</span>Using local hard drives instead of distributed storage</div>
+      <div class="mopt" data-opt="d"><span class="oletter">D</span>Keeping frequently accessed data in RAM</div>
+    </div>
+    <div class="mexp">Data locality in Hadoop means tasks are assigned to nodes where the data already exists, avoiding expensive network transfers. The JobTracker assigns tasks to TaskTrackers based on this principle for maximum efficiency.</div>
+  </div>
+
+  <div class="mcard" data-correct="d" data-unit="u3">
+    <div class="mq"><span class="qn">Q8.</span>Which advantage does the semi-join strategy offer in distributed query processing?</div>
+    <div class="mopts">
+      <div class="mopt" data-opt="a"><span class="oletter">A</span>It eliminates the need for any data transfer between sites</div>
+      <div class="mopt" data-opt="b"><span class="oletter">B</span>It always produces faster results than local join methods</div>
+      <div class="mopt" data-opt="c"><span class="oletter">C</span>It converts distributed joins into local operations only</div>
+      <div class="mopt" data-opt="d"><span class="oletter">D</span>It reduces communication cost by transferring only join attributes and eliminating dangling tuples before the final join</div>
+    </div>
+    <div class="mexp">The semi-join strategy transfers only the projected join attributes (much smaller than full relations), filters out non-matching tuples early, and significantly reduces the total bytes transferred — most efficient when many tuples in R don't participate in the join.</div>
+  </div>
+
+  <div class="mcard" data-correct="c" data-unit="u3">
+    <div class="mq"><span class="qn">Q9.</span>In HDFS, what does the NameNode store?</div>
+    <div class="mopts">
+      <div class="mopt" data-opt="a"><span class="oletter">A</span>The actual data blocks of all files</div>
+      <div class="mopt" data-opt="b"><span class="oletter">B</span>Replicas of frequently accessed files</div>
+      <div class="mopt" data-opt="c"><span class="oletter">C</span>Metadata about files: names, block locations, replication count, permissions</div>
+      <div class="mopt" data-opt="d"><span class="oletter">D</span>Only the directory structure, not file metadata</div>
+    </div>
+    <div class="mexp">The NameNode is the master node and stores only METADATA (file names, block locations, number of replicas, file permissions). It does NOT store actual data. DataNodes store the actual data blocks.</div>
+  </div>
+
+  <div class="mcard" data-correct="b" data-unit="u3">
+    <div class="mq"><span class="qn">Q10.</span>Why was Three-Phase Commit (3PC) designed to improve on 2PC?</div>
+    <div class="mopts">
+      <div class="mopt" data-opt="a"><span class="oletter">A</span>To require fewer network messages</div>
+      <div class="mopt" data-opt="b"><span class="oletter">B</span>To solve the blocking problem where participants are stuck in uncertainty if the coordinator crashes</div>
+      <div class="mopt" data-opt="c"><span class="oletter">C</span>To support heterogeneous databases</div>
+      <div class="mopt" data-opt="d"><span class="oletter">D</span>To reduce the number of log writes required</div>
+    </div>
+    <div class="mexp">In 2PC, if the Transaction Coordinator (TC) crashes after Phase 1 (before sending final decision), participants are stuck in an uncertain "pre-committed" state and must wait. 3PC adds a pre-commit phase and timeouts, allowing TMs to safely decide independently — making it non-blocking.</div>
+  </div>
+
+  <div class="mcard" data-correct="a" data-unit="u3">
+    <div class="mq"><span class="qn">Q11.</span>What is Intra-Query parallelism?</div>
+    <div class="mopts">
+      <div class="mopt" data-opt="a"><span class="oletter">A</span>Speeding up a single query by breaking it into smaller tasks that run concurrently across multiple processors</div>
+      <div class="mopt" data-opt="b"><span class="oletter">B</span>Running multiple independent queries simultaneously</div>
+      <div class="mopt" data-opt="c"><span class="oletter">C</span>Distributing a query to multiple database nodes</div>
+      <div class="mopt" data-opt="d"><span class="oletter">D</span>Executing queries in a sequential pipeline</div>
+    </div>
+    <div class="mexp">Intra-Query parallelism focuses on a SINGLE query. It divides the query into sub-queries or operations executed in parallel on different data partitions. Goal: reduce response time for one complex query. Commonly used in OLAP systems.</div>
+  </div>
+
+  <div class="mcard" data-correct="c" data-unit="u3">
+    <div class="mq"><span class="qn">Q12.</span>Primary-Copy Locking is designed to address what problem with Centralized Locking?</div>
+    <div class="mopts">
+      <div class="mopt" data-opt="a"><span class="oletter">A</span>Deadlock detection complexity</div>
+      <div class="mopt" data-opt="b"><span class="oletter">B</span>Inability to handle replicated data</div>
+      <div class="mopt" data-opt="c"><span class="oletter">C</span>The central lock site becoming a bottleneck and single point of failure</div>
+      <div class="mopt" data-opt="d"><span class="oletter">D</span>High message count per lock operation</div>
+    </div>
+    <div class="mexp">Primary-Copy Locking distributes the lock function across multiple sites (each logical element has its primary copy at a different site), avoiding the bottleneck of a single central lock site while still maintaining simplicity with 3 messages per lock.</div>
+  </div>
+
+</div><!-- end u3-mcq -->
+</div><!-- end u3 -->
+
+<!-- ═══════════════ UNIT 4 ═══════════════ -->
+<div id="u4" class="unit-s">
+
+<!-- 4.1 Stream Processing -->
+<div id="u4-s1">
+  <div class="sec-hdr"><span class="sec-num">4.1</span><h2 class="sec-ttl u4">Stream Processing Fundamentals</h2></div>
+  <div class="card">
+    <div class="card-ttl amber">What is Stream Processing?</div>
+    <p>The discipline of extracting information from <strong>unbounded data</strong> — data that is continuously generated and infinite in size (at least theoretically). Instead of waiting for all data, it processes data in real-time or near real-time.</p>
+    <div class="g2" style="margin-top:12px">
+      <div class="cbox amb"><span class="cicon">♾️</span><div><strong>Unbounded Dataset (Data in Motion)</strong><br>Infinite / continuously generated. Examples: IoT sensors, social media feeds, stock market data, website click streams. Must be processed continuously.</div></div>
+      <div class="cbox info"><span class="cicon">📦</span><div><strong>Bounded Dataset (Data at Rest)</strong><br>Fixed size — you can count all elements. Examples: stored files, monthly sales reports, CSV datasets. Can be processed via batch processing.</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-ttl amber">Stream Processing Model</div>
+    <div class="g3">
+      <div class="cbox amb"><span class="cicon">🔌</span><div><strong>Source</strong><br>Where data enters the system: sensors, logs, user events, message queues</div></div>
+      <div class="cbox amb"><span class="cicon">⚙️</span><div><strong>Processing Component</strong><br>Core logic: filter, transform, aggregate, analyze</div></div>
+      <div class="cbox amb"><span class="cicon">💾</span><div><strong>Sink</strong><br>Destination: databases, dashboards, alerts, storage systems</div></div>
+    </div>
+    <div class="cbox info" style="margin-top:10px"><span class="cicon">🔗</span><div><strong>Pipeline:</strong> One system's sink can become another system's source. Allows building large distributed data workflows: System A → System B → System C.</div></div>
+  </div>
+  <div class="card">
+    <div class="card-ttl amber">Transformations vs Aggregations</div>
+    <div class="tw"><table>
+      <tr><th class="u4h">Feature</th><th class="u4h">Transformation</th><th class="u4h">Aggregation</th></tr>
+      <tr><td>Output dependency</td><td>Narrow (one input → one output)</td><td>Wide (many inputs → one output)</td></tr>
+      <tr><td>Example</td><td>Multiply each number by 2; filter even numbers</td><td>Average of last 10 minutes; running total</td></tr>
+      <tr><td>State needed</td><td>None (stateless)</td><td>Yes (stateful)</td></tr>
+    </table></div>
+  </div>
+  <div class="card">
+    <div class="card-ttl amber">Window Aggregations</div>
+    <p>Instead of processing each event individually, windows group events over a time or count period and apply aggregations.</p>
+    <div class="g2" style="margin-top:12px">
+      <div class="cbox amb"><span class="cicon">🪟</span><div><strong>Tumbling Windows</strong><br>Fixed-size, consecutive, NON-overlapping windows. Example: "Max temperature each hour." Independent periods — the most natural windowing.</div></div>
+      <div class="cbox info"><span class="cicon">🎢</span><div><strong>Sliding Windows</strong><br>Two parameters: window length (X) and reporting frequency (Y). Example: "Average share price over last day, reported hourly." Tumbling = special case where X=Y.</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-ttl amber">Three Types of Time</div>
+    <div class="tw"><table>
+      <tr><th class="u4h">Type</th><th class="u4h">What it is</th><th class="u4h">Example</th></tr>
+      <tr><td><strong>Event Time</strong></td><td>When the event actually occurred (from source device clock)</td><td>Sensor records at 10:00 AM → Event Time = 10:00 AM</td></tr>
+      <tr><td><strong>Ingestion Time</strong></td><td>When event enters the streaming system (broker timestamp)</td><td>Event reaches system at 10:00:05 AM</td></tr>
+      <tr><td><strong>Processing Time</strong></td><td>When event is processed by the stream engine</td><td>Processed at 10:00:08 AM</td></tr>
+    </table></div>
+    <div class="cbox warn" style="margin-top:12px"><span class="cicon">⚠️</span><div><strong>Processing-time windows</strong>: Boundaries are well-defined but contents may be wrong — late events missed; events from same real time period may end up in different windows.</div></div>
+    <div class="cbox ok" style="margin-top:8px"><span class="cicon">✅</span><div><strong>Watermarks</strong> — A time threshold telling the system "no events older than this timestamp are expected." Closes event-time windows, allowing the system to finalize aggregations. Events older than the watermark are reported in a late-arrivals channel.</div></div>
+  </div>
+  <div class="card">
+    <div class="card-ttl amber">Stateful vs Stateless Processing</div>
+    <div class="g2">
+      <div class="card" style="background:rgba(255,179,71,.04);border-color:rgba(255,179,71,.2);margin-bottom:0">
+        <div class="card-ttl amber">Stateless Processing</div>
+        <ul class="nl amb">
+          <li>Each event processed independently — no memory of past events</li>
+          <li>Simpler, efficient, and easily scalable</li>
+          <li>Examples: Filtering, Mapping, Simple transformations, Splitting streams</li>
+        </ul>
+      </div>
+      <div class="card" style="background:rgba(105,240,174,.04);border-color:rgba(105,240,174,.2);margin-bottom:0">
+        <div class="card-ttl green">Stateful Processing</div>
+        <ul class="nl grn">
+          <li>System remembers past data while processing new data</li>
+          <li>Example: Running mean and standard deviation, counting totals</li>
+          <li>More costly; introduces failure concerns (what happens to state if system crashes?)</li>
+          <li>Requires checkpointing and data consistency guarantees</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 4.2 Streaming Architectures -->
+<div id="u4-s2">
+  <div class="sec-hdr"><span class="sec-num">4.2</span><h2 class="sec-ttl u4">Streaming Platform Architecture</h2></div>
+  <div class="card">
+    <div class="card-ttl amber">Components of a Streaming Data Platform</div>
+    <div class="steps">
+      <div class="step"><div class="snum amb">1</div><div class="sc"><strong>Hardware Level (Foundation)</strong><p>Physical/virtual infrastructure: servers, VMs, base OS. Provides compute power (CPU, RAM, network), forms a cluster of machines.</p></div></div>
+      <div class="step"><div class="snum amb">2</div><div class="sc"><strong>Persistence Level (Storage)</strong><p>Distributed storage solutions like HDFS. Stores input data, intermediate data, and final results. Provides shared interface across all machines.</p></div></div>
+      <div class="step"><div class="snum amb">3</div><div class="sc"><strong>Resource Manager (Cluster Control)</strong><p>YARN, Mesos, Kubernetes. Accepts job requests, allocates CPU/memory/containers, schedules tasks across machines.</p></div></div>
+      <div class="step"><div class="snum amb">4</div><div class="sc"><strong>Execution Engine (Processing)</strong><p>Apache Spark, Apache Flink, MapReduce. Runs user programs, performs transformations, aggregations, stream processing.</p></div></div>
+      <div class="step"><div class="snum amb">5</div><div class="sc"><strong>Data Ingestion (Input)</strong><p>Apache Kafka, log ingestion systems. Collects real-time data streams, buffers, and feeds into execution engine.</p></div></div>
+      <div class="step"><div class="snum amb">6</div><div class="sc"><strong>Processed Data Sink (Output)</strong><p>Redis, Cassandra, data warehouses. Stores final output, enables fast querying.</p></div></div>
+      <div class="step"><div class="snum amb">7</div><div class="sc"><strong>Visualization Layer</strong><p>Dashboards, reports, real-time monitoring. Converts processed data into actionable insights. Shift from static reports → real-time dashboards.</p></div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-ttl amber">Lambda Architecture</div>
+    <p>Handles massive data by combining <strong>batch + stream processing</strong> to balance low latency (fast) with high accuracy (correct).</p>
+    <div class="g3" style="margin-top:12px">
+      <div class="cbox amb"><span class="cicon">📦</span><div><strong>Batch Layer</strong><br>Processes entire dataset periodically (daily). Accurate but slow. Maintains master dataset and corrects errors from stream layer.</div></div>
+      <div class="cbox info"><span class="cicon">⚡</span><div><strong>Speed Layer (Stream)</strong><br>Processes real-time data with low latency. May be slightly inaccurate. Provides immediate but approximate results.</div></div>
+      <div class="cbox ok"><span class="cicon">🔀</span><div><strong>Serving Layer</strong><br>Combines batch views + stream results. Answers queries. Indexes batch views for low-latency ad-hoc queries.</div></div>
+    </div>
+    <div class="g2" style="margin-top:12px">
+      <div class="cbox ok"><span class="cicon">✅</span><div><strong>Benefits:</strong> Flexible scaling, automated high availability, business agility, handles both historical and real-time data</div></div>
+      <div class="cbox warn"><span class="cicon">⚠️</span><div><strong>Challenges:</strong> Highly complex — must maintain TWO separate codebases (batch and streaming). Debugging is difficult.</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-ttl amber">Kappa Architecture</div>
+    <p>Simpler alternative to Lambda — <strong>stream processing only</strong>. All data treated as a continuous stream, including historical data (replayed if needed).</p>
+    <div class="tw"><table>
+      <tr><th class="u4h">Feature</th><th class="u4h">Lambda</th><th class="u4h">Kappa</th></tr>
+      <tr><td>Processing layers</td><td>Batch + Stream</td><td>Stream only</td></tr>
+      <tr><td>Codebase</td><td>Two separate codebases</td><td>Unified codebase</td></tr>
+      <tr><td>Complexity</td><td>High</td><td>Lower</td></tr>
+      <tr><td>Historical data</td><td>Batch layer handles</td><td>Event replay from log</td></tr>
+      <tr><td>Latency</td><td>Low for stream, higher for batch</td><td>Low latency throughout</td></tr>
+    </table></div>
+    <div class="cbox info" style="margin-top:12px"><span class="cicon">🌍</span><div><strong>Real-world users:</strong> LinkedIn (Apache Kafka — billions of events/day), Netflix (personalization + recommendations), Uber (GPS + pricing in real-time), Spotify (user behavior tracking), Pinterest, Yelp.</div></div>
+  </div>
+</div>
+
+<!-- 4.3 Spark -->
+<div id="u4-s3">
+  <div class="sec-hdr"><span class="sec-num">4.3</span><h2 class="sec-ttl u4">Apache Spark &amp; Spark Streaming</h2></div>
+  <div class="card">
+    <div class="card-ttl amber">Why Spark? (MapReduce Problems Solved)</div>
+    <div class="g2">
+      <ul class="nl amb">
+        <li>MapReduce queries can take <strong>hours</strong> — Spark uses in-memory computation → 10–20× faster</li>
+        <li>MapReduce is batch-only — Spark supports <strong>real-time streaming</strong></li>
+        <li>MapReduce requires complex Map/Reduce code — Spark offers <strong>easy APIs</strong> (Python, SQL, Scala, Java, R)</li>
+      </ul>
+      <ul class="nl amb">
+        <li>Developed by AMPLab, UC Berkeley</li>
+        <li>Stores data in memory using <strong>RDDs</strong> (Resilient Distributed Datasets) — eliminates expensive disk writes</li>
+        <li>General-purpose cluster-computing platform compatible with Hadoop workloads</li>
+      </ul>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-ttl amber">Spark Architecture Layers</div>
+    <div class="steps">
+      <div class="step"><div class="snum amb">1</div><div class="sc"><strong>Storage Layer</strong><p>HDFS, Cassandra, HBase, Amazon S3 — Spark reads from multiple sources</p></div></div>
+      <div class="step"><div class="snum amb">2</div><div class="sc"><strong>Cluster Manager</strong><p>YARN, Mesos, or Standalone. Manages CPU, memory, node resources.</p></div></div>
+      <div class="step"><div class="snum amb">3</div><div class="sc"><strong>Spark Core</strong><p>Heart of Spark. Handles task scheduling, memory management, fault tolerance (via RDD lineage DAG).</p></div></div>
+      <div class="step"><div class="snum amb">4</div><div class="sc"><strong>Libraries Layer</strong><p>Spark SQL (structured queries), MLlib (machine learning), GraphX (graph processing), Spark Streaming (real-time).</p></div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-ttl amber">Key Spark Concepts</div>
+    <div class="tw"><table>
+      <tr><th class="u4h">Concept</th><th class="u4h">Description</th></tr>
+      <tr><td><strong>In-Memory Processing</strong></td><td>Data stored in RAM instead of repeated disk reads. RDDs cached in memory across multiple transformations.</td></tr>
+      <tr><td><strong>RDD Lineage (DAG)</strong></td><td>Directed Acyclic Graph tracking transformation history. Enables fault tolerance: lost partitions are recomputed from lineage, not replicated.</td></tr>
+      <tr><td><strong>Lazy Evaluation</strong></td><td>Transformations (map, filter) not executed immediately. Build a logical plan. Execution triggered only when an Action is called (count, collect, save).</td></tr>
+      <tr><td><strong>Cache Hints</strong></td><td><code>df.cache()</code> — tell Spark to keep data in memory for reuse. If memory is full, Spark spills to disk.</td></tr>
+      <tr><td><strong>Microbatching</strong></td><td>Stream data collected into small fixed-interval batches. Baseline latency = at least the batch interval (typically 1 second minimum).</td></tr>
+      <tr><td><strong>Polyglot API</strong></td><td>Spark supports Scala, Java, Python (PySpark), and R languages.</td></tr>
+    </table></div>
+  </div>
+  <div class="card">
+    <div class="card-ttl amber">Spark Streaming vs Structured Streaming</div>
+    <div class="g2">
+      <div class="card" style="background:rgba(255,179,71,.04);border-color:rgba(255,179,71,.2);margin-bottom:0">
+        <div class="card-ttl amber">Spark Streaming (DStreams)</div>
+        <ul class="nl amb">
+          <li>Converts stream into <strong>micro-batches at fixed time intervals</strong></li>
+          <li>DStream = sequence of RDDs over time</li>
+          <li>Lazily evaluated, immutable DStreams</li>
+          <li>Older API; simpler but less optimized</li>
+          <li>Needs output operation to trigger execution</li>
+        </ul>
+      </div>
+      <div class="card" style="background:rgba(105,240,174,.04);border-color:rgba(105,240,174,.2);margin-bottom:0">
+        <div class="card-ttl green">Structured Streaming</div>
+        <ul class="nl grn">
+          <li>Treats stream as an <strong>unbounded, continuously updating table</strong></li>
+          <li>Based on Catalyst Optimizer (rule + cost based)</li>
+          <li>Uses DataFrames/Datasets — SQL-like API</li>
+          <li>Supports event time, watermarking, multiple output modes</li>
+          <li>More optimized; easier for structured data</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 4.4 Apache Kafka -->
+<div id="u4-s4">
+  <div class="sec-hdr"><span class="sec-num">4.4</span><h2 class="sec-ttl u4">Apache Kafka</h2></div>
+  <div class="card">
+    <div class="card-ttl amber">What is Apache Kafka?</div>
+    <p>A distributed, high-throughput <strong>event streaming platform</strong> essential for big data architectures. Acts as a resilient buffer and data pipeline between data sources and processing systems. Decouples producers from consumers so neither needs to know about the other.</p>
+  </div>
+  <div class="card">
+    <div class="card-ttl amber">Core Kafka Components</div>
+    <div class="g3">
+      <div class="cbox amb"><span class="cicon">📤</span><div><strong>Producer (Publisher)</strong><br>Defines what data to send. Publishes messages to topics.</div></div>
+      <div class="cbox amb"><span class="cicon">📥</span><div><strong>Consumer (Subscriber)</strong><br>Subscribes to topics. Receives messages from the communication infrastructure. Does NOT specify who to receive from.</div></div>
+      <div class="cbox amb"><span class="cicon">🏛️</span><div><strong>Broker</strong><br>The communication infrastructure. Routes messages from producers to consumers. Multiple brokers form a Kafka cluster.</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-ttl amber">Topics, Partitions &amp; Routing</div>
+    <ul class="nl amb">
+      <li><strong>Topic:</strong> A named log on disk (e.g., "/shopping-cart-done"). Producers send to topics; consumers subscribe to topics</li>
+      <li><strong>Topic-Based Routing:</strong> Subscribers receive ALL messages on a subscribed topic — supported by Kafka</li>
+      <li><strong>Content-Based Routing:</strong> Subscribers define matching criteria — NOT supported by Kafka. Only pattern-based (wildcard) is available</li>
+      <li><strong>Partition:</strong> Ordered, immutable sequence of messages within a topic. Each partition replicated across multiple brokers for redundancy.</li>
+      <li><strong>Offset:</strong> Each message within a partition has a unique position/offset</li>
+      <li>Publisher decides which partition to write to (round-robin or key-based)</li>
+      <li>Partitions allow logs larger than single disk size and throughput greater than single server</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="card-ttl amber">Fault Tolerance (Replication)</div>
+    <div class="g2">
+      <ul class="nl amb">
+        <li><strong>Leader:</strong> Handles all reads and writes for a partition</li>
+        <li><strong>Follower:</strong> Replicates leader data; takes over if leader fails (automatic failover)</li>
+        <li><strong>Recommended:</strong> Replicas = 3, Quorum = 2</li>
+      </ul>
+      <div>
+        <div class="cbox amb"><span class="cicon">💨</span><div><strong>Acks=0 (Async/Fire-and-Forget):</strong> No response waited — fastest but risk of data loss</div></div>
+        <div class="cbox ok"><span class="cicon">🔐</span><div><strong>Acks=all (Sync):</strong> Wait until quorum of replicas confirm — safest</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-ttl green">Why Kafka is Fast</div>
+    <ul class="nl grn">
+      <li><strong>Sequential I/O:</strong> Producers append to end of file (sequential write); consumers read in order (sequential read). Disk drives are very fast for sequential operations.</li>
+      <li><strong>Zero Copy I/O:</strong> Uses DMA (Direct Memory Access) — OS moves data directly from disk cache to network card. No CPU copying between kernel and user space.</li>
+      <li><strong>Write Batching:</strong> Groups messages into batches, reducing network packets and disk operations.</li>
+      <li>Result: Nearly 100,000 messages/second vs traditional messaging systems like RabbitMQ (~20,000)</li>
+    </ul>
+  </div>
+</div>
+
+<!-- 4.5 Multi-model Databases -->
+<div id="u4-s5">
+  <div class="sec-hdr"><span class="sec-num">4.5</span><h2 class="sec-ttl u4">Multi-Model Databases</h2></div>
+  <div class="card">
+    <div class="card-ttl amber">What is a Multi-Model Database?</div>
+    <p>A database that can store, index, and query data in <strong>more than one model</strong> — combining relational, document, graph, key-value, and other models in one system. Provides a 360° view of customer data across varying formats.</p>
+    <div class="g2" style="margin-top:12px">
+      <div class="cbox amb"><span class="cicon">1️⃣</span><div><strong>Single Engine</strong><br>One engine supports all data models natively (e.g., ArangoDB, OrientDB)</div></div>
+      <div class="cbox info"><span class="cicon">🔀</span><div><strong>Multi-Engine</strong><br>Multiple specialized engines; middleware layer integrates them and provides unified query interface (e.g., Azure Cosmos DB, Oracle)</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-ttl amber">Notable Multi-Model Databases</div>
+    <div class="tw"><table>
+      <tr><th class="u4h">Database</th><th class="u4h">Models Supported</th><th class="u4h">Notes</th></tr>
+      <tr><td><strong>ArangoDB</strong></td><td>Document (JSON), Graph, Key-Value</td><td>Open-source; AQL query language; ACID transactions; single/cluster mode</td></tr>
+      <tr><td><strong>OrientDB</strong></td><td>Graph, Document, Key-Value, Object</td><td>Java-based; schema-less/full/mixed; uses B-tree and extendible hashing indexes; O(1) one-to-many traversal</td></tr>
+      <tr><td><strong>Azure Cosmos DB</strong></td><td>Relational, Document, Graph, Object</td><td>Microsoft cloud; multiple consistency models; ACID within partition</td></tr>
+      <tr><td><strong>Oracle</strong></td><td>Relational, Document (JSON), Graph, Object</td><td>Stores JSON inside relational tables; no need for separate MongoDB + MySQL</td></tr>
+      <tr><td><strong>PostgreSQL</strong></td><td>Relational, Document (JSONB)</td><td>JSONB (binary JSON) column type; SQL + JSON operators</td></tr>
+    </table></div>
+  </div>
+  <div class="card">
+    <div class="card-ttl amber">Polyglot Persistence vs Multi-Model DB</div>
+    <div class="g2">
+      <div class="cbox warn"><span class="cicon">🗃️</span><div><strong>Polyglot Persistence</strong><br>Using MULTIPLE SEPARATE databases for different data types. Example: User data → Relational DB, Product catalog → Document DB, Recommendations → Graph DB.</div></div>
+      <div class="cbox ok"><span class="cicon">🏢</span><div><strong>Multi-Model DB</strong><br>ONE database handles all models internally. Reduces need for polyglot persistence. ArangoDB/Oracle can handle document + graph + relational in one system.</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-ttl amber">Challenges of Multi-Model Databases</div>
+    <div class="g2">
+      <ul class="nl amb">
+        <li><strong>Open Data Model:</strong> Difficult common abstraction for all models; heterogeneous data integration is complex</li>
+        <li><strong>Unified Query Language:</strong> Graph needs traversal, document needs nested queries, relational needs joins — one language may become too complex</li>
+        <li><strong>Schema Evolution:</strong> Managing changes across multiple models; backward compatibility is hard</li>
+      </ul>
+      <ul class="nl amb">
+        <li><strong>Multi-Model Index:</strong> Each model needs different indexing (B+ trees, inverted indexes, adjacency); storage overhead increases</li>
+        <li><strong>Multi-Model Transactions:</strong> ACID across models is complex; distributed transactions expensive</li>
+        <li><strong>Memory Management:</strong> Different in-memory structures for each model; complex memory management</li>
+      </ul>
+    </div>
+    <div class="cbox info" style="margin-top:12px"><span class="cicon">⚖️</span><div><strong>ACID vs BASE in Multi-Model DBs:</strong> ACID (Atomicity, Consistency, Isolation, Durability) = strong consistency, slower, suitable for banking. BASE (Basically Available, Soft State, Eventual Consistency) = prioritizes availability/scalability, used in social media/big data.</div></div>
+  </div>
+</div>
+
+<!-- 4.6 Data Warehousing -->
+<div id="u4-s6">
+  <div class="sec-hdr"><span class="sec-num">4.6</span><h2 class="sec-ttl u4">Data Warehousing</h2></div>
+  <div class="card">
+    <div class="card-ttl amber">What is a Data Warehouse?</div>
+    <p>A <strong>subject-oriented, integrated, nonvolatile, time-variant</strong> collection of data in support of management's decisions. Holds data extracted from transaction systems, operational stores, and external sources in aggregate/summary form for enterprise-wide analysis and reporting.</p>
+    <div class="g2" style="margin-top:12px">
+      <ul class="nl amb">
+        <li><strong>Subject-Oriented:</strong> Organized around major subjects (sales, customers, products)</li>
+        <li><strong>Integrated:</strong> Collected from multiple sources, made consistent</li>
+      </ul>
+      <ul class="nl amb">
+        <li><strong>Nonvolatile:</strong> Stable — not frequently changed (read-mostly)</li>
+        <li><strong>Time-Variant:</strong> Contains historical data across time periods</li>
+      </ul>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-ttl amber">ETL Process (Building the Warehouse)</div>
+    <div class="steps">
+      <div class="step"><div class="snum amb">1</div><div class="sc"><strong>Extract</strong><p>Collect data from multiple heterogeneous sources (Oracle, MySQL, CSV, ERP, CRM) into a staging area</p></div></div>
+      <div class="step"><div class="snum amb">2</div><div class="sc"><strong>Format</strong><p>Ensure uniform representation — convert date formats, units, and encodings to a standard</p></div></div>
+      <div class="step"><div class="snum amb">3</div><div class="sc"><strong>Clean</strong><p>Remove missing values, duplicate records, incorrect/invalid data using validation and deduplication</p></div></div>
+      <div class="step"><div class="snum amb">4</div><div class="sc"><strong>Transform</strong><p>Fit data into warehouse schema (star/snowflake). Convert raw data into fact tables and dimension tables.</p></div></div>
+      <div class="step"><div class="snum amb">5</div><div class="sc"><strong>Load</strong><p>Initial Load (full first-time load) or Incremental Load (only new/updated data added)</p></div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-ttl amber">Multi-Dimensional Modeling</div>
+    <div class="g2">
+      <div class="cbox amb"><span class="cicon">⭐</span><div><strong>Star Schema</strong><br>Central fact table surrounded by dimension tables (one table per dimension). Simple, fast queries. Most common for data warehouses.</div></div>
+      <div class="cbox info"><span class="cicon">❄️</span><div><strong>Snowflake Schema</strong><br>Variation of star schema where dimension tables are normalized into a hierarchy. Less redundancy but more complex joins.</div></div>
+    </div>
+    <div class="g2" style="margin-top:12px">
+      <div class="cbox ok"><span class="cicon">📊</span><div><strong>Fact Table:</strong> Contains the measurable, quantitative data (e.g., sales amount, quantity). Has one tuple per recorded fact with pointers to dimension tables.</div></div>
+      <div class="cbox pur"><span class="cicon">📐</span><div><strong>Dimension Table:</strong> Contains descriptive attributes (e.g., time, product, location, customer). Used to organize and filter fact data.</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-ttl amber">OLAP Operations</div>
+    <div class="tw"><table>
+      <tr><th class="u4h">Operation</th><th class="u4h">Description</th><th class="u4h">Example</th></tr>
+      <tr><td><strong>Roll-up</strong></td><td>Summarize data with increasing generalization</td><td>Day → Month → Year sales totals</td></tr>
+      <tr><td><strong>Drill-down</strong></td><td>Increase level of detail (reverse of roll-up)</td><td>Year → Quarter → Month → Day</td></tr>
+      <tr><td><strong>Slice</strong></td><td>Select one dimension (projection)</td><td>Sales for only "2024" across all regions</td></tr>
+      <tr><td><strong>Dice</strong></td><td>Select multiple dimensions (sub-cube)</td><td>Sales for "2024" AND "North" region AND "Electronics"</td></tr>
+      <tr><td><strong>Pivot</strong></td><td>Cross-tabulation / rotate the view</td><td>Switch rows and columns in a report</td></tr>
+    </table></div>
+  </div>
+</div>
+
+<!-- 4.7 Data Mining -->
+<div id="u4-s7">
+  <div class="sec-hdr"><span class="sec-num">4.7</span><h2 class="sec-ttl u4">Data Mining</h2></div>
+  <div class="card">
+    <div class="card-ttl amber">What is Data Mining?</div>
+    <p>The process of discovering meaningful <strong>correlations, patterns, and trends</strong> by sifting through large amounts of data stored in repositories, employing pattern recognition technologies, statistical and mathematical techniques.</p>
+    <div class="g2" style="margin-top:12px">
+      <ul class="nl amb">
+        <li><strong>Association Rules:</strong> "If customer buys video equipment, they also buy another gadget" — correlate presence of items</li>
+        <li><strong>Classification Hierarchies:</strong> Classify customers by visit frequency, purchase type — work from existing events to create classes</li>
+      </ul>
+      <ul class="nl amb">
+        <li><strong>Sequential Patterns:</strong> "Camera → photographic supplies (3 months later) → accessory (6 months later)"</li>
+        <li><strong>Segmentation/Clustering:</strong> Partition population into groups of similar items/events</li>
+      </ul>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-ttl amber">Goals of Data Mining</div>
+    <div class="g2">
+      <ul class="nl amb">
+        <li><strong>Prediction:</strong> Analyze buying transactions to predict future purchases under certain discounts</li>
+        <li><strong>Identification:</strong> Identify intruders by programs executed, files accessed, CPU time per session</li>
+      </ul>
+      <ul class="nl amb">
+        <li><strong>Classification:</strong> Categorize customers (discount-seekers, loyal regulars, brand-attached shoppers)</li>
+        <li><strong>Optimization:</strong> Maximize output (sales, profits) given limited resources under constraints</li>
+      </ul>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-ttl amber">Frequent Patterns &amp; Apriori Algorithm</div>
+    <div class="g2">
+      <div class="cbox amb"><span class="cicon">📊</span><div><strong>Support</strong> — Frequency of occurrence of a pattern. How often an itemset appears in the database.<br>Example: Support(milk → bread) = 3/5 = 0.6</div></div>
+      <div class="cbox info"><span class="cicon">🎯</span><div><strong>Confidence</strong> — Likelihood that one item is purchased when another is. % of transactions containing A that also contain B.<br>Example: Confidence(milk → bread) = 0.6/0.8 = 0.75</div></div>
+    </div>
+    <div class="cbox ok" style="margin-top:12px"><span class="cicon">🔑</span><div><strong>Apriori Property (Downward Closure):</strong> If an itemset is frequent, ALL of its subsets must also be frequent. If a subset is NOT frequent, we can PRUNE the entire itemset — avoids evaluating all possible combinations.</div></div>
+    <div class="steps" style="margin-top:12px">
+      <div class="step"><div class="snum grn">1</div><div class="sc"><strong>Set Minimum Support threshold</strong><p>e.g., 40%</p></div></div>
+      <div class="step"><div class="snum grn">2</div><div class="sc"><strong>Find frequent 1-itemsets (L1)</strong><p>Count each item; remove those below min support</p></div></div>
+      <div class="step"><div class="snum grn">3</div><div class="sc"><strong>Generate candidate k-itemsets, prune, repeat</strong><p>Combine frequent (k-1) itemsets; use Apriori to prune infrequent ones; find Lk</p></div></div>
+      <div class="step"><div class="snum grn">4</div><div class="sc"><strong>Generate Association Rules</strong><p>From frequent itemsets, calculate Support and Confidence; select rules above minimum confidence</p></div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-ttl amber">Recommendation Systems</div>
+    <div class="g3">
+      <div class="cbox amb"><span class="cicon">📄</span><div><strong>Content-Based Filtering</strong><br>Recommends items similar to past preferences. Uses product features and textual descriptions. Computes cosine similarity between user profile vector and item vector.</div></div>
+      <div class="cbox info"><span class="cicon">👥</span><div><strong>Collaborative Filtering</strong><br>Recommends based on opinions of similar users. User-User (find similar users) or Item-Item (find similar items). Does not need item attributes.</div></div>
+      <div class="cbox ok"><span class="cicon">🔀</span><div><strong>Hybrid Filtering</strong><br>Combines content-based and collaborative. Weighted average of both scores or combined ranking. Best of both worlds.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- 4.8 Data Lakes -->
+<div id="u4-s8">
+  <div class="sec-hdr"><span class="sec-num">4.8</span><h2 class="sec-ttl u4">Data Lakes, Lakehouses &amp; Data Fabric</h2></div>
+  <div class="card">
+    <div class="card-ttl amber">What is a Data Lake?</div>
+    <p>A centralized repository that stores large volumes of data in its <strong>native format</strong> — structured, semi-structured, and unstructured. Uses low-cost object storage and open formats. Applies schema on READ (not on write).</p>
+    <ul class="nl amb" style="margin-top:10px">
+      <li>Stores raw data without predefined schema (<strong>schema-on-read</strong>)</li>
+      <li>Supports fast data ingestion (quick ingest from multiple sources with minimal delay)</li>
+      <li>Enables on-demand processing for analytics, exploration, machine learning</li>
+      <li>Scales efficiently to handle massive volumes</li>
+    </ul>
+  </div>
+  <div class="tw">
+    <table>
+      <tr><th class="u4h">Feature</th><th class="u4h">Data Warehouse</th><th class="u4h">Data Lake</th><th class="u4h">Data Lakehouse</th></tr>
+      <tr><td>Data type</td><td>Structured only</td><td>All types (raw)</td><td>All types</td></tr>
+      <tr><td>Schema</td><td>Before writing (schema-on-write)</td><td>After reading (schema-on-read)</td><td>Hybrid</td></tr>
+      <tr><td>Primary use</td><td>BI Reporting, OLAP</td><td>ML + raw analytics, exploration</td><td>All-in-one</td></tr>
+      <tr><td>Flexibility</td><td>Low (rigid schema)</td><td>High</td><td>High + controlled</td></tr>
+      <tr><td>Performance</td><td>High for structured queries</td><td>Medium</td><td>High</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <div class="card-ttl amber">Data Lake Design Pattern</div>
+    <div class="steps">
+      <div class="step"><div class="snum amb">1</div><div class="sc"><strong>Ingest</strong><p>Raw data collected from databases, apps, sensors, logs — stored in native format in data lake</p></div></div>
+      <div class="step"><div class="snum amb">2</div><div class="sc"><strong>Prepare / Process</strong><p>HDInsight, Apache Spark — clean, transform, filter. Data becomes usable but remains flexible.</p></div></div>
+      <div class="step"><div class="snum amb">3</div><div class="sc"><strong>Analyze</strong><p>Moved to SQL Data Warehouse / structured format for queries and analysis</p></div></div>
+      <div class="step"><div class="snum amb">4</div><div class="sc"><strong>Publish &amp; Consume</strong><p>Power BI dashboards, search systems, web apps. Data used for business decision-making.</p></div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-ttl amber">Key Data Lake Tools</div>
+    <div class="g3">
+      <div class="cbox amb"><span class="cicon">📦</span><div><strong>Storage:</strong> Hadoop HDFS — stores huge raw data volumes</div></div>
+      <div class="cbox amber"><span class="cicon">⚡</span><div><strong>Processing:</strong> Apache Spark — data cleaning, transformation, large-scale processing</div></div>
+      <div class="cbox info"><span class="cicon">⚡</span><div><strong>Fast Access:</strong> Apache HBase, Kudu — fast read/write for real-time applications</div></div>
+      <div class="cbox ok"><span class="cicon">📄</span><div><strong>Formats:</strong> ORC, Parquet — compressed, efficient columnar storage</div></div>
+      <div class="cbox pur"><span class="cicon">🔍</span><div><strong>Query (SQL-like):</strong> Hive, Presto, Impala, Drill — run SQL on raw data without moving it</div></div>
+      <div class="cbox amb"><span class="cicon">🌊</span><div><strong>Streaming:</strong> Apache Kafka — real-time event streaming into the lake</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-ttl amber">Data Lakehouse</div>
+    <p>A new paradigm combining the <strong>best of data lakes AND data warehouses</strong>. Implements data warehouse features (ACID transactions, schema enforcement, query optimization) directly on low-cost data lake storage.</p>
+  </div>
+  <div class="card">
+    <div class="card-ttl amber">Data Fabric</div>
+    <p>A modern architecture designed to <strong>democratize data access</strong> across an organization. A loosely coupled collection of distributed services providing the right data in the right shape at the right time from heterogeneous sources, across any cloud and on-premises platforms.</p>
+    <div class="g2" style="margin-top:12px">
+      <ul class="nl amb">
+        <li><strong>Distributed &amp; Loosely Coupled:</strong> Network of independent but connected data nodes</li>
+        <li><strong>Works Across Hybrid &amp; Multicloud:</strong> On-premise + AWS + Azure + others</li>
+        <li><strong>Intelligent &amp; Automated:</strong> Automates integration, movement, transformation</li>
+      </ul>
+      <ul class="nl amb">
+        <li><strong>Self-Service Access:</strong> Users access data without deep technical knowledge</li>
+        <li><strong>Handles Heterogeneous Data:</strong> Transactional + analytical + structured + unstructured</li>
+        <li><strong>Non-Functional Compliance:</strong> Performance, security, governance, cost efficiency</li>
+      </ul>
+    </div>
+    <div class="tw" style="margin-top:12px"><table>
+      <tr><th class="u4h">Feature</th><th class="u4h">Data Fabric</th><th class="u4h">Data Lake</th></tr>
+      <tr><td>Focus</td><td>Data access &amp; integration</td><td>Data storage</td></tr>
+      <tr><td>Role</td><td>Connects data systems</td><td>Stores raw data</td></tr>
+      <tr><td>Architecture</td><td>Distributed network</td><td>Central repository</td></tr>
+      <tr><td>Goal</td><td>Data democratization</td><td>Data collection</td></tr>
+    </table></div>
+  </div>
+</div>
+
+<!-- Unit 4 MCQs -->
+<div id="u4-mcq">
+  <div class="div"></div>
+  <div class="mcq-hdr">📝 Unit 4 — Practice MCQs</div>
+  <div class="sbar"><div><div class="slabel">SCORE</div><div class="sval" id="u4-score">0 / 0</div></div><button class="rbtn" onclick="resetMCQ('u4')">↺ Reset</button></div>
+
+  <div class="mcard" data-correct="b" data-unit="u4">
+    <div class="mq"><span class="qn u4">Q1.</span>What is a Tumbling Window in stream processing?</div>
+    <div class="mopts">
+      <div class="mopt" data-opt="a"><span class="oletter">A</span>A window that overlaps with the previous window by half its size</div>
+      <div class="mopt" data-opt="b"><span class="oletter">B</span>Fixed-size, consecutive, non-overlapping windows where each period is independent from previous ones</div>
+      <div class="mopt" data-opt="c"><span class="oletter">C</span>A window that slides every few seconds while covering a longer period</div>
+      <div class="mopt" data-opt="d"><span class="oletter">D</span>A window that groups events by count rather than by time</div>
+    </div>
+    <div class="mexp">Tumbling windows are fixed-size, consecutive, and NON-overlapping. Each period follows the previous without overlap (e.g., 0-60min, 60-120min, 120-180min). Sliding windows are a superset where the reporting frequency < window size.</div>
+  </div>
+
+  <div class="mcard" data-correct="c" data-unit="u4">
+    <div class="mq"><span class="qn u4">Q2.</span>What is a Watermark in event-time stream processing?</div>
+    <div class="mopts">
+      <div class="mopt" data-opt="a"><span class="oletter">A</span>A security marker added to streamed data for copyright protection</div>
+      <div class="mopt" data-opt="b"><span class="oletter">B</span>A threshold for maximum throughput in a data pipeline</div>
+      <div class="mopt" data-opt="c"><span class="oletter">C</span>A time threshold telling the system "no events older than this timestamp are expected" — used to close event-time windows</div>
+      <div class="mopt" data-opt="d"><span class="oletter">D</span>The minimum delay between processing two consecutive events</div>
+    </div>
+    <div class="mexp">A watermark closes the open boundary of event-time windows by declaring "no more events older than this time will arrive." This allows the system to finalize aggregations. Events older than the watermark are treated as late arrivals.</div>
+  </div>
+
+  <div class="mcard" data-correct="a" data-unit="u4">
+    <div class="mq"><span class="qn u4">Q3.</span>In Lambda Architecture, what is the purpose of the Speed Layer?</div>
+    <div class="mopts">
+      <div class="mopt" data-opt="a"><span class="oletter">A</span>To process real-time data with low latency, providing immediate but possibly approximate results</div>
+      <div class="mopt" data-opt="b"><span class="oletter">B</span>To reprocess the entire historical dataset accurately every day</div>
+      <div class="mopt" data-opt="c"><span class="oletter">C</span>To answer user queries by combining batch and stream results</div>
+      <div class="mopt" data-opt="d"><span class="oletter">D</span>To store and index master datasets for archival purposes</div>
+    </div>
+    <div class="mexp">The Speed Layer (stream layer) processes only recent, real-time data not yet covered by the batch layer. It provides low-latency but possibly slightly inaccurate results. The batch layer eventually corrects any errors made by the speed layer.</div>
+  </div>
+
+  <div class="mcard" data-correct="d" data-unit="u4">
+    <div class="mq"><span class="qn u4">Q4.</span>What makes Apache Spark 10-20× faster than traditional MapReduce?</div>
+    <div class="mopts">
+      <div class="mopt" data-opt="a"><span class="oletter">A</span>It uses more processors and larger cluster sizes</div>
+      <div class="mopt" data-opt="b"><span class="oletter">B</span>It skips the shuffle phase of MapReduce</div>
+      <div class="mopt" data-opt="c"><span class="oletter">C</span>It uses a better compression algorithm for data storage</div>
+      <div class="mopt" data-opt="d"><span class="oletter">D</span>It stores RDDs in memory (in-memory computation), eliminating expensive intermediate disk writes</div>
+    </div>
+    <div class="mexp">Spark's key innovation is in-memory computation via RDDs (Resilient Distributed Datasets). Instead of writing intermediate results to disk between each MapReduce step, Spark keeps data in RAM, drastically reducing I/O overhead.</div>
+  </div>
+
+  <div class="mcard" data-correct="b" data-unit="u4">
+    <div class="mq"><span class="qn u4">Q5.</span>What is a Kafka Partition?</div>
+    <div class="mopts">
+      <div class="mopt" data-opt="a"><span class="oletter">A</span>A virtual machine in the Kafka cluster</div>
+      <div class="mopt" data-opt="b"><span class="oletter">B</span>An ordered, immutable sequence of messages within a topic; replicated across brokers for redundancy</div>
+      <div class="mopt" data-opt="c"><span class="oletter">C</span>A subset of consumers that receive the same messages</div>
+      <div class="mopt" data-opt="d"><span class="oletter">D</span>The maximum size of a single Kafka message</div>
+    </div>
+    <div class="mexp">A Kafka partition is an ordered, immutable sequence of messages within a topic. Partitions allow topics to scale beyond a single disk/server and enable parallel throughput. Each partition is replicated across multiple brokers. Publishers decide which partition to write to (round-robin or key-based).</div>
+  </div>
+
+  <div class="mcard" data-correct="c" data-unit="u4">
+    <div class="mq"><span class="qn u4">Q6.</span>What is the difference between Data Lakes and Data Warehouses regarding schema?</div>
+    <div class="mopts">
+      <div class="mopt" data-opt="a"><span class="oletter">A</span>Both use schema-on-read; warehouses are just more optimized</div>
+      <div class="mopt" data-opt="b"><span class="oletter">B</span>Data lakes use schema-on-write; data warehouses use schema-on-read</div>
+      <div class="mopt" data-opt="c"><span class="oletter">C</span>Data lakes use schema-on-read (no predefined schema); data warehouses use schema-on-write (schema defined before loading)</div>
+      <div class="mopt" data-opt="d"><span class="oletter">D</span>Data lakes have rigid schemas; data warehouses are flexible</div>
+    </div>
+    <div class="mexp">Data warehouses enforce schema BEFORE data is written (schema-on-write) — data must conform to predefined structure. Data lakes store raw data in native format WITHOUT a predefined schema (schema-on-read) — schema is applied only when the data is queried.</div>
+  </div>
+
+  <div class="mcard" data-correct="a" data-unit="u4">
+    <div class="mq"><span class="qn u4">Q7.</span>In the Apriori algorithm, what does the Downward Closure Property state?</div>
+    <div class="mopts">
+      <div class="mopt" data-opt="a"><span class="oletter">A</span>If an itemset is frequent, then all of its subsets must also be frequent; if a subset is infrequent, we can prune the superset</div>
+      <div class="mopt" data-opt="b"><span class="oletter">B</span>Frequent itemsets always appear at the beginning of transaction logs</div>
+      <div class="mopt" data-opt="c"><span class="oletter">C</span>Confidence is always higher than support for any association rule</div>
+      <div class="mopt" data-opt="d"><span class="oletter">D</span>Any itemset that meets minimum confidence is also frequent</div>
+    </div>
+    <div class="mexp">The Apriori Property (Downward Closure): If {A,B,C} is frequent, then {A,B}, {A,C}, {B,C}, {A}, {B}, {C} must ALL be frequent. Contrapositive: if any subset is infrequent, the full itemset cannot be frequent → we can prune it without checking, saving enormous computation.</div>
+  </div>
+
+  <div class="mcard" data-correct="d" data-unit="u4">
+    <div class="mq"><span class="qn u4">Q8.</span>What distinguishes Kappa Architecture from Lambda Architecture?</div>
+    <div class="mopts">
+      <div class="mopt" data-opt="a"><span class="oletter">A</span>Kappa uses a batch layer for accuracy while Lambda is stream-only</div>
+      <div class="mopt" data-opt="b"><span class="oletter">B</span>Lambda is simpler because it only has one processing layer</div>
+      <div class="mopt" data-opt="c"><span class="oletter">C</span>Kappa cannot handle historical data; Lambda can</div>
+      <div class="mopt" data-opt="d"><span class="oletter">D</span>Kappa uses stream processing only with a unified codebase; Lambda uses separate batch and stream layers with two codebases</div>
+    </div>
+    <div class="mexp">Kappa Architecture uses stream processing ONLY — all data is treated as streams, including historical data (replayed if needed). Lambda has both a batch layer (accurate, slow) and a speed layer (fast, approximate), requiring two separate codebases to maintain.</div>
+  </div>
+
+  <div class="mcard" data-correct="b" data-unit="u4">
+    <div class="mq"><span class="qn u4">Q9.</span>In a Star Schema for Data Warehousing, what does the Fact Table contain?</div>
+    <div class="mopts">
+      <div class="mopt" data-opt="a"><span class="oletter">A</span>Descriptive information about dimensions like time, location, and customer</div>
+      <div class="mopt" data-opt="b"><span class="oletter">B</span>Measurable, quantitative data (e.g., sales amounts, quantities) with pointers to dimension tables</div>
+      <div class="mopt" data-opt="c"><span class="oletter">C</span>The raw, unprocessed source data before ETL</div>
+      <div class="mopt" data-opt="d"><span class="oletter">D</span>Metadata about the data warehouse structure itself</div>
+    </div>
+    <div class="mexp">The Fact Table contains measurable/quantitative data (e.g., sales amount, quantity sold, revenue). It has one tuple per recorded fact and contains foreign keys (pointers) to surrounding Dimension Tables, which hold descriptive attributes like time, product, location, customer.</div>
+  </div>
+
+  <div class="mcard" data-correct="c" data-unit="u4">
+    <div class="mq"><span class="qn u4">Q10.</span>What is Polyglot Persistence?</div>
+    <div class="mopts">
+      <div class="mopt" data-opt="a"><span class="oletter">A</span>A single database that supports multiple query languages</div>
+      <div class="mopt" data-opt="b"><span class="oletter">B</span>Using one multi-model database to handle all data types in an application</div>
+      <div class="mopt" data-opt="c"><span class="oletter">C</span>Using multiple separate, specialized data storage technologies for different data types within one application</div>
+      <div class="mopt" data-opt="d"><span class="oletter">D</span>Translating data between different database formats automatically</div>
+    </div>
+    <div class="mexp">Polyglot persistence = using MULTIPLE DIFFERENT databases for different data storage needs within a single application, chosen based on how data is used. Example: User data → MySQL, Product catalog → MongoDB, Recommendations → Neo4j. It's "using the right tool for the right job."</div>
+  </div>
+
+  <div class="mcard" data-correct="a" data-unit="u4">
+    <div class="mq"><span class="qn u4">Q11.</span>What is the ROLL-UP operation in OLAP?</div>
+    <div class="mopts">
+      <div class="mopt" data-opt="a"><span class="oletter">A</span>Summarizing data with increasing generalization (e.g., Day → Month → Year)</div>
+      <div class="mopt" data-opt="b"><span class="oletter">B</span>Increasing levels of detail in data analysis (going from Year to Day)</div>
+      <div class="mopt" data-opt="c"><span class="oletter">C</span>Rotating the perspective of the data cube for cross-tabulation</div>
+      <div class="mopt" data-opt="d"><span class="oletter">D</span>Selecting a single value from a specific dimension</div>
+    </div>
+    <div class="mexp">Roll-up aggregates data at a higher level of generalization. Day → Month → Year is rolling up time. City → State → Country is rolling up geography. Drill-down is the reverse (more detail). Together they allow navigating the data cube's hierarchy.</div>
+  </div>
+
+  <div class="mcard" data-correct="d" data-unit="u4">
+    <div class="mq"><span class="qn u4">Q12.</span>What does RDD stand for in Apache Spark, and why is it important?</div>
+    <div class="mopts">
+      <div class="mopt" data-opt="a"><span class="oletter">A</span>Rapid Data Distribution — important for network-efficient data transfer</div>
+      <div class="mopt" data-opt="b"><span class="oletter">B</span>Replicated Disk Dataset — important for fault tolerance via disk backup</div>
+      <div class="mopt" data-opt="c"><span class="oletter">C</span>Real-time Data Descriptor — important for streaming metadata management</div>
+      <div class="mopt" data-opt="d"><span class="oletter">D</span>Resilient Distributed Dataset — a fault-tolerant, in-memory data structure tracking transformation lineage to enable recomputation on failure</div>
+    </div>
+    <div class="mexp">RDD = Resilient Distributed Dataset. "Resilient" = fault-tolerant via lineage (can recompute lost partitions). "Distributed" = data partitioned across cluster. "Dataset" = a collection of records. RDDs are immutable and lazily evaluated. Their lineage DAG is the key to Spark's speed and fault tolerance.</div>
+  </div>
+
+</div><!-- end u4-mcq -->
+</div><!-- end u4 -->
+
+</div><!-- end wrap -->
+
+<button class="fab" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+const tocData = {
+  u3:[
+    {id:'u3-s1',label:'Parallel Databases'},
+    {id:'u3-s2',label:'MapReduce & Hadoop'},
+    {id:'u3-s3',label:'Distributed Databases'},
+    {id:'u3-s4',label:'Distributed Query Processing'},
+    {id:'u3-s5',label:'Distributed Transactions'},
+    {id:'u3-s6',label:'Distributed Locking'},
+    {id:'u3-s7',label:'P2P Search'},
+    {id:'u3-mcq',label:'📝 MCQs'},
+  ],
+  u4:[
+    {id:'u4-s1',label:'Stream Processing'},
+    {id:'u4-s2',label:'Streaming Architectures'},
+    {id:'u4-s3',label:'Apache Spark'},
+    {id:'u4-s4',label:'Apache Kafka'},
+    {id:'u4-s5',label:'Multi-Model Databases'},
+    {id:'u4-s6',label:'Data Warehousing'},
+    {id:'u4-s7',label:'Data Mining'},
+    {id:'u4-s8',label:'Data Lakes'},
+    {id:'u4-mcq',label:'📝 MCQs'},
+  ]
+};
+
+let currentUnit='u3';
+
+function buildTOC(unit){
+  const bar=document.getElementById('tocBar');
+  bar.innerHTML='';
+  tocData[unit].forEach(item=>{
+    const el=document.createElement('div');
+    el.className='toc-i'+(unit==='u4'?' u4h':'');
+    el.textContent=item.label;
+    el.onclick=()=>document.getElementById(item.id)?.scrollIntoView({behavior:'smooth',block:'start'});
+    bar.appendChild(el);
+  });
+}
+
+function switchUnit(unit){
+  if(!tocData[unit]) return;
+  const target=document.getElementById(unit);
+  if(!target) return;
+  currentUnit=unit;
+  document.querySelectorAll('.unit-s').forEach(s=>s.classList.remove('active'));
+  target.classList.add('active');
+  document.querySelectorAll('.utab').forEach(t=>t.classList.remove('active'));
+  const activeTab=document.querySelector(`.utab[data-unit="${unit}"]`);
+  if(activeTab) activeTab.classList.add('active');
+  buildTOC(unit);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+document.querySelectorAll('.utab[data-unit]').forEach(tab=>{
+  tab.addEventListener('click',()=>switchUnit(tab.dataset.unit));
+});
+
+buildTOC(currentUnit);
+
+// MCQ Logic
+const scores={u3:{c:0,t:0},u4:{c:0,t:0}};
+
+function attachMCQ(unit){
+  document.querySelectorAll(`.mcard[data-unit="${unit}"]`).forEach(card=>{
+    const correct=card.dataset.correct;
+    const opts=card.querySelectorAll('.mopt');
+    const exp=card.querySelector('.mexp');
+    let answered=false;
+    opts.forEach(opt=>{
+      opt.addEventListener('click',()=>{
+        if(answered)return;
+        answered=true;
+        scores[unit].t++;
+        const chosen=opt.dataset.opt;
+        opts.forEach(o=>{if(o.dataset.opt===correct)o.classList.add('rev-ok')});
+        if(chosen===correct){opt.classList.add('correct');scores[unit].c++;}
+        else opt.classList.add('wrong');
+        exp.classList.add('show');
+        updateScore(unit);
+      });
+    });
+  });
+}
+
+function updateScore(unit){
+  const el=document.getElementById(`${unit}-score`);
+  if(el)el.textContent=`${scores[unit].c} / ${scores[unit].t}`;
+}
+
+function resetMCQ(unit){
+  scores[unit]={c:0,t:0};
+  updateScore(unit);
+  document.querySelectorAll(`.mcard[data-unit="${unit}"]`).forEach(card=>{
+    const correct=card.dataset.correct;
+    const exp=card.querySelector('.mexp');
+    exp.classList.remove('show');
+    const oldOpts=card.querySelectorAll('.mopt');
+    const newOpts=[];
+    oldOpts.forEach(opt=>{
+      const n=opt.cloneNode(true);
+      opt.parentNode.replaceChild(n,opt);
+      newOpts.push(n);
+    });
+    let answered=false;
+    newOpts.forEach(opt=>{
+      opt.classList.remove('correct','wrong','rev-ok');
+      opt.addEventListener('click',()=>{
+        if(answered)return;
+        answered=true;
+        scores[unit].t++;
+        newOpts.forEach(o=>{if(o.dataset.opt===correct)o.classList.add('rev-ok')});
+        if(opt.dataset.opt===correct){opt.classList.add('correct');scores[unit].c++;}
+        else opt.classList.add('wrong');
+        exp.classList.add('show');
+        updateScore(unit);
+      });
+    });
+  });
+}
+
+attachMCQ('u3');
+attachMCQ('u4');
+</script>
+</body>
+</html>
+  
+

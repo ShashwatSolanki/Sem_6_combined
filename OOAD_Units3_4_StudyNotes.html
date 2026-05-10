@@ -1,0 +1,1968 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OOAD â€“ Units 3 & 4 Study Notes</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg: #0c0e14;
+    --surface: #141720;
+    --card: #1b1f2e;
+    --border: #252a40;
+    --accent1: #a78bfa; /* violet */
+    --accent2: #fbbf24; /* amber */
+    --accent3: #34d399; /* emerald */
+    --accent4: #f87171; /* red */
+    --accent5: #60a5fa; /* blue */
+    --accent6: #fb923c; /* orange */
+    --text: #e2e8f8;
+    --muted: #7a82a0;
+    --highlight: #251e40;
+    --code-bg: #0a0d17;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 15px;
+    line-height: 1.75;
+    padding: 2rem 1rem 4rem;
+  }
+
+  .container { max-width: 940px; margin: 0 auto; }
+
+  /* â”€â”€ Header â”€â”€ */
+  header {
+    text-align: center;
+    padding: 3rem 1rem 2rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2.5rem;
+    position: relative;
+  }
+  header::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 50%; transform: translateX(-50%);
+    width: 200px; height: 3px;
+    background: linear-gradient(90deg, var(--accent1), var(--accent3));
+    border-radius: 2px;
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--accent1) 30%, var(--accent3));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.2;
+  }
+  header .sub { color: var(--accent2); font-size: 0.88rem; margin-top: 0.5rem; font-style: italic; }
+
+  /* â”€â”€ TOC â”€â”€ */
+  .toc {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.2rem 1.5rem;
+    margin-bottom: 2.5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem 2rem;
+  }
+  .toc-col h3 { color: var(--accent2); font-size: 0.82rem; margin-bottom: 0.5rem; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.05em; }
+  .toc a { color: var(--muted); text-decoration: none; font-size: 0.82rem; display: block; padding: 1px 0; transition: color 0.2s; }
+  .toc a:hover { color: var(--accent3); }
+
+  /* â”€â”€ Unit badges â”€â”€ */
+  .unit-badge {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 3px 12px;
+    border-radius: 20px;
+    margin-bottom: 0.4rem;
+    letter-spacing: 0.1em;
+  }
+  .u3 { background: var(--accent1); color: #0c0e14; }
+  .u4 { background: var(--accent3); color: #0c0e14; }
+
+  /* â”€â”€ Section headings â”€â”€ */
+  h2.sec {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.75rem;
+    margin: 2.8rem 0 1rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid var(--border);
+  }
+  h2.sec.v { color: var(--accent1); }
+  h2.sec.g { color: var(--accent3); }
+
+  h3.topic {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--accent2);
+    margin: 1.4rem 0 0.4rem;
+  }
+  h4.sub {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--accent5);
+    margin: 1rem 0 0.3rem;
+  }
+
+  /* â”€â”€ Cards â”€â”€ */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.1rem 1.3rem;
+    margin-bottom: 1rem;
+  }
+
+  /* â”€â”€ Key box â”€â”€ */
+  .key {
+    background: var(--highlight);
+    border-left: 3px solid var(--accent1);
+    border-radius: 0 6px 6px 0;
+    padding: 0.65rem 1rem;
+    margin: 0.7rem 0;
+    font-size: 0.91rem;
+  }
+  .key.green { border-color: var(--accent3); }
+  .key.amber { border-color: var(--accent2); }
+
+  /* â”€â”€ MCQ pill â”€â”€ */
+  .mcq {
+    background: #1a1305;
+    border: 1px solid var(--accent2);
+    border-radius: 7px;
+    padding: 0.55rem 0.9rem;
+    margin: 0.5rem 0;
+    font-size: 0.87rem;
+    color: var(--accent2);
+  }
+  .mcq::before { content: "âš¡ MCQ LIKELY: "; font-weight: 700; }
+
+  /* â”€â”€ Code blocks â”€â”€ */
+  pre {
+    background: var(--code-bg);
+    border: 1px solid #1e2535;
+    border-radius: 8px;
+    padding: 0.9rem 1.1rem;
+    overflow-x: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    line-height: 1.55;
+    color: #c9d1d9;
+    margin: 0.7rem 0;
+  }
+  .kw { color: #ff7b72; }
+  .cls { color: #79c0ff; }
+  .str { color: #a5d6ff; }
+  .cmt { color: #6e7681; font-style: italic; }
+  .fn { color: #d2a8ff; }
+  .ann { color: #ffa657; }
+
+  /* â”€â”€ SVG diagrams â”€â”€ */
+  .diagram {
+    background: var(--code-bg);
+    border: 1px solid #1e2535;
+    border-radius: 10px;
+    padding: 1rem;
+    margin: 0.8rem 0;
+    overflow-x: auto;
+    text-align: center;
+  }
+  .diagram svg { max-width: 100%; height: auto; }
+
+  /* â”€â”€ Tables â”€â”€ */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.87rem;
+    margin: 0.7rem 0;
+  }
+  th {
+    background: var(--highlight);
+    color: var(--accent2);
+    padding: 0.45rem 0.8rem;
+    text-align: left;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+  }
+  td { padding: 0.4rem 0.8rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) td { background: #141822; }
+
+  /* â”€â”€ Lists â”€â”€ */
+  ul.pts { padding-left: 1.2rem; }
+  ul.pts li { margin-bottom: 0.25rem; font-size: 0.91rem; }
+  ol.steps { padding-left: 1.3rem; }
+  ol.steps li { margin-bottom: 0.3rem; font-size: 0.91rem; }
+
+  p { margin-bottom: 0.6rem; font-size: 0.93rem; }
+
+  hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+
+  .tag {
+    display: inline-block;
+    background: #1a2535;
+    color: var(--accent5);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    padding: 1px 7px;
+    border-radius: 4px;
+    margin: 0 2px;
+  }
+
+  @media (max-width: 600px) {
+    .toc { grid-template-columns: 1fr; }
+    header h1 { font-size: 1.7rem; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>Object Oriented Analysis & Design<br>Units 3 & 4 â€” Complete Study Notes</h1>
+  <p class="sub">GRASP Â· SOLID Â· Design Patterns Â· Structural Â· Behavioural Â· Anti-Patterns Â· with Diagrams & Code</p>
+</header>
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-col">
+    <h3>UNIT 3</h3>
+    <a href="#grasp">GRASP Principles (all 9)</a>
+    <a href="#solid">SOLID Principles</a>
+    <a href="#srp">SRP â€“ Single Responsibility</a>
+    <a href="#ocp">OCP â€“ Open/Closed</a>
+    <a href="#lsp">LSP â€“ Liskov Substitution</a>
+    <a href="#isp">ISP â€“ Interface Segregation</a>
+    <a href="#dip">DIP â€“ Dependency Inversion</a>
+    <a href="#intro-dp">Intro to Design Patterns</a>
+    <a href="#singleton">Singleton Pattern</a>
+    <a href="#factory">Factory Method Pattern</a>
+    <a href="#builder">Builder Pattern</a>
+    <a href="#prototype">Prototype Pattern</a>
+  </div>
+  <div class="toc-col">
+    <h3>UNIT 4</h3>
+    <a href="#adapter">Adapter Pattern</a>
+    <a href="#facade">Facade Pattern</a>
+    <a href="#proxy">Proxy Pattern</a>
+    <a href="#flyweight">Flyweight Pattern</a>
+    <a href="#bridge">Bridge Pattern</a>
+    <a href="#composite">Composite Pattern</a>
+    <a href="#decorator">Decorator Pattern</a>
+    <a href="#chain">Chain of Responsibility</a>
+    <a href="#command">Command Pattern</a>
+    <a href="#interpreter">Interpreter Pattern</a>
+    <a href="#iterator">Iterator Pattern</a>
+    <a href="#observer">Observer Pattern</a>
+    <a href="#strategy">Strategy Pattern</a>
+    <a href="#state">State Pattern</a>
+    <a href="#mediator">Mediator Pattern</a>
+    <a href="#memento">Memento Pattern</a>
+    <a href="#visitor">Visitor Pattern</a>
+    <a href="#template-method">Template Method Pattern</a>
+    <a href="#antipatterns">Anti-Patterns</a>
+  </div>
+</div>
+
+<!-- ========== UNIT 3 ========== -->
+<div class="unit-badge u3">UNIT 3 â€” GRASP, SOLID & Creational Patterns</div>
+
+<!-- â”€â”€ GRASP â”€â”€ -->
+<h2 class="sec v" id="grasp">1. GRASP Principles</h2>
+<div class="card">
+  <p><strong>GRASP</strong> = General Responsibility Assignment Software Patterns. Published by Craig Larman. 9 fundamental principles for assigning responsibilities to classes/objects in OO design. A <strong>responsibility</strong> is a contract/obligation a class must fulfil.</p>
+
+  <h4 class="sub">Types of Responsibility</h4>
+  <h4 class="sub">Consequences</h4>
+  <ul class="pts">
+    <li><strong>Doing:</strong> Creating objects, doing calculations, initiating actions in other objects, coordinating activities</li>
+    <li><strong>Knowing:</strong> Knowing private encapsulated data, related objects, things it can derive/calculate</li>
+  </ul>
+
+  <h3 class="topic">1. Creator</h3>
+  <p><strong>Problem:</strong> Who creates a new instance of class X?<br>
+  <strong>Solution:</strong> Assign creation to the class that <em>contains</em>, <em>aggregates</em>, <em>records</em>, <em>closely uses</em>, or has <em>initialising data</em> for X.</p>
+  <div class="key">Container creates Contained. Sale creates SalesLineItems. Board knows Squares, so Board creates Square in Monopoly.</div>
+  <div class="mcq">Creator â€” "Container creates Contained". Factory pattern is used for complex creation situations.</div>
+
+  <h3 class="topic">2. Information Expert</h3>
+  <p><strong>Problem:</strong> What is the basic principle to assign responsibilities?<br>
+  <strong>Solution:</strong> Assign responsibility to the class that has the information needed to fulfil it â€” <em>objects do things related to the information they have.</em></p>
+
+  <table>
+    <tr><th>Class</th><th>Responsibility (POS Example)</th></tr>
+    <tr><td>Sale</td><td>Knows sale total</td></tr>
+    <tr><td>SalesLineItem</td><td>Knows line-item subtotal</td></tr>
+    <tr><td>ProductDescription</td><td>Knows product price</td></tr>
+  </table>
+  <div class="mcq">Information Expert â†’ assign to class that has the data. Board is information expert for Square positions in Monopoly.</div>
+
+  <h3 class="topic">3. Low Coupling</h3>
+  <p><strong>Coupling</strong> = degree of dependency between classes.<br>
+  <strong>Problem:</strong> How to support low dependency, low change impact, high reuse?<br>
+  <strong>Solution:</strong> Assign responsibilities so that coupling remains low.</p>
+  <ul class="pts">
+    <li><strong>Tight Coupling:</strong> Class creates instances of another, directly accesses its methods/fields â†’ hard to change, hard to reuse</li>
+    <li><strong>Loose Coupling:</strong> Classes interact through interfaces/abstractions â†’ changes in one class don't cascade</li>
+  </ul>
+
+  <!-- Low Coupling diagram -->
+  <div class="diagram">
+    <svg viewBox="0 0 500 160" xmlns="http://www.w3.org/2000/svg" width="500" height="160">
+      <defs>
+        <marker id="arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+          <path d="M0,0 L8,3 L0,6 Z" fill="#7a82a0"/>
+        </marker>
+      </defs>
+      <!-- Tight coupling side -->
+      <text x="90" y="18" fill="#f87171" font-family="JetBrains Mono" font-size="11" text-anchor="middle">TIGHT (Bad)</text>
+      <rect x="10" y="30" width="80" height="30" rx="5" fill="#1b1f2e" stroke="#f87171" stroke-width="1.5"/>
+      <text x="50" y="50" fill="#e2e8f8" font-family="JetBrains Mono" font-size="10" text-anchor="middle">RentVideo</text>
+      <rect x="10" y="90" width="80" height="30" rx="5" fill="#1b1f2e" stroke="#7a82a0" stroke-width="1"/>
+      <text x="50" y="110" fill="#e2e8f8" font-family="JetBrains Mono" font-size="10" text-anchor="middle">VideoStore</text>
+      <rect x="110" y="90" width="60" height="30" rx="5" fill="#1b1f2e" stroke="#7a82a0" stroke-width="1"/>
+      <text x="140" y="110" fill="#e2e8f8" font-family="JetBrains Mono" font-size="10" text-anchor="middle">Video</text>
+      <line x1="50" y1="60" x2="50" y2="90" stroke="#f87171" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="70" y1="60" x2="130" y2="90" stroke="#f87171" stroke-width="1.5" marker-end="url(#arr)"/>
+      <text x="90" y="148" fill="#f87171" font-size="9" font-family="JetBrains Mono" text-anchor="middle">RentVideo knows both</text>
+
+      <!-- Divider -->
+      <line x1="210" y1="20" x2="210" y2="140" stroke="#252a40" stroke-width="1"/>
+
+      <!-- Low coupling side -->
+      <text x="355" y="18" fill="#34d399" font-family="JetBrains Mono" font-size="11" text-anchor="middle">LOOSE (Good)</text>
+      <rect x="220" y="30" width="80" height="30" rx="5" fill="#1b1f2e" stroke="#34d399" stroke-width="1.5"/>
+      <text x="260" y="50" fill="#e2e8f8" font-family="JetBrains Mono" font-size="10" text-anchor="middle">RentVideo</text>
+      <rect x="220" y="90" width="80" height="30" rx="5" fill="#1b1f2e" stroke="#7a82a0" stroke-width="1"/>
+      <text x="260" y="110" fill="#e2e8f8" font-family="JetBrains Mono" font-size="10" text-anchor="middle">VideoStore</text>
+      <rect x="340" y="90" width="60" height="30" rx="5" fill="#1b1f2e" stroke="#7a82a0" stroke-width="1"/>
+      <text x="370" y="110" fill="#e2e8f8" font-family="JetBrains Mono" font-size="10" text-anchor="middle">Video</text>
+      <line x1="260" y1="60" x2="260" y2="90" stroke="#34d399" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="300" y1="105" x2="340" y2="105" stroke="#34d399" stroke-width="1.5" marker-end="url(#arr)"/>
+      <text x="355" y="148" fill="#34d399" font-size="9" font-family="JetBrains Mono" text-anchor="middle">Rent only knows VideoStore</text>
+    </svg>
+  </div>
+  <div class="mcq">Low Coupling: use interfaces + Dependency Injection. Subclassing = high coupling. TypeX has attribute of TypeY = coupled.</div>
+
+  <h3 class="topic">4. High Cohesion</h3>
+  <p><strong>Cohesion</strong> = measure of how strongly related and focused the responsibilities of a class are.<br>
+  <strong>Problem:</strong> How to keep complexity manageable?<br>
+  <strong>Solution:</strong> Assign responsibilities so cohesion remains high.</p>
+  <p><strong>Low cohesion problems:</strong> Hard to understand, hard to reuse, hard to maintain, brittle.</p>
+  <div class="mcq">High cohesion = class does ONE focused thing. Low cohesion = does many unrelated things.</div>
+
+  <h3 class="topic">5. Controller</h3>
+  <p><strong>Problem:</strong> Who should be responsible for handling a system event (input from UI layer)?<br>
+  <strong>Solution:</strong> Assign responsibility to either:</p>
+  <ul class="pts">
+    <li><strong>FaÃ§ade Controller:</strong> Class representing the overall system/device/subsystem</li>
+    <li><strong>Use Case Controller:</strong> Class representing a specific use case scenario (<code>SaleHandler</code>)</li>
+  </ul>
+  <p>Controller <strong>coordinates</strong> activity but <strong>delegates</strong> work â€” it doesn't do the work itself.</p>
+  <p><strong>Bloated Controller (Bad):</strong> Single class receiving all system events, doing too much work, storing too much data.</p>
+  <div class="mcq">Controller: first object that receives message from UI layer. Two types: FaÃ§ade Controller and Use Case Controller.</div>
+
+  <h3 class="topic">6. Polymorphism</h3>
+  <p><strong>Problem:</strong> How to handle alternatives based on type?<br>
+  <strong>Solution:</strong> Assign responsibility using polymorphic operations to types where behaviour varies.</p>
+  <table>
+    <tr><th>Type</th><th>Also Called</th><th>Example</th></tr>
+    <tr><td>Ad-hoc</td><td>Overloading</td><td><code>+</code> adds integers AND concatenates strings</td></tr>
+    <tr><td>Parametric</td><td>Early binding / Generics</td><td><code>List&lt;T&gt;</code> works for any type T</td></tr>
+    <tr><td>Inclusion</td><td>Subtyping / Runtime polymorphism</td><td>Shape reference â†’ calls Circle.getArea() at runtime</td></tr>
+    <tr><td>Coercion</td><td>Casting</td><td><code>int x = 10; double y = x;</code> (implicit widening)</td></tr>
+  </table>
+  <div class="mcq">4 types: Ad-hoc=Overloading, Parametric=Generics, Inclusion=Subtyping, Coercion=Casting.</div>
+
+  <h3 class="topic">7. Indirection</h3>
+  <p><strong>Problem:</strong> How to avoid direct coupling between two components while keeping reuse ability?<br>
+  <strong>Solution:</strong> Assign responsibility to an <strong>intermediate class</strong> that mediates between them.</p>
+  <p>Related patterns: Adapter, Bridge, Mediator. Example: <code>Salary</code> class as intermediary between caller and <code>Employee</code>.</p>
+  <div class="mcq">Indirection = intermediate class for mediation. Avoids direct coupling. Related: Adapter, Bridge, Mediator.</div>
+
+  <h3 class="topic">8. Pure Fabrication</h3>
+  <p><strong>Problem:</strong> What class should have responsibility when assigning only to domain objects would violate High Cohesion or Low Coupling?<br>
+  <strong>Solution:</strong> Assign responsibilities to an <strong>artificial convenience class</strong> that does not represent a domain concept.</p>
+  <p>Examples: utility classes, service classes, helper classes, DAO (Data Access Object).</p>
+  <div class="key amber">Monopoly: a <code>Cup</code> class holds dice and manages rolling â€” not a real domain entity but solves the design problem cleanly. Can be reused in any dice-based game.</div>
+  <div class="mcq">Pure Fabrication = artificial class, not from domain model. Created when domain objects would cause poor cohesion/coupling.</div>
+
+  <h3 class="topic">9. Protected Variations (PV)</h3>
+  <p><strong>Problem:</strong> How to design so variation/instability in elements doesn't cause undesirable impact on others?<br>
+  <strong>Solution:</strong> Identify points of predicted variation â†’ create a <strong>stable interface</strong> around them.</p>
+  <ul class="pts">
+    <li><strong>Variation point:</strong> Branching point in existing system or requirements</li>
+    <li><strong>Evolution point:</strong> Possible future branching point not yet in requirements</li>
+  </ul>
+  <p>Similar to Open-Closed Principle. Example: <code>Account</code> interface with different account types implementing it â€” BankSystem doesn't change when a new account type is added.</p>
+  <h4 class="sub">GRASP Mini Code Bank</h4>
+  <pre><span class="cmt">// Creator</span>
+<span class="kw">class</span> <span class="cls">Order</span> { <span class="kw">void</span> <span class="fn">addItem</span>() { <span class="cmt">/* creates OrderItem */</span> } }
+
+<span class="cmt">// Information Expert</span>
+<span class="kw">class</span> <span class="cls">OrderItem</span> { <span class="kw">double</span> <span class="fn">subtotal</span>() { <span class="kw">return</span> qty * price; } }
+
+<span class="cmt">// Controller</span>
+<span class="kw">class</span> <span class="cls">OrderController</span> { <span class="kw">void</span> <span class="fn">placeOrder</span>() { orderService.<span class="fn">save</span>(); } }
+
+<span class="cmt">// Polymorphism</span>
+<span class="kw">interface</span> <span class="cls">Payment</span> { <span class="kw">void</span> <span class="fn">pay</span>(); }
+
+<span class="cmt">// Indirection</span>
+<span class="kw">class</span> <span class="cls">PaymentGateway</span> { <span class="kw">void</span> <span class="fn">process</span>() { bankApi.<span class="fn">call</span>(); } }
+
+<span class="cmt">// Pure Fabrication</span>
+<span class="kw">class</span> <span class="cls">UserRepository</span> { <span class="kw">void</span> <span class="fn">save</span>(<span class="cls">User</span> u) { } }
+
+<span class="cmt">// Protected Variations</span>
+<span class="kw">interface</span> <span class="cls">Account</span> { <span class="kw">double</span> <span class="fn">interest</span>(); }</pre>
+  <div class="mcq">Protected Variations â†’ stable interface around change points. Supports Open-Closed Principle.</div>
+</div>
+
+<hr>
+<!-- â”€â”€ SOLID â”€â”€ -->
+<h2 class="sec v" id="solid">2. SOLID Principles</h2>
+<div class="card">
+  <p><strong>SOLID</strong> = 5 design principles by Robert C. Martin (Uncle Bob). Acronym coined by Michael Feathers. Goal: flexible, stable software with low coupling + high cohesion.</p>
+
+  <h4 class="sub">Problems SOLID solves (Bad Design symptoms)</h4>
+  <table>
+    <tr><th>Symptom</th><th>Description</th></tr>
+    <tr><td><strong>Rigidity</strong></td><td>Every change causes cascade of changes in dependent modules</td></tr>
+    <tr><td><strong>Fragility</strong></td><td>Software breaks in unrelated places on every change</td></tr>
+    <tr><td><strong>Immobility</strong></td><td>Useful modules can't be reused â€” too many dependencies</td></tr>
+    <tr><td><strong>Viscosity</strong></td><td>It's easier to do the wrong thing (hacks) than the right design</td></tr>
+  </table>
+</div>
+
+<!-- SRP -->
+<h2 class="sec v" id="srp">3. SRP â€” Single Responsibility Principle</h2>
+<div class="card">
+  <p><strong>"A class should have one, and only one, reason to change."</strong> â€” Robert C. Martin</p>
+  <ul class="pts">
+    <li>Each class does only one thing</li>
+    <li>Can be applied to classes, components, microservices</li>
+    <li>Ensures low coupling, fewer test cases, easier maintenance</li>
+  </ul>
+
+  <h4 class="sub">Violation Example</h4>
+  <pre><span class="cmt">// BAD: Book has two responsibilities â€” data + inventory search</span>
+<span class="kw">class</span> <span class="cls">Book</span> {
+    <span class="cls">String</span> title, author;
+    <span class="cls">String</span> <span class="fn">getTitle</span>() { <span class="kw">return</span> title; }
+    <span class="kw">void</span> <span class="fn">setTitle</span>(<span class="cls">String</span> t) { title = t; }
+    <span class="kw">void</span> <span class="fn">searchBook</span>() { ... } <span class="cmt">// â† WRONG: inventory logic in Book!</span>
+}</pre>
+
+  <h4 class="sub">Fixed (SRP applied)</h4>
+  <pre><span class="cmt">// GOOD: Book = data only. InventoryView = search only.</span>
+<span class="kw">class</span> <span class="cls">Book</span> {
+    <span class="cls">String</span> title, author;
+    <span class="cls">String</span> <span class="fn">getTitle</span>() { <span class="kw">return</span> title; }
+    <span class="kw">void</span> <span class="fn">setTitle</span>(<span class="cls">String</span> t) { title = t; }
+}
+
+<span class="kw">class</span> <span class="cls">InventoryView</span> {
+    <span class="cls">Book</span> book;
+    <span class="cls">InventoryView</span>(<span class="cls">Book</span> b) { <span class="kw">this</span>.book = b; }
+    <span class="kw">void</span> <span class="fn">searchBook</span>() { ... }
+}</pre>
+  <div class="mcq">SRP: one class = one reason to change. Advantage: fewer test cases, lower coupling, better organisation.</div>
+</div>
+
+<!-- OCP -->
+<h2 class="sec v" id="ocp">4. OCP â€” Open/Closed Principle</h2>
+<div class="card">
+  <p><strong>"Open for extension, Closed for modification."</strong> â€” Bertrand Meyer</p>
+  <p>Add new features by <em>extending</em> code (via inheritance/interfaces), never by <em>modifying</em> existing working code.</p>
+
+  <h4 class="sub">Violation â†’ Fix</h4>
+  <pre><span class="cmt">// VIOLATION: Adding new discount type requires modifying DiscountManager</span>
+<span class="kw">class</span> <span class="cls">DiscountManager</span> {
+    <span class="kw">void</span> <span class="fn">processCookbookDiscount</span>(<span class="cls">CookbookDiscount</span> d) { ... }
+    <span class="kw">void</span> <span class="fn">processBiographyDiscount</span>(<span class="cls">BiographyDiscount</span> d) { ... } <span class="cmt">// â† must modify!</span>
+}
+
+<span class="cmt">// GOOD: Use an interface â€” DiscountManager never changes for new types</span>
+<span class="kw">interface</span> <span class="cls">BookDiscount</span> { <span class="cls">String</span> <span class="fn">getBookDiscount</span>(); }
+
+<span class="kw">class</span> <span class="cls">CookbookDiscount</span> <span class="kw">implements</span> <span class="cls">BookDiscount</span> {
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="cls">String</span> <span class="fn">getBookDiscount</span>() { <span class="kw">return</span> <span class="str">"30% between Dec 1-24"</span>; }
+}
+
+<span class="kw">class</span> <span class="cls">DiscountManager</span> {
+    <span class="kw">void</span> <span class="fn">processBookDiscount</span>(<span class="cls">BookDiscount</span> d) { ... } <span class="cmt">// â† never needs to change!</span>
+}</pre>
+  <p><strong>If OCP is violated:</strong> entire functionality must be retested, SRP also breaks, maintenance overhead increases.</p>
+  <div class="mcq">OCP: extend via inheritance/interfaces, don't modify. Violating OCP also breaks SRP.</div>
+</div>
+
+<!-- LSP -->
+<h2 class="sec v" id="lsp">5. LSP â€” Liskov Substitution Principle</h2>
+<div class="card">
+  <p><strong>"Derived types must be completely substitutable for their base types."</strong> â€” Barbara Liskov (1987)</p>
+  <p>A child class should <em>never</em> change characteristics of its parent. Subclasses should do <em>at least</em> as much as the parent, never less.</p>
+  <p>Applies to <strong>is-a (inheritance)</strong> hierarchies. Avoids overuse/misuse of inheritance.</p>
+
+  <h4 class="sub">Violation</h4>
+  <pre><span class="cmt">// AudiobookDelivery CAN'T deliver to physical locations</span>
+<span class="cmt">// but it MUST override getDeliveryLocations() â€” VIOLATION!</span>
+<span class="kw">class</span> <span class="cls">AudiobookDelivery</span> <span class="kw">extends</span> <span class="cls">BookDelivery</span> {
+    <span class="ann">@Override</span>
+    <span class="kw">void</span> <span class="fn">getDeliveryLocations</span>() { <span class="cmt">/* can't be implemented */</span> } <span class="cmt">// â† LSP violation!</span>
+}</pre>
+
+  <h4 class="sub">Fix â€” Extra abstraction layer</h4>
+  <pre><span class="kw">class</span> <span class="cls">BookDelivery</span>  { <span class="cls">String</span> title; <span class="kw">int</span> userID; }
+
+<span class="kw">class</span> <span class="cls">OfflineDelivery</span> <span class="kw">extends</span> <span class="cls">BookDelivery</span>  { <span class="kw">void</span> <span class="fn">getDeliveryLocations</span>() { ... } }
+<span class="kw">class</span> <span class="cls">OnlineDelivery</span>  <span class="kw">extends</span> <span class="cls">BookDelivery</span>  { <span class="kw">void</span> <span class="fn">getSoftwareOptions</span>()   { ... } }
+
+<span class="kw">class</span> <span class="cls">HardcoverDelivery</span> <span class="kw">extends</span> <span class="cls">OfflineDelivery</span> { <span class="ann">@Override</span> <span class="kw">void</span> <span class="fn">getDeliveryLocations</span>() { ... } }
+<span class="kw">class</span> <span class="cls">AudiobookDelivery</span> <span class="kw">extends</span> <span class="cls">OnlineDelivery</span>  { <span class="ann">@Override</span> <span class="kw">void</span> <span class="fn">getSoftwareOptions</span>()   { ... } }
+<span class="cmt">// âœ“ Now AudiobookDelivery never has to deal with physical location methods!</span></pre>
+  <div class="mcq">LSP: is-a relationship. Substitute subclass for superclass â†’ behaviour unchanged. Child must NOT do LESS than parent.</div>
+</div>
+
+<!-- ISP -->
+<h2 class="sec v" id="isp">6. ISP â€” Interface Segregation Principle</h2>
+<div class="card">
+  <p><strong>"Clients should not be forced to implement interfaces they do not use."</strong></p>
+  <p>Break fat (bloated) interfaces into smaller, client-specific interfaces. Many small specific interfaces > one general-purpose interface.</p>
+  <div class="key amber">Xerox case: one large Job class with all responsibilities â†’ segregated into multiple task-specific interfaces.</div>
+
+  <h4 class="sub">Violation â†’ Fix</h4>
+  <pre><span class="cmt">// FAT interface â€” HardcoverUI must implement listenSample() which it doesn't need!</span>
+<span class="kw">interface</span> <span class="cls">BookAction</span> { <span class="kw">void</span> <span class="fn">seeReviews</span>(); <span class="kw">void</span> <span class="fn">searchSecondhand</span>(); <span class="kw">void</span> <span class="fn">listenSample</span>(); }
+
+<span class="cmt">// GOOD: Split into specific interfaces</span>
+<span class="kw">interface</span> <span class="cls">BookAction</span>      { <span class="kw">void</span> <span class="fn">seeReviews</span>(); }
+<span class="kw">interface</span> <span class="cls">HardcoverAction</span> <span class="kw">extends</span> <span class="cls">BookAction</span> { <span class="kw">void</span> <span class="fn">searchSecondhand</span>(); }
+<span class="kw">interface</span> <span class="cls">AudioAction</span>     <span class="kw">extends</span> <span class="cls">BookAction</span> { <span class="kw">void</span> <span class="fn">listenSample</span>(); }
+
+<span class="kw">class</span> <span class="cls">HardcoverUI</span> <span class="kw">implements</span> <span class="cls">HardcoverAction</span> { ... } <span class="cmt">// only what it needs</span>
+<span class="kw">class</span> <span class="cls">AudiobookUI</span> <span class="kw">implements</span> <span class="cls">AudioAction</span>     { ... } <span class="cmt">// only what it needs</span></pre>
+  <div class="mcq">ISP: no forced implementation of unused methods. Fat interface â†’ split into role interfaces. Many small > one large.</div>
+</div>
+
+<!-- DIP -->
+<h2 class="sec v" id="dip">7. DIP â€” Dependency Inversion Principle</h2>
+<div class="card">
+  <p><strong>"Program to the interface, not the implementation."</strong></p>
+  <ul class="pts">
+    <li>High-level modules should NOT depend on low-level modules â€” both should depend on <strong>abstractions</strong></li>
+    <li>Abstractions should NOT depend on details â€” details should depend on abstractions</li>
+    <li>Combination of OCP + LSP (Robert C. Martin)</li>
+  </ul>
+
+  <h4 class="sub">Violation â†’ Fix</h4>
+  <pre><span class="cmt">// BAD: Shelf directly depends on Book (concrete class)</span>
+<span class="kw">class</span> <span class="cls">Shelf</span> { <span class="cls">Book</span> book; <span class="kw">void</span> <span class="fn">addBook</span>(<span class="cls">Book</span> b) { ... } }  <span class="cmt">// â† can't add DVD!</span>
+
+<span class="cmt">// GOOD: Introduce Product abstraction</span>
+<span class="kw">interface</span> <span class="cls">Product</span>  { <span class="kw">void</span> <span class="fn">seeReviews</span>(); <span class="kw">void</span> <span class="fn">getSample</span>(); }
+<span class="kw">class</span> <span class="cls">Book</span> <span class="kw">implements</span> <span class="cls">Product</span> { ... }
+<span class="kw">class</span> <span class="cls">DVD</span>  <span class="kw">implements</span> <span class="cls">Product</span> { ... }
+
+<span class="kw">class</span> <span class="cls">Shelf</span> {
+    <span class="cls">Product</span> p;
+    <span class="kw">void</span> <span class="fn">addProduct</span>(<span class="cls">Product</span> product) { ... } <span class="cmt">// â† works for Book, DVD, Magazine...</span>
+}
+
+<span class="cmt">// DIP in action: OrderService depends on Database interface, not MySQL</span>
+<span class="kw">interface</span> <span class="cls">Database</span> { <span class="kw">void</span> <span class="fn">saveOrder</span>(<span class="cls">Order</span> o); }
+<span class="kw">class</span> <span class="cls">OrderService</span> {
+    <span class="kw">private</span> <span class="cls">Database</span> db; <span class="cmt">// injected â€” could be MySQL, MongoDB, etc.</span>
+    <span class="cls">OrderService</span>(<span class="cls">Database</span> db) { <span class="kw">this</span>.db = db; }
+    <span class="kw">void</span> <span class="fn">placeOrder</span>(<span class="cls">Order</span> o) { db.<span class="fn">saveOrder</span>(o); }
+}</pre>
+  <div class="mcq">DIP: both high-level and low-level depend on abstractions. Goal: avoid tightly coupled code. Related: OCP + LSP.</div>
+</div>
+
+<hr>
+<!-- â”€â”€ Design Patterns Intro â”€â”€ -->
+<h2 class="sec v" id="intro-dp">8. Introduction to Design Patterns</h2>
+<div class="card">
+  <p><strong>Design Pattern:</strong> A general, reusable solution to a commonly occurring problem in software design. Not finished code â€” a template/blueprint.</p>
+  <p><strong>Gang of Four (GoF) Book (1994):</strong> by Gamma, Helm, Johnson, Vlissides. Defined <strong>23 patterns</strong> in 3 categories.</p>
+
+  <table>
+    <tr><th>Category</th><th>Focus</th><th>Examples</th></tr>
+    <tr><td><strong>Creational</strong></td><td>Object creation mechanisms</td><td>Singleton, Factory, Builder, Prototype, Abstract Factory</td></tr>
+    <tr><td><strong>Structural</strong></td><td>Static composition of classes/objects</td><td>Adapter, Facade, Proxy, Flyweight, Decorator, Bridge, Composite</td></tr>
+    <tr><td><strong>Behavioral</strong></td><td>Dynamic interaction among objects</td><td>Chain of Responsibility, Command, Iterator, Observer, Strategy, Template, Visitor</td></tr>
+  </table>
+
+  <h4 class="sub">4 Essential Elements of a Pattern</h4>
+  <ul class="pts">
+    <li><strong>Pattern Name</strong> â€” handles design vocabulary</li>
+    <li><strong>Problem</strong> â€” when to apply it</li>
+    <li><strong>Solution</strong> â€” elements, relationships, responsibilities</li>
+    <li><strong>Consequences</strong> â€” trade-offs of using the pattern</li>
+  </ul>
+  <h4 class="sub">Exam Answer Keywords (write these headings)</h4>
+  <table>
+    <tr><th>Keyword</th><th>What to write in exam</th></tr>
+    <tr><td><strong>Intent</strong></td><td>One-line purpose of the pattern</td></tr>
+    <tr><td><strong>Motivation</strong></td><td>Why the direct design is bad / what problem forces this pattern</td></tr>
+    <tr><td><strong>Applicability</strong></td><td>When to use it in a real scenario</td></tr>
+    <tr><td><strong>Structure</strong></td><td>Main participants and their relationships (draw UML if possible)</td></tr>
+    <tr><td><strong>Consequences</strong></td><td>Advantages, trade-offs, flexibility, complexity</td></tr>
+  </table>
+  <div class="key amber">High-scoring pattern answers usually follow this order: Intent -> Motivation -> Applicability -> Structure / Participants -> Consequences -> small UML -> small code snippet.</div>
+  <div class="mcq">GoF = 23 patterns. Creational=object creation, Structural=static composition, Behavioral=dynamic interaction.</div>
+</div>
+
+<!-- â”€â”€ Singleton â”€â”€ -->
+<h2 class="sec v" id="singleton">9. Singleton Pattern (Creational)</h2>
+<div class="card">
+  <p><strong>Intent:</strong> Ensure a class has only <strong>one instance</strong>, and provide a <strong>global access point</strong> to it.</p>
+  <p><strong>Motivation:</strong> Some services must behave consistently from one shared point. If multiple logger/configuration objects exist, system state becomes inconsistent.</p>
+  <p><strong>Applicability:</strong> Use when exactly one object should control a shared service such as configuration, cache manager, logger, or thread pool manager.</p>
+  <p><strong>Real analogy:</strong> A country has only one official government.</p>
+  <p><strong>Use cases:</strong> Logging, caching, thread pool, database connection, configuration manager.</p>
+
+  <h4 class="sub">Solution Steps</h4>
+  <ol class="steps">
+    <li>Make constructor <strong>private</strong> (prevent external instantiation)</li>
+    <li>Add a <strong>private static field</strong> to store the single instance</li>
+    <li>Create a <strong>public static getInstance()</strong> method that returns the cached instance</li>
+  </ol>
+
+  <h4 class="sub">Method 1: Lazy Instantiation (NOT thread-safe)</h4>
+  <pre><span class="kw">class</span> <span class="cls">Singleton</span> {
+    <span class="kw">private static</span> <span class="cls">Singleton</span> obj;
+    <span class="kw">private</span> <span class="cls">Singleton</span>() {}  <span class="cmt">// private constructor</span>
+    <span class="kw">public static</span> <span class="cls">Singleton</span> <span class="fn">getInstance</span>() {
+        <span class="kw">if</span> (obj == <span class="kw">null</span>) obj = <span class="kw">new</span> <span class="cls">Singleton</span>();  <span class="cmt">// lazy: created only when needed</span>
+        <span class="kw">return</span> obj;
+    }
+}</pre>
+
+  <h4 class="sub">Method 2: Synchronized (thread-safe, slower)</h4>
+  <pre><span class="kw">public static synchronized</span> <span class="cls">Singleton</span> <span class="fn">getInstance</span>() {
+    <span class="kw">if</span> (obj == <span class="kw">null</span>) obj = <span class="kw">new</span> <span class="cls">Singleton</span>();
+    <span class="kw">return</span> obj;
+}  <span class="cmt">// â† overhead: synchronizes every call</span></pre>
+
+  <h4 class="sub">Method 3: Eager Instantiation (thread-safe)</h4>
+  <pre><span class="kw">private static</span> <span class="cls">Singleton</span> obj = <span class="kw">new</span> <span class="cls">Singleton</span>();  <span class="cmt">// created when class loads</span></pre>
+
+  <h4 class="sub">Method 4: Double-Checked Locking (Best âœ…)</h4>
+  <pre><span class="kw">private static volatile</span> <span class="cls">Singleton</span> obj = <span class="kw">null</span>;  <span class="cmt">// volatile ensures visibility</span>
+<span class="kw">public static</span> <span class="cls">Singleton</span> <span class="fn">getInstance</span>() {
+    <span class="kw">if</span> (obj == <span class="kw">null</span>) {
+        <span class="kw">synchronized</span> (<span class="cls">Singleton</span>.<span class="kw">class</span>) {  <span class="cmt">// lock only if null</span>
+            <span class="kw">if</span> (obj == <span class="kw">null</span>) obj = <span class="kw">new</span> <span class="cls">Singleton</span>();
+        }
+    }
+    <span class="kw">return</span> obj;
+}</pre>
+
+  <!-- Singleton UML -->
+  <div class="diagram">
+    <svg viewBox="0 0 260 120" xmlns="http://www.w3.org/2000/svg" width="260" height="120">
+      <rect x="80" y="10" width="140" height="90" rx="5" fill="#1b1f2e" stroke="#a78bfa" stroke-width="1.5"/>
+      <line x1="80" y1="32" x2="220" y2="32" stroke="#252a40" stroke-width="1"/>
+      <line x1="80" y1="70" x2="220" y2="70" stroke="#252a40" stroke-width="1"/>
+      <text x="150" y="27" fill="#a78bfa" font-family="JetBrains Mono" font-size="11" text-anchor="middle" font-weight="bold">Singleton</text>
+      <text x="90" y="48" fill="#7a82a0" font-family="JetBrains Mono" font-size="9">- instance: Singleton</text>
+      <text x="90" y="85" fill="#60a5fa" font-family="JetBrains Mono" font-size="9">+ getInstance(): Singleton</text>
+      <!-- arrow from class back to itself -->
+      <path d="M220,50 Q260,50 260,80 Q260,100 220,95" fill="none" stroke="#7a82a0" stroke-width="1" stroke-dasharray="4"/>
+      <text x="10" y="55" fill="#7a82a0" font-family="JetBrains Mono" font-size="8">Client</text>
+      <line x1="78" y1="55" x2="35" y2="55" stroke="#7a82a0" stroke-width="1"/>
+    </svg>
+  </div>
+  <h4 class="sub">Consequences</h4>
+  <ul class="pts">
+    <li>Controlled single access point to a shared service</li>
+    <li>Useful when one common object must be reused everywhere</li>
+    <li>Can make testing and dependency management harder if overused</li>
+  </ul>
+  <div class="key amber"><strong>4-Mark Exam Practice:</strong> A system creates multiple logger objects and separate logs appear for the same application. Identify the pattern and write a correct Java implementation.</div>
+  <div class="mcq">Singleton: private constructor + static getInstance(). Use <code>volatile</code> for double-checked locking. Violates SRP (solves 2 problems).</div>
+</div>
+
+<!-- â”€â”€ Factory â”€â”€ -->
+<h2 class="sec v" id="factory">10. Factory Method Pattern (Creational)</h2>
+<div class="card">
+  <p><strong>Intent:</strong> Define an interface for creating an object, but let <strong>subclasses decide which class to instantiate</strong>. Also known as: <strong>Virtual Constructor</strong>.</p>
+  <p>Client accesses objects through a <strong>common interface</strong> â€” creation details are hidden.</p>
+
+  <p><strong>Motivation:</strong> Direct creation using concrete classes couples the client tightly to product classes. Any new type forces client changes.</p>
+  <p><strong>Applicability:</strong> Use when a class should defer creation to subclasses, or when exact product types are decided by configuration or context.</p>
+
+  <!-- Factory UML Diagram -->
+  <div class="diagram">
+    <svg viewBox="0 0 500 200" xmlns="http://www.w3.org/2000/svg" width="500" height="200">
+      <defs>
+        <marker id="tri" markerWidth="8" markerHeight="6" refX="0" refY="3" orient="auto">
+          <path d="M0,0 L8,3 L0,6 Z" fill="none" stroke="#a78bfa" stroke-width="1.5"/>
+        </marker>
+        <marker id="tri2" markerWidth="8" markerHeight="6" refX="0" refY="3" orient="auto">
+          <path d="M0,0 L8,3 L0,6 Z" fill="none" stroke="#34d399" stroke-width="1.5"/>
+        </marker>
+      </defs>
+      <!-- Creator (abstract) -->
+      <rect x="170" y="10" width="140" height="50" rx="5" fill="#1b1f2e" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="240" y="30" fill="#a78bfa" font-family="JetBrains Mono" font-size="10" text-anchor="middle" font-style="italic">Â«abstractÂ»Creator</text>
+      <text x="240" y="50" fill="#60a5fa" font-family="JetBrains Mono" font-size="9" text-anchor="middle">+ factoryMethod()</text>
+      <!-- ConcreteCreator -->
+      <rect x="170" y="130" width="140" height="40" rx="5" fill="#1b1f2e" stroke="#a78bfa" stroke-width="1"/>
+      <text x="240" y="150" fill="#e2e8f8" font-family="JetBrains Mono" font-size="10" text-anchor="middle">ConcreteCreator</text>
+      <text x="240" y="165" fill="#60a5fa" font-family="JetBrains Mono" font-size="9" text-anchor="middle">+ factoryMethod()</text>
+      <line x1="240" y1="60" x2="240" y2="130" stroke="#a78bfa" stroke-width="1.5" marker-start="url(#tri)"/>
+      <!-- Product (interface) -->
+      <rect x="360" y="10" width="120" height="50" rx="5" fill="#1b1f2e" stroke="#34d399" stroke-width="1.5"/>
+      <text x="420" y="30" fill="#34d399" font-family="JetBrains Mono" font-size="10" text-anchor="middle" font-style="italic">Â«interfaceÂ»Product</text>
+      <text x="420" y="50" fill="#60a5fa" font-family="JetBrains Mono" font-size="9" text-anchor="middle">+ operation()</text>
+      <!-- ConcreteProduct -->
+      <rect x="360" y="130" width="120" height="40" rx="5" fill="#1b1f2e" stroke="#34d399" stroke-width="1"/>
+      <text x="420" y="152" fill="#e2e8f8" font-family="JetBrains Mono" font-size="10" text-anchor="middle">ConcreteProduct</text>
+      <line x1="420" y1="60" x2="420" y2="130" stroke="#34d399" stroke-width="1.5" marker-start="url(#tri2)"/>
+      <!-- creates arrow -->
+      <line x1="310" y1="150" x2="360" y2="150" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="5"/>
+      <text x="335" y="143" fill="#fbbf24" font-family="JetBrains Mono" font-size="8" text-anchor="middle">creates</text>
+      <!-- Client -->
+      <rect x="10" y="10" width="80" height="30" rx="5" fill="#1b1f2e" stroke="#7a82a0" stroke-width="1"/>
+      <text x="50" y="30" fill="#e2e8f8" font-family="JetBrains Mono" font-size="10" text-anchor="middle">Client</text>
+      <line x1="90" y1="25" x2="170" y2="25" stroke="#7a82a0" stroke-width="1"/>
+    </svg>
+  </div>
+
+  <h4 class="sub">Participants</h4>
+  <table>
+    <tr><th>Role</th><th>Description</th></tr>
+    <tr><td><strong>Product</strong></td><td>Interface for objects the factory creates</td></tr>
+    <tr><td><strong>ConcreteProduct</strong></td><td>Implements Product interface</td></tr>
+    <tr><td><strong>Creator</strong></td><td>Declares factoryMethod() returning a Product</td></tr>
+    <tr><td><strong>ConcreteCreator</strong></td><td>Overrides factoryMethod() to return a ConcreteProduct</td></tr>
+  </table>
+  <h4 class="sub">Easy Java Example</h4>
+  <pre><span class="kw">interface</span> <span class="cls">Notification</span> { <span class="kw">void</span> <span class="fn">send</span>(); }
+
+<span class="kw">class</span> <span class="cls">EmailNotification</span> <span class="kw">implements</span> <span class="cls">Notification</span> {
+    <span class="kw">public void</span> <span class="fn">send</span>() { <span class="cls">System</span>.out.<span class="fn">println</span>(<span class="str">"Email sent"</span>); }
+}
+
+<span class="kw">abstract class</span> <span class="cls">NotificationFactory</span> {
+    <span class="kw">abstract</span> <span class="cls">Notification</span> <span class="fn">createNotification</span>();
+}</pre>
+  <h4 class="sub">Consequences</h4>
+  <ul class="pts">
+    <li>Removes direct dependency on concrete products</li>
+    <li>Supports extension through new creators and products</li>
+    <li>Introduces extra classes compared to simple object creation</li>
+  </ul>
+  <div class="key amber"><strong>4-Mark Exam Practice:</strong> A payment client directly creates concrete payment classes. Rewrite the design using Factory Method and identify the participants.</div>
+  <div class="mcq">Factory = Virtual Constructor. Subclasses decide class to instantiate. Client uses common interface. Hides creation logic.</div>
+</div>
+
+<!-- â”€â”€ Builder â”€â”€ -->
+<h2 class="sec v" id="builder">11. Builder Pattern (Creational)</h2>
+<div class="card">
+  <p><strong>Intent:</strong> Separate the construction of a complex object from its representation so the same construction process can create different representations.</p>
+  <p>Helps avoid "telescoping constructors" (constructor with 10 optional parameters).</p>
+  <p><strong>Motivation:</strong> A complex object with many optional parts makes constructors long, unreadable, and error-prone.</p>
+  <p><strong>Applicability:</strong> Use when object creation must happen step by step and different final products can be built using similar construction steps.</p>
+
+  <!-- Builder UML -->
+  <div class="diagram">
+    <svg viewBox="0 0 500 170" xmlns="http://www.w3.org/2000/svg" width="500" height="170">
+      <!-- Director -->
+      <rect x="10" y="60" width="100" height="50" rx="5" fill="#1b1f2e" stroke="#fbbf24" stroke-width="1.5"/>
+      <text x="60" y="80" fill="#fbbf24" font-family="JetBrains Mono" font-size="10" text-anchor="middle" font-weight="bold">Director</text>
+      <text x="60" y="98" fill="#60a5fa" font-family="JetBrains Mono" font-size="9" text-anchor="middle">+ build()</text>
+      <!-- Builder -->
+      <rect x="175" y="10" width="140" height="50" rx="5" fill="#1b1f2e" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="245" y="28" fill="#a78bfa" font-family="JetBrains Mono" font-size="10" text-anchor="middle" font-style="italic">Â«abstractÂ»Builder</text>
+      <text x="245" y="48" fill="#60a5fa" font-family="JetBrains Mono" font-size="9" text-anchor="middle">+ buildPart()</text>
+      <!-- ConcreteBuilder -->
+      <rect x="175" y="110" width="140" height="50" rx="5" fill="#1b1f2e" stroke="#a78bfa" stroke-width="1"/>
+      <text x="245" y="130" fill="#e2e8f8" font-family="JetBrains Mono" font-size="10" text-anchor="middle">ConcreteBuilder</text>
+      <text x="245" y="148" fill="#60a5fa" font-family="JetBrains Mono" font-size="9" text-anchor="middle">+ buildPart() + getResult()</text>
+      <line x1="245" y1="60" x2="245" y2="110" stroke="#a78bfa" stroke-width="1.5"/>
+      <!-- Product -->
+      <rect x="380" y="110" width="100" height="40" rx="5" fill="#1b1f2e" stroke="#34d399" stroke-width="1.5"/>
+      <text x="430" y="135" fill="#34d399" font-family="JetBrains Mono" font-size="10" text-anchor="middle" font-weight="bold">Product</text>
+      <!-- arrows -->
+      <line x1="110" y1="85" x2="175" y2="35" stroke="#fbbf24" stroke-width="1.5"/>
+      <line x1="315" y1="135" x2="380" y2="135" stroke="#34d399" stroke-width="1.5" stroke-dasharray="5"/>
+      <text x="347" y="127" fill="#34d399" font-family="JetBrains Mono" font-size="8">creates</text>
+    </svg>
+  </div>
+
+  <h4 class="sub">Participants</h4>
+  <table>
+    <tr><th>Role</th><th>Description (Burger example)</th></tr>
+    <tr><td><strong>Builder</strong></td><td>Abstract interface for creating parts (BurgerBuilder)</td></tr>
+    <tr><td><strong>ConcreteBuilder</strong></td><td>Implements building steps (CheeseBurgerBuilder)</td></tr>
+    <tr><td><strong>Director</strong></td><td>Controls the build process (Chef)</td></tr>
+    <tr><td><strong>Product</strong></td><td>The complex object under construction (Burger)</td></tr>
+  </table>
+  <h4 class="sub">Easy Java Example</h4>
+  <pre><span class="kw">class</span> <span class="cls">Burger</span> { <span class="cls">String</span> bun, patty, topping; }
+
+<span class="kw">interface</span> <span class="cls">BurgerBuilder</span> {
+    <span class="kw">void</span> <span class="fn">addBun</span>();
+    <span class="kw">void</span> <span class="fn">addPatty</span>();
+    <span class="kw">void</span> <span class="fn">addTopping</span>();
+    <span class="cls">Burger</span> <span class="fn">getBurger</span>();
+}</pre>
+  <h4 class="sub">Consequences</h4>
+  <ul class="pts">
+    <li>Keeps construction logic separate from the product object</li>
+    <li>Improves readability for objects with many optional fields</li>
+    <li>May be unnecessary for very small/simple objects</li>
+  </ul>
+  <div class="key amber"><strong>4-Mark Exam Practice:</strong> Explain why Builder is better than a constructor with many parameters for creating a configurable laptop or burger object.</div>
+  <div class="mcq">Builder: Director controls build, ConcreteBuilder implements steps, Product = result. Avoids telescoping constructors.</div>
+</div>
+
+<!-- â”€â”€ Prototype â”€â”€ -->
+<h2 class="sec v" id="prototype">12. Prototype Pattern (Creational)</h2>
+<div class="card">
+  <p><strong>Intent:</strong> Create new objects by <strong>copying existing objects</strong> (cloning), without making code dependent on their classes.</p>
+  <p>Used when object creation is expensive/complex, or when classes are specified at runtime.</p>
+  <p>In Java: uses <code>clone()</code> method + <code>Cloneable</code> interface.</p>
+  <p><strong>Motivation:</strong> If creating and initializing an object is costly, cloning a ready object is often faster and simpler.</p>
+  <p><strong>Applicability:</strong> Use when objects differ only slightly from existing ones or when prototypes must be registered and copied dynamically.</p>
+
+  <h4 class="sub">Key Concepts</h4>
+  <ul class="pts">
+    <li><strong>Prototype Registry:</strong> Centralized store of pre-defined prototype objects for retrieval and cloning</li>
+    <li>Client asks prototype to clone itself â€” doesn't know the specific class</li>
+    <li><strong>Deep copy</strong> required when object has references to other objects (use <code>clone()</code> or deserialization)</li>
+  </ul>
+
+  <h4 class="sub">Benefits</h4>
+  <ul class="pts">
+    <li>Adding/removing products at runtime</li>
+    <li>Specifying new objects by varying values or structure</li>
+    <li>Reduced subclassing</li>
+    <li>Configuring application with classes dynamically</li>
+  </ul>
+  <h4 class="sub">Easy Java Example</h4>
+  <pre><span class="kw">class</span> <span class="cls">IDCard</span> <span class="kw">implements</span> <span class="cls">Cloneable</span> {
+    <span class="cls">String</span> name;
+    <span class="kw">public</span> <span class="cls">IDCard</span> <span class="fn">clone</span>() <span class="kw">throws</span> <span class="cls">CloneNotSupportedException</span> {
+        <span class="kw">return</span> (<span class="cls">IDCard</span>) <span class="kw">super</span>.<span class="fn">clone</span>();
+    }
+}</pre>
+  <h4 class="sub">Consequences</h4>
+  <ul class="pts">
+    <li>Reduces repeated expensive initialization</li>
+    <li>Supports runtime configuration through prototype objects</li>
+    <li>Deep copy handling can be tricky when nested references exist</li>
+  </ul>
+  <div class="key amber"><strong>4-Mark Exam Practice:</strong> A certificate generator creates many similar objects with only student details changing. Explain why Prototype is suitable and distinguish shallow copy from deep copy.</div>
+  <div class="mcq">Prototype: copy via clone(). Uses Cloneable interface. Prototype Registry = cache of prototype objects. Reduces subclassing.</div>
+</div>
+
+<!-- ======== UNIT 4 ======== -->
+<hr>
+<div class="unit-badge u4">UNIT 4 â€” Structural & Behavioural Patterns + Anti-Patterns</div>
+
+<!-- â”€â”€ Adapter â”€â”€ -->
+<h2 class="sec g" id="adapter">13. Adapter Pattern (Structural)</h2>
+<div class="card">
+  <p><strong>Intent:</strong> Convert the interface of a class into another interface that clients expect. Allows classes with incompatible interfaces to work together.</p>
+  <p>Also known as: <strong>Wrapper</strong>.</p>
+  <p><strong>Motivation:</strong> Reusing an existing class is difficult when its interface does not match what the client expects.</p>
+  <p><strong>Applicability:</strong> Use when you want to reuse a legacy or third-party class without modifying its source code.</p>
+
+  <!-- Adapter diagram -->
+  <div class="diagram">
+    <svg viewBox="0 0 460 120" xmlns="http://www.w3.org/2000/svg" width="460" height="120">
+      <rect x="10" y="40" width="70" height="40" rx="5" fill="#1b1f2e" stroke="#7a82a0" stroke-width="1"/>
+      <text x="45" y="65" fill="#e2e8f8" font-family="JetBrains Mono" font-size="10" text-anchor="middle">Client</text>
+      <rect x="130" y="10" width="100" height="40" rx="5" fill="#1b1f2e" stroke="#34d399" stroke-width="1.5"/>
+      <text x="180" y="26" fill="#34d399" font-family="JetBrains Mono" font-size="9" text-anchor="middle">Â«interfaceÂ»</text>
+      <text x="180" y="42" fill="#34d399" font-family="JetBrains Mono" font-size="10" text-anchor="middle">Target</text>
+      <rect x="130" y="70" width="100" height="40" rx="5" fill="#1b1f2e" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="180" y="95" fill="#a78bfa" font-family="JetBrains Mono" font-size="10" text-anchor="middle">Adapter</text>
+      <rect x="340" y="40" width="110" height="40" rx="5" fill="#1b1f2e" stroke="#fbbf24" stroke-width="1.5"/>
+      <text x="395" y="65" fill="#fbbf24" font-family="JetBrains Mono" font-size="10" text-anchor="middle">Adaptee</text>
+      <line x1="80" y1="60" x2="130" y2="30" stroke="#7a82a0" stroke-width="1.5"/>
+      <line x1="80" y1="60" x2="130" y2="90" stroke="#7a82a0" stroke-width="1.5"/>
+      <line x1="230" y1="90" x2="340" y2="60" stroke="#a78bfa" stroke-width="1.5" stroke-dasharray="5"/>
+      <text x="284" y="82" fill="#a78bfa" font-family="JetBrains Mono" font-size="8">delegates</text>
+    </svg>
+  </div>
+
+  <h4 class="sub">Two Types</h4>
+  <table>
+    <tr><th>Type</th><th>Mechanism</th><th>Key Difference</th></tr>
+    <tr><td><strong>Class Adapter</strong></td><td>Multiple inheritance (extends Adaptee)</td><td>Works only for specific Adaptee class (not subclasses). Can override Adaptee behaviour.</td></tr>
+    <tr><td><strong>Object Adapter</strong></td><td>Composition (holds Adaptee reference)</td><td>Works for Adaptee AND its subclasses. More flexible. More delegation code needed.</td></tr>
+  </table>
+  <h4 class="sub">Easy Java Example</h4>
+  <pre><span class="kw">interface</span> <span class="cls">Printer</span> { <span class="kw">void</span> <span class="fn">print</span>(); }
+
+<span class="kw">class</span> <span class="cls">OldPrinter</span> {
+    <span class="kw">void</span> <span class="fn">printOldFormat</span>() { <span class="cls">System</span>.out.<span class="fn">println</span>(<span class="str">"Old printer output"</span>); }
+}
+
+<span class="kw">class</span> <span class="cls">PrinterAdapter</span> <span class="kw">implements</span> <span class="cls">Printer</span> {
+    <span class="kw">private</span> <span class="cls">OldPrinter</span> oldPrinter = <span class="kw">new</span> <span class="cls">OldPrinter</span>();
+    <span class="kw">public void</span> <span class="fn">print</span>() { oldPrinter.<span class="fn">printOldFormat</span>(); }
+}</pre>
+  <h4 class="sub">Consequences</h4>
+  <ul class="pts">
+    <li>Improves reuse of incompatible or legacy classes</li>
+    <li>Protects client from adaptee interface mismatch</li>
+    <li>Adds one wrapper layer and delegation code</li>
+  </ul>
+  <div class="key amber"><strong>4-Mark Exam Practice:</strong> A client expects a <code>Printer</code> interface but only an old class with <code>printOldFormat()</code> exists. Draw the adapter structure and write the code.</div>
+  <div class="mcq">Adapter = Wrapper. 4 participants: Target, Adapter, Adaptee, Client. Object adapter uses composition; Class adapter uses inheritance.</div>
+</div>
+
+<!-- â”€â”€ Facade â”€â”€ -->
+<h2 class="sec g" id="facade">14. Facade Pattern (Structural)</h2>
+<div class="card">
+  <p><strong>Intent:</strong> Provide a <strong>unified interface</strong> to a set of interfaces in a subsystem. Defines a higher-level interface that makes the subsystem easier to use.</p>
+  <p>Think: <code>fopen()</code> â€” one call that hides complex file system operations.</p>
+
+  <p><strong>Motivation:</strong> A subsystem may expose too many classes and steps. Clients become hard to write and tightly coupled to internal details.</p>
+  <p><strong>Applicability:</strong> Use when you want one simple entry point to a complex subsystem such as booking, startup, reporting, or home theatre control.</p>
+
+  <!-- Facade diagram -->
+  <div class="diagram">
+    <svg viewBox="0 0 400 150" xmlns="http://www.w3.org/2000/svg" width="400" height="150">
+      <rect x="10" y="55" width="70" height="40" rx="5" fill="#1b1f2e" stroke="#7a82a0" stroke-width="1"/>
+      <text x="45" y="80" fill="#e2e8f8" font-family="JetBrains Mono" font-size="10" text-anchor="middle">Client</text>
+      <!-- Facade -->
+      <rect x="140" y="55" width="90" height="40" rx="5" fill="#1b1f2e" stroke="#34d399" stroke-width="2"/>
+      <text x="185" y="80" fill="#34d399" font-family="JetBrains Mono" font-size="11" text-anchor="middle" font-weight="bold">Facade</text>
+      <!-- Subsystem boxes -->
+      <rect x="300" y="10" width="85" height="30" rx="4" fill="#1b1f2e" stroke="#252a40" stroke-width="1"/>
+      <text x="342" y="30" fill="#7a82a0" font-family="JetBrains Mono" font-size="9" text-anchor="middle">SubsystemA</text>
+      <rect x="300" y="55" width="85" height="30" rx="4" fill="#1b1f2e" stroke="#252a40" stroke-width="1"/>
+      <text x="342" y="75" fill="#7a82a0" font-family="JetBrains Mono" font-size="9" text-anchor="middle">SubsystemB</text>
+      <rect x="300" y="100" width="85" height="30" rx="4" fill="#1b1f2e" stroke="#252a40" stroke-width="1"/>
+      <text x="342" y="120" fill="#7a82a0" font-family="JetBrains Mono" font-size="9" text-anchor="middle">SubsystemC</text>
+      <line x1="80" y1="75" x2="140" y2="75" stroke="#34d399" stroke-width="2"/>
+      <line x1="230" y1="65" x2="300" y2="25" stroke="#7a82a0" stroke-width="1" stroke-dasharray="4"/>
+      <line x1="230" y1="75" x2="300" y2="70" stroke="#7a82a0" stroke-width="1" stroke-dasharray="4"/>
+      <line x1="230" y1="85" x2="300" y2="115" stroke="#7a82a0" stroke-width="1" stroke-dasharray="4"/>
+    </svg>
+  </div>
+  <h4 class="sub">Consequences</h4>
+  <ul class="pts">
+    <li>Shields clients from subsystem components â€” fewer objects to deal with</li>
+    <li>Promotes <strong>weak coupling</strong> between subsystem and clients</li>
+    <li>Can eliminate complex/circular dependencies</li>
+    <li>Example: Home theatre â€” one <code>watchMovie()</code> method controls amplifier, projector, screen, popcorn maker</li>
+  </ul>
+  <h4 class="sub">Easy Java Example</h4>
+  <pre><span class="kw">class</span> <span class="cls">HomeTheatreFacade</span> {
+    <span class="kw">void</span> <span class="fn">watchMovie</span>() {
+        <span class="cls">System</span>.out.<span class="fn">println</span>(<span class="str">"Projector ON"</span>);
+        <span class="cls">System</span>.out.<span class="fn">println</span>(<span class="str">"Sound system ON"</span>);
+        <span class="cls">System</span>.out.<span class="fn">println</span>(<span class="str">"Movie started"</span>);
+    }
+}</pre>
+  <div class="key amber"><strong>4-Mark Exam Practice:</strong> A movie system needs separate calls to projector, speakers, and lights. Explain how Facade simplifies client code and sketch the Java class.</div>
+  <div class="mcq">Facade = simplified interface to complex subsystem. Promotes weak coupling. Real example: fopen(), booking package system.</div>
+</div>
+
+<!-- â”€â”€ Proxy â”€â”€ -->
+<h2 class="sec g" id="proxy">15. Proxy Pattern (Structural)</h2>
+<div class="card">
+  <p><strong>Intent:</strong> Provide a <strong>surrogate or placeholder</strong> for another object to control access to it. Client doesn't know about the proxy â€” it appears as the real object.</p>
+
+  <p><strong>Motivation:</strong> Access to the real object may need lazy loading, protection, caching, or remote communication.</p>
+  <p><strong>Applicability:</strong> Use when access must be controlled without changing the interface seen by the client.</p>
+
+  <h4 class="sub">3 Main Types of Proxy</h4>
+  <table>
+    <tr><th>Type</th><th>Purpose</th><th>Example</th></tr>
+    <tr><td><strong>Remote Proxy</strong></td><td>Local representative for object in different address space</td><td>Remote method invocation</td></tr>
+    <tr><td><strong>Virtual Proxy</strong></td><td>Creates expensive objects on demand (lazy init)</td><td>Image not loaded until displayed</td></tr>
+    <tr><td><strong>Protection Proxy</strong></td><td>Controls access rights to object</td><td>Corporate proxy server, access control</td></tr>
+    <tr><td><strong>Cache Proxy</strong></td><td>Caches results to improve performance</td><td>Caching YouTube video on first load</td></tr>
+  </table>
+
+  <h4 class="sub">Participants</h4>
+  <ul class="pts">
+    <li><strong>Subject:</strong> Interface exposing functionality to clients</li>
+    <li><strong>Real Subject:</strong> Actual implementation hidden behind proxy</li>
+    <li><strong>Proxy:</strong> Hides real object, clients talk to this</li>
+  </ul>
+  <div class="key">Real-world example: Corporate network proxy checks requests, allows/blocks websites before passing to server.</div>
+  <h4 class="sub">Easy Java Example</h4>
+  <pre><span class="kw">interface</span> <span class="cls">Image</span> { <span class="kw">void</span> <span class="fn">display</span>(); }
+
+<span class="kw">class</span> <span class="cls">ProxyImage</span> <span class="kw">implements</span> <span class="cls">Image</span> {
+    <span class="kw">public void</span> <span class="fn">display</span>() { <span class="cls">System</span>.out.<span class="fn">println</span>(<span class="str">"Load image only when needed"</span>); }
+}</pre>
+  <h4 class="sub">Consequences</h4>
+  <ul class="pts">
+    <li>Adds control, validation, caching, or lazy loading transparently</li>
+    <li>Keeps client code unchanged because proxy and real subject share interface</li>
+    <li>Introduces an additional forwarding layer</li>
+  </ul>
+  <div class="key amber"><strong>4-Mark Exam Practice:</strong> An expensive image should load only when the user opens it. Identify the proxy type and write the class outline.</div>
+  <div class="mcq">Proxy = surrogate/placeholder. Virtual=lazy init, Remote=different address space, Protection=access control, Cache=memoization.</div>
+</div>
+
+<!-- â”€â”€ Flyweight â”€â”€ -->
+<h2 class="sec g" id="flyweight">16. Flyweight Pattern (Structural)</h2>
+<div class="card">
+  <p><strong>Intent:</strong> Use sharing to support large numbers of fine-grained objects efficiently. Share common state between many objects to save RAM.</p>
+  <p><strong>Motivation:</strong> Systems with thousands of similar objects waste memory if each object stores the same internal data repeatedly.</p>
+  <p><strong>Applicability:</strong> Use when many objects share intrinsic state and differ mainly in external context.</p>
+
+  <h4 class="sub">Key Concept: Intrinsic vs Extrinsic State</h4>
+  <table>
+    <tr><th>State</th><th>Description</th><th>Example (Document Editor)</th></tr>
+    <tr><td><strong>Intrinsic</strong></td><td>Independent of context, shareable, stored IN flyweight</td><td>Character code (letter 'A')</td></tr>
+    <tr><td><strong>Extrinsic</strong></td><td>Dependent on context, NOT shareable, passed in by client</td><td>Position, font, color (passed per use)</td></tr>
+  </table>
+
+  <h4 class="sub">Participants</h4>
+  <ul class="pts">
+    <li><strong>Flyweight:</strong> Interface to receive/act on extrinsic state</li>
+    <li><strong>ConcreteFlyweight:</strong> Implements Flyweight, stores intrinsic state (sharable)</li>
+    <li><strong>UnsharedConcreteFlyweight:</strong> Not all flyweights need sharing (e.g., Row, Column)</li>
+    <li><strong>FlyweightFactory:</strong> Creates and manages shared flyweight objects â€” returns existing if available</li>
+    <li><strong>Client:</strong> Computes/stores extrinsic state, gets flyweights from factory</li>
+  </ul>
+  <div class="key green">Java String Constant Pool is a classic Flyweight. All "hello" literals point to the same object. Browsers: image loaded once, reused from cache.</div>
+  <h4 class="sub">Easy Java Example</h4>
+  <pre><span class="kw">class</span> <span class="cls">Letter</span> {
+    <span class="kw">private</span> <span class="cls">char</span> symbol;   <span class="cmt">// intrinsic state</span>
+    <span class="cls">Letter</span>(<span class="cls">char</span> s) { symbol = s; }
+    <span class="kw">void</span> <span class="fn">display</span>(<span class="kw">int</span> row, <span class="kw">int</span> col) { <span class="cls">System</span>.out.<span class="fn">println</span>(symbol + <span class="str">" at "</span> + row + <span class="str">","</span> + col); }
+}</pre>
+  <h4 class="sub">Consequences</h4>
+  <ul class="pts">
+    <li>Saves memory by sharing intrinsic state</li>
+    <li>Useful for editors, strings, caches, and repeated visual objects</li>
+    <li>Separating intrinsic and extrinsic state increases design complexity</li>
+  </ul>
+  <div class="key amber"><strong>4-Mark Exam Practice:</strong> A document editor stores millions of repeated character objects. Explain how Flyweight reduces memory and distinguish intrinsic from extrinsic state.</div>
+  <div class="mcq">Flyweight: share intrinsic state. Intrinsic = shareable/context-independent. Extrinsic = not shared/context-dependent. FlyweightFactory manages pool.</div>
+</div>
+
+<h2 class="sec g" id="bridge">17. Bridge Pattern (Structural)</h2>
+<div class="card">
+  <p><strong>Intent:</strong> Decouple an abstraction from its implementation so that the two can vary independently.</p>
+  <p><strong>Motivation:</strong> If every abstraction is subclassed for every implementation, the number of classes grows too fast. Example: <code>BasicRemoteSonyTV</code>, <code>BasicRemoteSamsungTV</code>, <code>AdvancedRemoteSonyTV</code>, <code>AdvancedRemoteSamsungTV</code>.</p>
+  <p><strong>Applicability:</strong> Use when you have two independent dimensions of variation, such as remote type and TV brand, message type and sending platform, or shape and drawing API.</p>
+
+  <h4 class="sub">Structure</h4>
+  <table>
+    <tr><th>Participant</th><th>Role</th></tr>
+    <tr><td><strong>Abstraction</strong></td><td>High-level view used by client (Remote)</td></tr>
+    <tr><td><strong>RefinedAbstraction</strong></td><td>Extended abstraction (AdvancedRemote)</td></tr>
+    <tr><td><strong>Implementor</strong></td><td>Interface for implementation side (Device)</td></tr>
+    <tr><td><strong>ConcreteImplementor</strong></td><td>Actual implementations (TV, Radio)</td></tr>
+  </table>
+
+  <h4 class="sub">Mini UML (Class Diagram)</h4>
+  <div class="diagram">
+    <svg viewBox="0 0 520 210" xmlns="http://www.w3.org/2000/svg" width="520" height="210">
+      <defs>
+        <marker id="umlTriBridge" markerWidth="8" markerHeight="6" refX="0" refY="3" orient="auto">
+          <path d="M0,0 L8,3 L0,6 Z" fill="none" stroke="#a78bfa" stroke-width="1.4"/>
+        </marker>
+      </defs>
+      <rect x="20" y="78" width="90" height="34" rx="5" fill="#1b1f2e" stroke="#7a82a0"/>
+      <text x="65" y="99" fill="#e2e8f8" font-family="JetBrains Mono" font-size="10" text-anchor="middle">Client</text>
+
+      <rect x="160" y="24" width="120" height="42" rx="5" fill="#1b1f2e" stroke="#34d399" stroke-width="1.5"/>
+      <text x="220" y="48" fill="#34d399" font-family="JetBrains Mono" font-size="10" text-anchor="middle">Remote</text>
+      <rect x="160" y="126" width="120" height="42" rx="5" fill="#1b1f2e" stroke="#34d399"/>
+      <text x="220" y="150" fill="#e2e8f8" font-family="JetBrains Mono" font-size="10" text-anchor="middle">AdvancedRemote</text>
+
+      <rect x="350" y="24" width="130" height="42" rx="5" fill="#1b1f2e" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="415" y="48" fill="#a78bfa" font-family="JetBrains Mono" font-size="10" text-anchor="middle">Device</text>
+      <rect x="350" y="96" width="130" height="34" rx="5" fill="#1b1f2e" stroke="#a78bfa"/>
+      <text x="415" y="117" fill="#e2e8f8" font-family="JetBrains Mono" font-size="10" text-anchor="middle">TV</text>
+      <rect x="350" y="154" width="130" height="34" rx="5" fill="#1b1f2e" stroke="#a78bfa"/>
+      <text x="415" y="175" fill="#e2e8f8" font-family="JetBrains Mono" font-size="10" text-anchor="middle">Radio</text>
+
+      <line x1="110" y1="95" x2="160" y2="45" stroke="#7a82a0" stroke-width="1.4"/>
+      <line x1="280" y1="45" x2="350" y2="45" stroke="#fbbf24" stroke-width="1.6"/>
+      <text x="315" y="37" fill="#fbbf24" font-family="JetBrains Mono" font-size="8" text-anchor="middle">has-a</text>
+
+      <line x1="220" y1="66" x2="220" y2="126" stroke="#34d399" stroke-width="1.4" marker-start="url(#umlTriBridge)"/>
+      <line x1="415" y1="66" x2="415" y2="96" stroke="#a78bfa" stroke-width="1.4" marker-start="url(#umlTriBridge)"/>
+      <line x1="415" y1="66" x2="415" y2="154" stroke="#a78bfa" stroke-width="1.4" marker-start="url(#umlTriBridge)"/>
+    </svg>
+  </div>
+
+  <h4 class="sub">Interaction Idea</h4>
+  <div class="key green">Client calls <code>remote.togglePower()</code>. Remote delegates the work to its <code>device</code>. The abstraction and implementation can both be extended independently.</div>
+
+  <h4 class="sub">Easy Java Example</h4>
+  <pre><span class="kw">interface</span> <span class="cls">Device</span> {
+    <span class="kw">void</span> <span class="fn">on</span>();
+    <span class="kw">void</span> <span class="fn">off</span>();
+}
+
+<span class="kw">class</span> <span class="cls">TV</span> <span class="kw">implements</span> <span class="cls">Device</span> {
+    <span class="kw">public void</span> <span class="fn">on</span>()  { <span class="cls">System</span>.out.<span class="fn">println</span>(<span class="str">"TV ON"</span>); }
+    <span class="kw">public void</span> <span class="fn">off</span>() { <span class="cls">System</span>.out.<span class="fn">println</span>(<span class="str">"TV OFF"</span>); }
+}
+
+<span class="kw">class</span> <span class="cls">Remote</span> {
+    <span class="kw">protected</span> <span class="cls">Device</span> device;
+    <span class="cls">Remote</span>(<span class="cls">Device</span> d) { device = d; }
+    <span class="kw">void</span> <span class="fn">togglePower</span>(<span class="kw">boolean</span> on) { <span class="kw">if</span> (on) device.<span class="fn">on</span>(); <span class="kw">else</span> device.<span class="fn">off</span>(); }
+}</pre>
+
+  <h4 class="sub">Consequences</h4>
+  <ul class="pts">
+    <li>Avoids class explosion caused by combining multiple dimensions through inheritance</li>
+    <li>Improves extensibility on both sides</li>
+    <li>Adds one more indirection layer, so design becomes slightly more abstract</li>
+  </ul>
+  <div class="mcq">Bridge uses composition, not inheritance, to separate abstraction from implementation. Remote-Device is the classic memory trick.</div>
+</div>
+
+<!-- Ã¢â€â‚¬Ã¢â€â‚¬ Composite Ã¢â€â‚¬Ã¢â€â‚¬ -->
+<h2 class="sec g" id="composite">18. Composite Pattern (Structural)</h2>
+<div class="card">
+  <p><strong>Intent:</strong> Compose objects into tree structures to represent part-whole hierarchies so clients can treat individual objects and groups uniformly.</p>
+  <p><strong>Motivation:</strong> A client should not need separate code for one file and a folder of files. The same operation like <code>showDetails()</code> should work on both.</p>
+  <p><strong>Applicability:</strong> File systems, organisation charts, menu trees, GUI component trees.</p>
+
+  <h4 class="sub">Structure</h4>
+  <table>
+    <tr><th>Participant</th><th>Role</th></tr>
+    <tr><td><strong>Component</strong></td><td>Common interface for leaf and composite</td></tr>
+    <tr><td><strong>Leaf</strong></td><td>Primitive object with no children</td></tr>
+    <tr><td><strong>Composite</strong></td><td>Stores children and forwards operations to them</td></tr>
+    <tr><td><strong>Client</strong></td><td>Treats all objects through Component interface</td></tr>
+  </table>
+
+  <h4 class="sub">Mini UML (Class Diagram)</h4>
+  <div class="diagram">
+    <svg viewBox="0 0 520 200" xmlns="http://www.w3.org/2000/svg" width="520" height="200">
+      <defs>
+        <marker id="umlTriComposite" markerWidth="8" markerHeight="6" refX="0" refY="3" orient="auto">
+          <path d="M0,0 L8,3 L0,6 Z" fill="none" stroke="#34d399" stroke-width="1.4"/>
+        </marker>
+      </defs>
+      <rect x="190" y="20" width="140" height="40" rx="5" fill="#1b1f2e" stroke="#34d399" stroke-width="1.5"/>
+      <text x="260" y="44" fill="#34d399" font-family="JetBrains Mono" font-size="10" text-anchor="middle">Component</text>
+
+      <rect x="70" y="120" width="120" height="38" rx="5" fill="#1b1f2e" stroke="#34d399"/>
+      <text x="130" y="143" fill="#e2e8f8" font-family="JetBrains Mono" font-size="10" text-anchor="middle">File (Leaf)</text>
+
+      <rect x="300" y="120" width="140" height="38" rx="5" fill="#1b1f2e" stroke="#34d399"/>
+      <text x="370" y="143" fill="#e2e8f8" font-family="JetBrains Mono" font-size="10" text-anchor="middle">Folder (Composite)</text>
+
+      <line x1="260" y1="60" x2="130" y2="120" stroke="#34d399" stroke-width="1.4" marker-start="url(#umlTriComposite)"/>
+      <line x1="260" y1="60" x2="370" y2="120" stroke="#34d399" stroke-width="1.4" marker-start="url(#umlTriComposite)"/>
+
+      <line x1="370" y1="158" x2="370" y2="182" stroke="#fbbf24" stroke-width="1.6"/>
+      <circle cx="370" cy="182" r="4" fill="#fbbf24"/>
+      <line x1="374" y1="182" x2="455" y2="182" stroke="#fbbf24" stroke-width="1.6"/>
+      <text x="415" y="172" fill="#fbbf24" font-family="JetBrains Mono" font-size="8" text-anchor="middle">contains Component*</text>
+    </svg>
+  </div>
+
+  <h4 class="sub">Easy Java Example</h4>
+  <pre><span class="kw">interface</span> <span class="cls">FileSystemItem</span> { <span class="kw">void</span> <span class="fn">show</span>(); }
+
+<span class="kw">class</span> <span class="cls">FileItem</span> <span class="kw">implements</span> <span class="cls">FileSystemItem</span> {
+    <span class="kw">private</span> <span class="cls">String</span> name;
+    <span class="cls">FileItem</span>(<span class="cls">String</span> n) { name = n; }
+    <span class="kw">public void</span> <span class="fn">show</span>() { <span class="cls">System</span>.out.<span class="fn">println</span>(name); }
+}
+
+<span class="kw">class</span> <span class="cls">Folder</span> <span class="kw">implements</span> <span class="cls">FileSystemItem</span> {
+    <span class="kw">private</span> <span class="cls">List</span>&lt;<span class="cls">FileSystemItem</span>&gt; children = <span class="kw">new</span> <span class="cls">ArrayList</span>&lt;&gt;();
+    <span class="kw">public void</span> <span class="fn">add</span>(<span class="cls">FileSystemItem</span> item) { children.<span class="fn">add</span>(item); }
+    <span class="kw">public void</span> <span class="fn">show</span>() {
+        <span class="cls">System</span>.out.<span class="fn">println</span>(<span class="str">"Folder"</span>);
+        <span class="kw">for</span> (<span class="cls">FileSystemItem</span> item : children) item.<span class="fn">show</span>();
+    }
+}</pre>
+
+  <h4 class="sub">Consequences</h4>
+  <ul class="pts">
+    <li>Simplifies client code because leaf and composite are treated uniformly</li>
+    <li>Makes recursive structures easy to model</li>
+    <li>Can make it harder to restrict which objects can contain children</li>
+  </ul>
+  <div class="mcq">Composite is best remembered as tree structure plus uniform treatment of single object and group.</div>
+</div>
+
+<!-- Ã¢â€â‚¬Ã¢â€â‚¬ Decorator Ã¢â€â‚¬Ã¢â€â‚¬ -->
+<h2 class="sec g" id="decorator">19. Decorator Pattern (Structural)</h2>
+<div class="card">
+  <p><strong>Intent:</strong> Attach additional responsibilities to an object dynamically. Decorators provide a flexible alternative to subclassing for extending behaviour.</p>
+  <p><strong>Motivation:</strong> If you create subclasses for every feature combination, the class count becomes huge. Example: <code>PlainCoffee</code>, <code>MilkCoffee</code>, <code>SugarCoffee</code>, <code>MilkSugarCoffee</code>.</p>
+  <p><strong>Applicability:</strong> Use when you want to add features at runtime without changing the original class.</p>
+
+  <h4 class="sub">Structure</h4>
+  <table>
+    <tr><th>Participant</th><th>Role</th></tr>
+    <tr><td><strong>Component</strong></td><td>Common interface (Coffee)</td></tr>
+    <tr><td><strong>ConcreteComponent</strong></td><td>Base object (SimpleCoffee)</td></tr>
+    <tr><td><strong>Decorator</strong></td><td>Wraps a Component reference</td></tr>
+    <tr><td><strong>ConcreteDecorator</strong></td><td>Adds new behaviour/state (MilkDecorator)</td></tr>
+  </table>
+
+  <h4 class="sub">Mini UML (Class Diagram)</h4>
+  <div class="diagram">
+    <svg viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg" width="560" height="220">
+      <defs>
+        <marker id="umlTriDecorator" markerWidth="8" markerHeight="6" refX="0" refY="3" orient="auto">
+          <path d="M0,0 L8,3 L0,6 Z" fill="none" stroke="#34d399" stroke-width="1.4"/>
+        </marker>
+      </defs>
+      <rect x="210" y="18" width="140" height="40" rx="5" fill="#1b1f2e" stroke="#34d399" stroke-width="1.5"/>
+      <text x="280" y="42" fill="#34d399" font-family="JetBrains Mono" font-size="10" text-anchor="middle">Coffee</text>
+
+      <rect x="40" y="98" width="130" height="38" rx="5" fill="#1b1f2e" stroke="#34d399"/>
+      <text x="105" y="121" fill="#e2e8f8" font-family="JetBrains Mono" font-size="10" text-anchor="middle">SimpleCoffee</text>
+
+      <rect x="215" y="98" width="150" height="38" rx="5" fill="#1b1f2e" stroke="#34d399"/>
+      <text x="290" y="121" fill="#e2e8f8" font-family="JetBrains Mono" font-size="10" text-anchor="middle">CoffeeDecorator</text>
+
+      <rect x="220" y="168" width="130" height="32" rx="5" fill="#1b1f2e" stroke="#a78bfa"/>
+      <text x="285" y="188" fill="#e2e8f8" font-family="JetBrains Mono" font-size="9" text-anchor="middle">MilkDecorator</text>
+
+      <rect x="400" y="98" width="120" height="38" rx="5" fill="#1b1f2e" stroke="#fbbf24"/>
+      <text x="460" y="121" fill="#e2e8f8" font-family="JetBrains Mono" font-size="10" text-anchor="middle">Coffee ref</text>
+
+      <line x1="280" y1="58" x2="105" y2="98" stroke="#34d399" stroke-width="1.4" marker-start="url(#umlTriDecorator)"/>
+      <line x1="280" y1="58" x2="290" y2="98" stroke="#34d399" stroke-width="1.4" marker-start="url(#umlTriDecorator)"/>
+      <line x1="285" y1="168" x2="290" y2="136" stroke="#a78bfa" stroke-width="1.4" marker-start="url(#umlTriDecorator)"/>
+      <line x1="365" y1="117" x2="400" y2="117" stroke="#fbbf24" stroke-width="1.6"/>
+      <text x="382" y="108" fill="#fbbf24" font-family="JetBrains Mono" font-size="8" text-anchor="middle">has-a</text>
+    </svg>
+  </div>
+
+  <h4 class="sub">Easy Java Example</h4>
+  <pre><span class="kw">interface</span> <span class="cls">Coffee</span> { <span class="cls">String</span> <span class="fn">description</span>(); }
+
+<span class="kw">class</span> <span class="cls">SimpleCoffee</span> <span class="kw">implements</span> <span class="cls">Coffee</span> {
+    <span class="kw">public</span> <span class="cls">String</span> <span class="fn">description</span>() { <span class="kw">return</span> <span class="str">"Plain coffee"</span>; }
+}
+
+<span class="kw">class</span> <span class="cls">MilkDecorator</span> <span class="kw">implements</span> <span class="cls">Coffee</span> {
+    <span class="kw">private</span> <span class="cls">Coffee</span> coffee;
+    <span class="cls">MilkDecorator</span>(<span class="cls">Coffee</span> c) { coffee = c; }
+    <span class="kw">public</span> <span class="cls">String</span> <span class="fn">description</span>() { <span class="kw">return</span> coffee.<span class="fn">description</span>() + <span class="str">" + milk"</span>; }
+}</pre>
+
+  <h4 class="sub">Consequences</h4>
+  <ul class="pts">
+    <li>More flexible than static inheritance</li>
+    <li>Lets us stack responsibilities in many combinations</li>
+    <li>Introduces many small wrapper objects</li>
+  </ul>
+  <div class="mcq">Decorator and Adapter both wrap objects, but Decorator adds behaviour while Adapter changes interface.</div>
+</div>
+
+<hr>
+<!-- â”€â”€ Chain of Responsibility â”€â”€ -->
+<h2 class="sec g" id="chain">20. Chain of Responsibility Pattern (Behavioural)</h2>
+<div class="card">
+  <p><strong>Intent:</strong> Avoid coupling sender of a request to its receiver by giving <strong>multiple objects a chance to handle the request</strong>. Chain receiving objects and pass request along until one handles it.</p>
+  <p><strong>Motivation:</strong> The sender should not need to know exactly which object will process the request.</p>
+  <p><strong>Applicability:</strong> Use when multiple handlers are possible and the request should travel until one accepts it.</p>
+
+  <!-- Chain diagram -->
+  <div class="diagram">
+    <svg viewBox="0 0 480 80" xmlns="http://www.w3.org/2000/svg" width="480" height="80">
+      <rect x="10" y="25" width="70" height="30" rx="5" fill="#1b1f2e" stroke="#7a82a0" stroke-width="1"/>
+      <text x="45" y="45" fill="#e2e8f8" font-family="JetBrains Mono" font-size="10" text-anchor="middle">Client</text>
+      <line x1="80" y1="40" x2="110" y2="40" stroke="#34d399" stroke-width="2"/>
+      <rect x="110" y="25" width="80" height="30" rx="5" fill="#1b1f2e" stroke="#34d399" stroke-width="1.5"/>
+      <text x="150" y="45" fill="#34d399" font-family="JetBrains Mono" font-size="10" text-anchor="middle">Manager</text>
+      <line x1="190" y1="40" x2="220" y2="40" stroke="#34d399" stroke-width="2"/>
+      <text x="205" y="34" fill="#fbbf24" font-family="JetBrains Mono" font-size="8">pass</text>
+      <rect x="220" y="25" width="80" height="30" rx="5" fill="#1b1f2e" stroke="#34d399" stroke-width="1.5"/>
+      <text x="260" y="45" fill="#34d399" font-family="JetBrains Mono" font-size="10" text-anchor="middle">VP</text>
+      <line x1="300" y1="40" x2="330" y2="40" stroke="#34d399" stroke-width="2"/>
+      <text x="315" y="34" fill="#fbbf24" font-family="JetBrains Mono" font-size="8">pass</text>
+      <rect x="330" y="25" width="80" height="30" rx="5" fill="#1b1f2e" stroke="#34d399" stroke-width="1.5"/>
+      <text x="370" y="45" fill="#34d399" font-family="JetBrains Mono" font-size="10" text-anchor="middle">CEO</text>
+      <text x="370" y="63" fill="#a78bfa" font-family="JetBrains Mono" font-size="8" text-anchor="middle">handles</text>
+      <line x1="415" y1="40" x2="445" y2="40" stroke="#7a82a0" stroke-width="1" stroke-dasharray="4"/>
+      <rect x="445" y="28" width="28" height="24" rx="3" fill="#1b1f2e" stroke="#7a82a0" stroke-width="1"/>
+      <text x="459" y="44" fill="#f87171" font-family="JetBrains Mono" font-size="8" text-anchor="middle">null</text>
+    </svg>
+  </div>
+
+  <h4 class="sub">Participants</h4>
+  <ul class="pts">
+    <li><strong>Handler:</strong> Interface â€” receives request, dispatches to chain, knows first handler only</li>
+    <li><strong>ConcreteHandler:</strong> Handles request if responsible, else forwards to successor</li>
+    <li><strong>Client:</strong> Initiates request to first handler in chain</li>
+  </ul>
+
+  <h4 class="sub">Transaction Approval (Code)</h4>
+  <pre><span class="kw">abstract class</span> <span class="cls">TransactionProcessor</span> {
+    <span class="kw">private</span> <span class="cls">TransactionProcessor</span> successor;
+    <span class="kw">abstract protected</span> <span class="cls">Double</span> <span class="fn">getApprovalLimit</span>();
+    <span class="kw">public void</span> <span class="fn">approve</span>(<span class="cls">Transaction</span> t) {
+        <span class="kw">if</span> (t.<span class="fn">getAmount</span>() <= <span class="fn">getApprovalLimit</span>())
+            <span class="cls">System</span>.out.<span class="fn">println</span>(<span class="str">"Approved by "</span> + <span class="fn">getDesignation</span>());
+        <span class="kw">else if</span> (successor != <span class="kw">null</span>)
+            successor.<span class="fn">approve</span>(t);   <span class="cmt">// pass to next in chain</span>
+    }
+}
+
+<span class="cmt">// Manager (limit 1L), VP (limit 10L), CEO (limit 25L)</span>
+<span class="cmt">// Chain: manager â†’ vicePresident â†’ CEO</span>
+manager.<span class="fn">setSuccessor</span>(vicePresident);
+vicePresident.<span class="fn">setSuccessor</span>(ceo);</pre>
+  <h4 class="sub">Consequences</h4>
+  <ul class="pts">
+    <li>Reduces coupling between request sender and receiver</li>
+    <li>Lets us add or reorder handlers easily</li>
+    <li>A request may remain unhandled if no object accepts it</li>
+  </ul>
+  <div class="key amber"><strong>4-Mark Exam Practice:</strong> A leave request may be approved by team lead, manager, or director depending on duration. Identify the pattern and write the handler chain.</div>
+  <div class="mcq">Chain of Responsibility: avoids coupling sender-receiver. Request may fall off end if unhandled. Used in Java exception handling.</div>
+</div>
+
+<!-- â”€â”€ Command â”€â”€ -->
+<h2 class="sec g" id="command">21. Command Pattern (Behavioural)</h2>
+<div class="card">
+  <p><strong>Intent:</strong> Encapsulate a request as an object, allowing parameterisation of clients, queuing requests, and support for undo/redo.</p>
+  <p><strong>Motivation:</strong> Requests often need to be stored, queued, logged, or undone instead of executed immediately.</p>
+  <p><strong>Applicability:</strong> Use when menu items, buttons, jobs, or remote actions should be represented as separate objects.</p>
+
+  <h4 class="sub">Participants</h4>
+  <table>
+    <tr><th>Role</th><th>Description</th><th>Stock Example</th></tr>
+    <tr><td><strong>Command</strong></td><td>Interface with execute()</td><td>Order (interface)</td></tr>
+    <tr><td><strong>ConcreteCommand</strong></td><td>Binds Receiver + action, implements execute()</td><td>BuyStock, SellStock</td></tr>
+    <tr><td><strong>Client</strong></td><td>Creates ConcreteCommand, sets Receiver</td><td>CommandPatternDemo</td></tr>
+    <tr><td><strong>Invoker</strong></td><td>Asks Command to carry out request (stores commands)</td><td>Broker</td></tr>
+    <tr><td><strong>Receiver</strong></td><td>Knows how to perform the operation</td><td>Stock</td></tr>
+  </table>
+
+  <h4 class="sub">Full Stock Trading Example</h4>
+  <pre><span class="kw">interface</span> <span class="cls">Order</span> { <span class="kw">void</span> <span class="fn">execute</span>(); }
+
+<span class="kw">class</span> <span class="cls">BuyStock</span> <span class="kw">implements</span> <span class="cls">Order</span> {
+    <span class="kw">private</span> <span class="cls">Stock</span> stock;
+    <span class="cls">BuyStock</span>(<span class="cls">Stock</span> s) { stock = s; }
+    <span class="kw">public void</span> <span class="fn">execute</span>() { stock.<span class="fn">buy</span>(); }
+}
+
+<span class="kw">class</span> <span class="cls">Broker</span> {  <span class="cmt">// Invoker</span>
+    <span class="kw">private</span> <span class="cls">List</span>&lt;<span class="cls">Order</span>&gt; orderList = <span class="kw">new</span> <span class="cls">ArrayList</span>&lt;&gt;();
+    <span class="kw">public void</span> <span class="fn">takeOrder</span>(<span class="cls">Order</span> o) { orderList.<span class="fn">add</span>(o); }
+    <span class="kw">public void</span> <span class="fn">placeOrders</span>() {
+        <span class="kw">for</span>(<span class="cls">Order</span> o : orderList) o.<span class="fn">execute</span>();
+        orderList.<span class="fn">clear</span>();
+    }
+}</pre>
+  <h4 class="sub">Consequences</h4>
+  <ul class="pts">
+    <li>Separates invoker from receiver</li>
+    <li>Makes queuing, logging, and undo operations easier</li>
+    <li>Introduces extra command classes</li>
+  </ul>
+  <div class="key amber"><strong>4-Mark Exam Practice:</strong> A remote control should support TV on/off commands and later undo. Explain why Command fits and identify client, invoker, receiver, and command.</div>
+  <div class="mcq">Command: Invoker asks command to execute. Receiver does actual work. ConcreteCommand binds Receiver+action. Supports undo via rollback.</div>
+</div>
+
+<!-- â”€â”€ Interpreter â”€â”€ -->
+<h2 class="sec g" id="interpreter">22. Interpreter Pattern (Behavioural)</h2>
+<div class="card">
+  <p><strong>Intent:</strong> Define a grammar for a language and provide an interpreter to deal with that grammar.</p>
+  <p>Use when you need to interpret sentences in a domain-specific language (DSL).</p>
+  <p><strong>Motivation:</strong> Some problems are naturally expressed as small languages or rule sets that must be parsed and evaluated.</p>
+  <p><strong>Applicability:</strong> Use for simple grammars such as arithmetic expressions, filtering rules, or mini command languages.</p>
+
+  <h4 class="sub">Participants</h4>
+  <ul class="pts">
+    <li><strong>AbstractExpression:</strong> Declares interpret() operation</li>
+    <li><strong>TerminalExpression:</strong> Implements interpret() for terminal symbols (leaf nodes)</li>
+    <li><strong>NonterminalExpression:</strong> One per grammar rule, recursive interpret()</li>
+    <li><strong>Context:</strong> Contains global information for interpreter</li>
+    <li><strong>Client:</strong> Builds abstract syntax tree (AST), invokes interpret()</li>
+  </ul>
+
+  <h4 class="sub">Example: Math Expression</h4>
+  <pre><span class="cmt">// 2 + 3 modelled as:</span>
+<span class="kw">new</span> <span class="cls">AddExpression</span>(<span class="kw">new</span> <span class="cls">ConstantExpression</span>(<span class="kw">2</span>), <span class="kw">new</span> <span class="cls">ConstantExpression</span>(<span class="kw">3</span>))
+
+<span class="cmt">// (2 + 6) + (1 + 9):</span>
+<span class="kw">new</span> <span class="cls">AddExpression</span>(
+    <span class="kw">new</span> <span class="cls">AddExpression</span>(<span class="kw">new</span> <span class="cls">ConstantExpression</span>(<span class="kw">2</span>), <span class="kw">new</span> <span class="cls">ConstantExpression</span>(<span class="kw">6</span>)),
+    <span class="kw">new</span> <span class="cls">AddExpression</span>(<span class="kw">new</span> <span class="cls">ConstantExpression</span>(<span class="kw">1</span>), <span class="kw">new</span> <span class="cls">ConstantExpression</span>(<span class="kw">9</span>))
+)</pre>
+
+  <p><strong>Applications:</strong> Regular expressions, SQL query parsers, mathematical expression evaluators, programming language interpreters.</p>
+  <h4 class="sub">Consequences</h4>
+  <ul class="pts">
+    <li>Makes grammar structure explicit in code</li>
+    <li>Easy to extend for small languages by adding new expression classes</li>
+    <li>Can become class-heavy and inefficient for large grammars</li>
+  </ul>
+  <div class="key amber"><strong>4-Mark Exam Practice:</strong> Explain how the expression <code>(2 + 6) + (1 + 9)</code> is represented using Interpreter pattern objects.</div>
+  <div class="mcq">Interpreter: grammar + AST. Context = global info. TerminalExpression = leaf. Client builds tree + calls interpret(). Used for regex, SQL, DSLs.</div>
+</div>
+
+<!-- â”€â”€ Iterator â”€â”€ -->
+<h2 class="sec g" id="iterator">23. Iterator Pattern (Behavioural)</h2>
+<div class="card">
+  <p><strong>Intent:</strong> Provide a way to access elements of an aggregate object <strong>sequentially without exposing its underlying implementation</strong>.</p>
+  <p>Provides a uniform way to traverse any collection (List, Set, Map) regardless of its internal structure.</p>
+  <p><strong>Motivation:</strong> The client should traverse collections without knowing whether the data is stored in an array, list, tree, or custom structure.</p>
+  <p><strong>Applicability:</strong> Use when traversal logic should be separate from collection implementation.</p>
+
+  <h4 class="sub">Participants</h4>
+  <table>
+    <tr><th>Role</th><th>Description</th></tr>
+    <tr><td><strong>Iterator</strong></td><td>Interface: hasNext(), next(), remove()</td></tr>
+    <tr><td><strong>ConcreteIterator</strong></td><td>Implements Iterator, tracks current position</td></tr>
+    <tr><td><strong>Aggregate</strong></td><td>Interface for creating Iterator object (createIterator())</td></tr>
+    <tr><td><strong>ConcreteAggregate</strong></td><td>Implements Aggregate, returns proper ConcreteIterator</td></tr>
+  </table>
+
+  <h4 class="sub">Advantages</h4>
+  <ul class="pts">
+    <li>Single Responsibility Principle â€” traversal logic extracted to separate class</li>
+    <li>Open/Closed Principle â€” add new collections/iterators without changing client code</li>
+    <li>Can iterate same collection in parallel (each iterator has its own state)</li>
+    <li>Supports lazy evaluation (retrieve elements only when needed)</li>
+  </ul>
+  <h4 class="sub">Easy Java Example</h4>
+  <pre><span class="cls">List</span>&lt;<span class="cls">String</span>&gt; names = <span class="kw">new</span> <span class="cls">ArrayList</span>&lt;&gt;();
+names.<span class="fn">add</span>(<span class="str">"A"</span>);
+names.<span class="fn">add</span>(<span class="str">"B"</span>);
+
+<span class="cls">Iterator</span>&lt;<span class="cls">String</span>&gt; it = names.<span class="fn">iterator</span>();
+<span class="kw">while</span>(it.<span class="fn">hasNext</span>()) <span class="cls">System</span>.out.<span class="fn">println</span>(it.<span class="fn">next</span>());</pre>
+  <div class="key amber"><strong>4-Mark Exam Practice:</strong> Why is Iterator preferred over exposing the internal array of a collection? Explain with Java collection traversal.</div>
+  <div class="mcq">Iterator: sequential access without exposing implementation. ConcreteIterator tracks position. Java: Iterator interface, for-each loops.</div>
+</div>
+
+<hr>
+<!-- â”€â”€ Anti-Patterns â”€â”€ -->
+<!-- Ã¢â€â‚¬Ã¢â€â‚¬ Observer Ã¢â€â‚¬Ã¢â€â‚¬ -->
+<h2 class="sec g" id="observer">24. Observer Pattern (Behavioural)</h2>
+<div class="card">
+  <p><strong>Intent:</strong> Define a one-to-many dependency so that when one object changes state, all its dependents are notified automatically.</p>
+  <p><strong>Motivation:</strong> Hard-coding updates from one object to many other objects creates tight coupling. A subject should not know concrete observer classes.</p>
+  <p><strong>Applicability:</strong> Event systems, stock tickers, GUI listeners, YouTube subscriptions, weather updates.</p>
+  <h4 class="sub">Structure</h4>
+  <table>
+    <tr><th>Participant</th><th>Role</th></tr>
+    <tr><td><strong>Subject</strong></td><td>Stores observers, attaches/detaches, sends notifications</td></tr>
+    <tr><td><strong>Observer</strong></td><td>Defines update() method</td></tr>
+    <tr><td><strong>ConcreteSubject</strong></td><td>Maintains state of interest</td></tr>
+    <tr><td><strong>ConcreteObserver</strong></td><td>Receives updated information</td></tr>
+  </table>
+  <h4 class="sub">Mini UML + Interaction</h4>
+  <div class="diagram">
+    <svg viewBox="0 0 520 170" xmlns="http://www.w3.org/2000/svg" width="520" height="170">
+      <rect x="190" y="18" width="140" height="40" rx="5" fill="#1b1f2e" stroke="#34d399" stroke-width="1.5"/>
+      <text x="260" y="42" fill="#34d399" font-family="JetBrains Mono" font-size="10" text-anchor="middle">Channel (Subject)</text>
+      <rect x="50" y="110" width="140" height="36" rx="5" fill="#1b1f2e" stroke="#a78bfa"/>
+      <text x="120" y="132" fill="#e2e8f8" font-family="JetBrains Mono" font-size="10" text-anchor="middle">Subscriber1</text>
+      <rect x="330" y="110" width="140" height="36" rx="5" fill="#1b1f2e" stroke="#a78bfa"/>
+      <text x="400" y="132" fill="#e2e8f8" font-family="JetBrains Mono" font-size="10" text-anchor="middle">Subscriber2</text>
+      <line x1="260" y1="58" x2="120" y2="110" stroke="#fbbf24" stroke-width="1.6"/>
+      <line x1="260" y1="58" x2="400" y2="110" stroke="#fbbf24" stroke-width="1.6"/>
+      <text x="186" y="76" fill="#fbbf24" font-family="JetBrains Mono" font-size="8" text-anchor="middle">notify()</text>
+      <text x="335" y="76" fill="#fbbf24" font-family="JetBrains Mono" font-size="8" text-anchor="middle">notify()</text>
+    </svg>
+  </div>
+  <h4 class="sub">Easy Java Example</h4>
+  <pre><span class="kw">interface</span> <span class="cls">Subscriber</span> { <span class="kw">void</span> <span class="fn">update</span>(<span class="cls">String</span> video); }
+
+<span class="kw">class</span> <span class="cls">Channel</span> {
+    <span class="kw">private</span> <span class="cls">List</span>&lt;<span class="cls">Subscriber</span>&gt; subs = <span class="kw">new</span> <span class="cls">ArrayList</span>&lt;&gt;();
+    <span class="kw">void</span> <span class="fn">subscribe</span>(<span class="cls">Subscriber</span> s) { subs.<span class="fn">add</span>(s); }
+    <span class="kw">void</span> <span class="fn">upload</span>(<span class="cls">String</span> video) {
+        <span class="kw">for</span> (<span class="cls">Subscriber</span> s : subs) s.<span class="fn">update</span>(video);
+    }
+}</pre>
+  <h4 class="sub">Consequences</h4>
+  <ul class="pts">
+    <li>Loose coupling between subject and observers</li>
+    <li>Easy to add new observers without changing subject logic</li>
+    <li>Notification order and excessive updates can become tricky</li>
+  </ul>
+  <div class="mcq">Observer = publish-subscribe style notification. One subject, many observers.</div>
+</div>
+
+<!-- Ã¢â€â‚¬Ã¢â€â‚¬ Strategy Ã¢â€â‚¬Ã¢â€â‚¬ -->
+<h2 class="sec g" id="strategy">25. Strategy Pattern (Behavioural)</h2>
+<div class="card">
+  <p><strong>Intent:</strong> Define a family of algorithms, encapsulate each one, and make them interchangeable.</p>
+  <p><strong>Motivation:</strong> Long <code>if-else</code> or <code>switch</code> blocks for multiple algorithms violate OCP. Example: different payment modes.</p>
+  <p><strong>Applicability:</strong> Sorting choices, discount policies, route selection, payment methods.</p>
+  <h4 class="sub">Structure</h4>
+  <table>
+    <tr><th>Participant</th><th>Role</th></tr>
+    <tr><td><strong>Strategy</strong></td><td>Common algorithm interface</td></tr>
+    <tr><td><strong>ConcreteStrategy</strong></td><td>Specific implementation</td></tr>
+    <tr><td><strong>Context</strong></td><td>Uses a Strategy object</td></tr>
+  </table>
+  <h4 class="sub">Mini UML</h4>
+  <div class="diagram">
+    <svg viewBox="0 0 540 200" xmlns="http://www.w3.org/2000/svg" width="540" height="200">
+      <defs>
+        <marker id="umlTriStrategy" markerWidth="8" markerHeight="6" refX="0" refY="3" orient="auto">
+          <path d="M0,0 L8,3 L0,6 Z" fill="none" stroke="#34d399" stroke-width="1.4"/>
+        </marker>
+      </defs>
+      <rect x="40" y="72" width="130" height="40" rx="5" fill="#1b1f2e" stroke="#7a82a0"/>
+      <text x="105" y="96" fill="#e2e8f8" font-family="JetBrains Mono" font-size="10" text-anchor="middle">Checkout</text>
+      <rect x="215" y="20" width="150" height="42" rx="5" fill="#1b1f2e" stroke="#34d399" stroke-width="1.5"/>
+      <text x="290" y="44" fill="#34d399" font-family="JetBrains Mono" font-size="10" text-anchor="middle">PaymentStrategy</text>
+      <rect x="210" y="102" width="100" height="34" rx="5" fill="#1b1f2e" stroke="#34d399"/>
+      <text x="260" y="123" fill="#e2e8f8" font-family="JetBrains Mono" font-size="9" text-anchor="middle">CardPayment</text>
+      <rect x="330" y="102" width="100" height="34" rx="5" fill="#1b1f2e" stroke="#34d399"/>
+      <text x="380" y="123" fill="#e2e8f8" font-family="JetBrains Mono" font-size="9" text-anchor="middle">UpiPayment</text>
+      <rect x="270" y="154" width="100" height="34" rx="5" fill="#1b1f2e" stroke="#34d399"/>
+      <text x="320" y="175" fill="#e2e8f8" font-family="JetBrains Mono" font-size="9" text-anchor="middle">CashPayment</text>
+      <line x1="170" y1="92" x2="215" y2="41" stroke="#fbbf24" stroke-width="1.6"/>
+      <text x="192" y="66" fill="#fbbf24" font-family="JetBrains Mono" font-size="8" text-anchor="middle">has-a</text>
+      <line x1="290" y1="62" x2="260" y2="102" stroke="#34d399" stroke-width="1.4" marker-start="url(#umlTriStrategy)"/>
+      <line x1="290" y1="62" x2="380" y2="102" stroke="#34d399" stroke-width="1.4" marker-start="url(#umlTriStrategy)"/>
+      <line x1="290" y1="62" x2="320" y2="154" stroke="#34d399" stroke-width="1.4" marker-start="url(#umlTriStrategy)"/>
+    </svg>
+  </div>
+  <h4 class="sub">Easy Java Example</h4>
+  <pre><span class="kw">interface</span> <span class="cls">PaymentStrategy</span> { <span class="kw">void</span> <span class="fn">pay</span>(<span class="kw">int</span> amount); }
+
+<span class="kw">class</span> <span class="cls">UpiPayment</span> <span class="kw">implements</span> <span class="cls">PaymentStrategy</span> {
+    <span class="kw">public void</span> <span class="fn">pay</span>(<span class="kw">int</span> amount) { <span class="cls">System</span>.out.<span class="fn">println</span>(<span class="str">"Paid by UPI: "</span> + amount); }
+}
+
+<span class="kw">class</span> <span class="cls">Checkout</span> {
+    <span class="kw">private</span> <span class="cls">PaymentStrategy</span> strategy;
+    <span class="kw">void</span> <span class="fn">setStrategy</span>(<span class="cls">PaymentStrategy</span> s) { strategy = s; }
+    <span class="kw">void</span> <span class="fn">makePayment</span>(<span class="kw">int</span> amount) { strategy.<span class="fn">pay</span>(amount); }
+}</pre>
+  <h4 class="sub">Consequences</h4>
+  <ul class="pts">
+    <li>Removes conditional logic from context</li>
+    <li>Supports runtime switching of algorithms</li>
+    <li>Client must understand available strategies</li>
+  </ul>
+  <div class="mcq">Strategy changes the algorithm. State changes the behaviour based on internal state. Both use composition, but intent is different.</div>
+</div>
+
+<!-- Ã¢â€â‚¬Ã¢â€â‚¬ State Ã¢â€â‚¬Ã¢â€â‚¬ -->
+<h2 class="sec g" id="state">26. State Pattern (Behavioural)</h2>
+<div class="card">
+  <p><strong>Intent:</strong> Allow an object to alter its behaviour when its internal state changes. The object appears to change its class.</p>
+  <p><strong>Motivation:</strong> Huge conditionals based on current state are hard to maintain. Example: vending machine behaviour changes in idle, has-money, and sold state.</p>
+  <p><strong>Applicability:</strong> Workflows, game characters, vending machines, network connection lifecycle.</p>
+  <h4 class="sub">Structure</h4>
+  <table>
+    <tr><th>Participant</th><th>Role</th></tr>
+    <tr><td><strong>Context</strong></td><td>Maintains current state object</td></tr>
+    <tr><td><strong>State</strong></td><td>Common behaviour interface</td></tr>
+    <tr><td><strong>ConcreteState</strong></td><td>Implements behaviour for one state</td></tr>
+  </table>
+  <h4 class="sub">Mini State Transition</h4>
+  <pre>Idle --insertCoin--> HasMoney --pressButton--> Dispensing --done--> Idle</pre>
+  <h4 class="sub">Easy Java Example</h4>
+  <pre><span class="kw">interface</span> <span class="cls">State</span> { <span class="kw">void</span> <span class="fn">handle</span>(); }
+
+<span class="kw">class</span> <span class="cls">IdleState</span> <span class="kw">implements</span> <span class="cls">State</span> {
+    <span class="kw">public void</span> <span class="fn">handle</span>() { <span class="cls">System</span>.out.<span class="fn">println</span>(<span class="str">"Insert coin"</span>); }
+}
+
+<span class="kw">class</span> <span class="cls">VendingMachine</span> {
+    <span class="kw">private</span> <span class="cls">State</span> state = <span class="kw">new</span> <span class="cls">IdleState</span>();
+    <span class="kw">void</span> <span class="fn">setState</span>(<span class="cls">State</span> s) { state = s; }
+    <span class="kw">void</span> <span class="fn">request</span>() { state.<span class="fn">handle</span>(); }
+}</pre>
+  <h4 class="sub">Consequences</h4>
+  <ul class="pts">
+    <li>Localises state-specific behaviour into separate classes</li>
+    <li>Removes large state conditionals</li>
+    <li>Can increase number of classes</li>
+  </ul>
+  <div class="mcq">State is ideal when the same request behaves differently depending on internal state.</div>
+</div>
+
+<!-- Ã¢â€â‚¬Ã¢â€â‚¬ Mediator Ã¢â€â‚¬Ã¢â€â‚¬ -->
+<h2 class="sec g" id="mediator">27. Mediator Pattern (Behavioural)</h2>
+<div class="card">
+  <p><strong>Intent:</strong> Define an object that encapsulates how a set of objects interact. Mediator promotes loose coupling by keeping objects from referring to each other explicitly.</p>
+  <p><strong>Motivation:</strong> If every object talks directly to every other object, dependencies become a web. A mediator centralises communication.</p>
+  <p><strong>Applicability:</strong> Chat rooms, air traffic control, GUI dialog coordination.</p>
+  <h4 class="sub">Structure</h4>
+  <table>
+    <tr><th>Participant</th><th>Role</th></tr>
+    <tr><td><strong>Mediator</strong></td><td>Declares communication operations</td></tr>
+    <tr><td><strong>ConcreteMediator</strong></td><td>Coordinates colleagues</td></tr>
+    <tr><td><strong>Colleague</strong></td><td>Communicates through mediator</td></tr>
+  </table>
+  <h4 class="sub">Mini UML</h4>
+  <div class="diagram">
+    <svg viewBox="0 0 520 180" xmlns="http://www.w3.org/2000/svg" width="520" height="180">
+      <rect x="190" y="62" width="140" height="44" rx="5" fill="#1b1f2e" stroke="#34d399" stroke-width="1.5"/>
+      <text x="260" y="89" fill="#34d399" font-family="JetBrains Mono" font-size="10" text-anchor="middle">ChatRoom (Mediator)</text>
+      <rect x="40" y="20" width="100" height="34" rx="5" fill="#1b1f2e" stroke="#a78bfa"/><text x="90" y="41" fill="#e2e8f8" font-family="JetBrains Mono" font-size="9" text-anchor="middle">UserA</text>
+      <rect x="380" y="20" width="100" height="34" rx="5" fill="#1b1f2e" stroke="#a78bfa"/><text x="430" y="41" fill="#e2e8f8" font-family="JetBrains Mono" font-size="9" text-anchor="middle">UserB</text>
+      <rect x="40" y="126" width="100" height="34" rx="5" fill="#1b1f2e" stroke="#a78bfa"/><text x="90" y="147" fill="#e2e8f8" font-family="JetBrains Mono" font-size="9" text-anchor="middle">UserC</text>
+      <rect x="380" y="126" width="100" height="34" rx="5" fill="#1b1f2e" stroke="#a78bfa"/><text x="430" y="147" fill="#e2e8f8" font-family="JetBrains Mono" font-size="9" text-anchor="middle">UserD</text>
+      <line x1="140" y1="37" x2="190" y2="74" stroke="#fbbf24" stroke-width="1.5"/>
+      <line x1="380" y1="37" x2="330" y2="74" stroke="#fbbf24" stroke-width="1.5"/>
+      <line x1="140" y1="143" x2="190" y2="94" stroke="#fbbf24" stroke-width="1.5"/>
+      <line x1="380" y1="143" x2="330" y2="94" stroke="#fbbf24" stroke-width="1.5"/>
+    </svg>
+  </div>
+  <h4 class="sub">Easy Java Example</h4>
+  <pre><span class="kw">class</span> <span class="cls">ChatRoom</span> {
+    <span class="kw">static void</span> <span class="fn">showMessage</span>(<span class="cls">String</span> user, <span class="cls">String</span> msg) {
+        <span class="cls">System</span>.out.<span class="fn">println</span>(user + <span class="str">": "</span> + msg);
+    }
+}
+
+<span class="kw">class</span> <span class="cls">User</span> {
+    <span class="kw">private</span> <span class="cls">String</span> name;
+    <span class="cls">User</span>(<span class="cls">String</span> n) { name = n; }
+    <span class="kw">void</span> <span class="fn">send</span>(<span class="cls">String</span> msg) { <span class="cls">ChatRoom</span>.<span class="fn">showMessage</span>(name, msg); }
+}</pre>
+  <h4 class="sub">Consequences</h4>
+  <ul class="pts">
+    <li>Reduces many-to-many coupling between colleagues</li>
+    <li>Centralises control logic</li>
+    <li>Mediator itself can become too complex if overloaded</li>
+  </ul>
+  <div class="mcq">Mediator centralises communication. Observer distributes notification. Do not mix them up.</div>
+</div>
+
+<!-- Ã¢â€â‚¬Ã¢â€â‚¬ Memento Ã¢â€â‚¬Ã¢â€â‚¬ -->
+<h2 class="sec g" id="memento">28. Memento Pattern (Behavioural)</h2>
+<div class="card">
+  <p><strong>Intent:</strong> Capture and externalise an object's internal state so that the object can be restored later without violating encapsulation.</p>
+  <p><strong>Motivation:</strong> Undo/restore is difficult if outside classes directly access private fields.</p>
+  <p><strong>Applicability:</strong> Text editor undo, game save points, transaction rollback snapshots.</p>
+  <h4 class="sub">Structure</h4>
+  <table>
+    <tr><th>Participant</th><th>Role</th></tr>
+    <tr><td><strong>Originator</strong></td><td>Creates memento and restores from it</td></tr>
+    <tr><td><strong>Memento</strong></td><td>Stores internal state snapshot</td></tr>
+    <tr><td><strong>Caretaker</strong></td><td>Keeps memento safe, but does not inspect it</td></tr>
+  </table>
+  <h4 class="sub">Mini UML + Flow</h4>
+  <pre>Editor -> createMemento() -> SaveState
+History stores SaveState
+Editor <- restore(SaveState) <- History</pre>
+  <h4 class="sub">Easy Java Example</h4>
+  <pre><span class="kw">class</span> <span class="cls">SaveState</span> {
+    <span class="kw">private</span> <span class="cls">String</span> text;
+    <span class="cls">SaveState</span>(<span class="cls">String</span> t) { text = t; }
+    <span class="kw">String</span> <span class="fn">getText</span>() { <span class="kw">return</span> text; }
+}
+
+<span class="kw">class</span> <span class="cls">Editor</span> {
+    <span class="kw">private</span> <span class="cls">String</span> text;
+    <span class="cls">SaveState</span> <span class="fn">save</span>() { <span class="kw">return</span> <span class="kw">new</span> <span class="cls">SaveState</span>(text); }
+    <span class="kw">void</span> <span class="fn">restore</span>(<span class="cls">SaveState</span> s) { text = s.<span class="fn">getText</span>(); }
+}</pre>
+  <h4 class="sub">Consequences</h4>
+  <ul class="pts">
+    <li>Supports undo/rollback cleanly</li>
+    <li>Preserves encapsulation better than exposing internals</li>
+    <li>Many snapshots can consume memory</li>
+  </ul>
+  <div class="mcq">Originator creates the memento, Caretaker stores it, Memento holds snapshot state.</div>
+</div>
+
+<!-- Ã¢â€â‚¬Ã¢â€â‚¬ Visitor Ã¢â€â‚¬Ã¢â€â‚¬ -->
+<h2 class="sec g" id="visitor">29. Visitor Pattern (Behavioural)</h2>
+<div class="card">
+  <p><strong>Intent:</strong> Represent an operation to be performed on elements of an object structure. Visitor lets you define a new operation without changing the element classes.</p>
+  <p><strong>Motivation:</strong> If many unrelated operations are added to stable element classes, those classes become bloated.</p>
+  <p><strong>Applicability:</strong> Reporting, tax calculation, compiler AST processing, validation across many element types.</p>
+  <h4 class="sub">Structure</h4>
+  <table>
+    <tr><th>Participant</th><th>Role</th></tr>
+    <tr><td><strong>Visitor</strong></td><td>Declares visit methods for each element type</td></tr>
+    <tr><td><strong>ConcreteVisitor</strong></td><td>Implements one operation</td></tr>
+    <tr><td><strong>Element</strong></td><td>Declares accept(visitor)</td></tr>
+    <tr><td><strong>ConcreteElement</strong></td><td>Calls visitor.visit(this)</td></tr>
+  </table>
+  <h4 class="sub">Mini UML</h4>
+  <div class="diagram">
+    <svg viewBox="0 0 560 210" xmlns="http://www.w3.org/2000/svg" width="560" height="210">
+      <rect x="205" y="16" width="150" height="42" rx="5" fill="#1b1f2e" stroke="#34d399" stroke-width="1.5"/>
+      <text x="280" y="40" fill="#34d399" font-family="JetBrains Mono" font-size="10" text-anchor="middle">TaxVisitor</text>
+      <rect x="80" y="118" width="120" height="36" rx="5" fill="#1b1f2e" stroke="#a78bfa"/>
+      <text x="140" y="140" fill="#e2e8f8" font-family="JetBrains Mono" font-size="10" text-anchor="middle">Book</text>
+      <rect x="360" y="118" width="120" height="36" rx="5" fill="#1b1f2e" stroke="#a78bfa"/>
+      <text x="420" y="140" fill="#e2e8f8" font-family="JetBrains Mono" font-size="10" text-anchor="middle">Fruit</text>
+      <line x1="220" y1="58" x2="150" y2="118" stroke="#fbbf24" stroke-width="1.5"/>
+      <line x1="340" y1="58" x2="410" y2="118" stroke="#fbbf24" stroke-width="1.5"/>
+      <text x="177" y="86" fill="#fbbf24" font-family="JetBrains Mono" font-size="8" text-anchor="middle">visit(Book)</text>
+      <text x="385" y="86" fill="#fbbf24" font-family="JetBrains Mono" font-size="8" text-anchor="middle">visit(Fruit)</text>
+      <line x1="150" y1="118" x2="220" y2="58" stroke="#7a82a0" stroke-width="1.2" stroke-dasharray="4"/>
+      <line x1="410" y1="118" x2="340" y2="58" stroke="#7a82a0" stroke-width="1.2" stroke-dasharray="4"/>
+    </svg>
+  </div>
+  <h4 class="sub">Easy Java Example</h4>
+  <pre><span class="kw">interface</span> <span class="cls">Item</span> { <span class="kw">int</span> <span class="fn">accept</span>(<span class="cls">TaxVisitor</span> v); }
+
+<span class="kw">class</span> <span class="cls">Book</span> <span class="kw">implements</span> <span class="cls">Item</span> {
+    <span class="kw">public</span> <span class="kw">int</span> <span class="fn">accept</span>(<span class="cls">TaxVisitor</span> v) { <span class="kw">return</span> v.<span class="fn">visit</span>(<span class="kw">this</span>); }
+}
+
+<span class="kw">class</span> <span class="cls">TaxVisitor</span> {
+    <span class="kw">int</span> <span class="fn">visit</span>(<span class="cls">Book</span> b) { <span class="kw">return</span> <span class="kw">5</span>; }
+    <span class="kw">int</span> <span class="fn">visit</span>(<span class="cls">Fruit</span> f) { <span class="kw">return</span> <span class="kw">2</span>; }
+}</pre>
+  <h4 class="sub">Consequences</h4>
+  <ul class="pts">
+    <li>Easy to add new operations on existing elements</li>
+    <li>Groups related operations into one visitor</li>
+    <li>Adding a new element type requires changing visitor interface and all visitors</li>
+  </ul>
+  <div class="mcq">Visitor is good when element classes are stable but operations keep increasing.</div>
+</div>
+
+<!-- Ã¢â€â‚¬Ã¢â€â‚¬ Template Method Ã¢â€â‚¬Ã¢â€â‚¬ -->
+<h2 class="sec g" id="template-method">30. Template Method Pattern (Behavioural)</h2>
+<div class="card">
+  <p><strong>Intent:</strong> Define the skeleton of an algorithm in an operation, deferring some steps to subclasses. Template Method lets subclasses redefine certain steps without changing the algorithm structure.</p>
+  <p><strong>Motivation:</strong> Many processes follow the same broad sequence but differ in some steps. Example: tea and coffee preparation.</p>
+  <p><strong>Applicability:</strong> Cooking recipes, report generation, data import pipelines, framework lifecycle hooks.</p>
+  <h4 class="sub">Structure</h4>
+  <table>
+    <tr><th>Participant</th><th>Role</th></tr>
+    <tr><td><strong>AbstractClass</strong></td><td>Defines template method and common steps</td></tr>
+    <tr><td><strong>ConcreteClass</strong></td><td>Overrides variable steps</td></tr>
+  </table>
+  <h4 class="sub">Mini UML + Sequence</h4>
+  <pre>Beverage.prepare()
+  1. boilWater()
+  2. brew()           <- subclass specific
+  3. pourInCup()
+  4. addCondiments()  <- subclass specific</pre>
+  <h4 class="sub">Easy Java Example</h4>
+  <pre><span class="kw">abstract class</span> <span class="cls">Beverage</span> {
+    <span class="kw">final void</span> <span class="fn">prepare</span>() {
+        <span class="fn">boilWater</span>();
+        <span class="fn">brew</span>();
+        <span class="fn">pourInCup</span>();
+        <span class="fn">addCondiments</span>();
+    }
+    <span class="kw">abstract void</span> <span class="fn">brew</span>();
+    <span class="kw">abstract void</span> <span class="fn">addCondiments</span>();
+}</pre>
+  <h4 class="sub">Consequences</h4>
+  <ul class="pts">
+    <li>Promotes code reuse for common steps</li>
+    <li>Controls algorithm order from base class</li>
+    <li>Uses inheritance, so behaviour variation is fixed through subclassing</li>
+  </ul>
+  <div class="mcq">Template Method fixes the algorithm skeleton in parent class. Strategy swaps the whole algorithm through composition.</div>
+</div>
+
+<h2 class="sec g" id="antipatterns">31. Anti-Patterns</h2>
+<div class="card">
+  <h3 class="topic">What are Anti-Patterns?</h3>
+  <p>A solution to a problem that generates <strong>more problems than it addresses</strong>. Anti-patterns describe "negative solutions" with a path for correction (refactoring).</p>
+  <table>
+    <tr><th>Concept</th><th>Definition</th></tr>
+    <tr><td><strong>Pattern</strong></td><td>Good ideas â€” repeatable solution to a common problem</td></tr>
+    <tr><td><strong>Anti-Pattern</strong></td><td>Bad ideas â€” recognised poor solution with a refactored alternative</td></tr>
+    <tr><td><strong>Refactoring</strong></td><td>Better ideas â€” the corrective solution</td></tr>
+  </table>
+
+  <h3 class="topic">3 Viewpoints of Anti-Patterns</h3>
+  <ul class="pts">
+    <li><strong>Development Anti-Patterns:</strong> Programmer-level issues when solving programming problems</li>
+    <li><strong>Architectural Anti-Patterns:</strong> System/enterprise-level structure problems (most serious)</li>
+    <li><strong>Management Anti-Patterns:</strong> Software organisation and people problems</li>
+  </ul>
+
+  <h3 class="topic">Root Causes (7 Deadly Sins)</h3>
+  <table>
+    <tr><th>Sin</th><th>Effect</th></tr>
+    <tr><td>Haste</td><td>Tight deadlines â†’ neglect important activities</td></tr>
+    <tr><td>Apathy</td><td>Not caring about solving known problems</td></tr>
+    <tr><td>Narrow-Mindedness</td><td>Refusal to learn proven solutions</td></tr>
+    <tr><td>Sloth</td><td>Adapts simplest "solution" regardless of quality</td></tr>
+    <tr><td>Avarice</td><td>Greed â†’ over-complex, hard-to-maintain systems</td></tr>
+    <tr><td>Ignorance</td><td>Lack of motivation to understand things</td></tr>
+    <tr><td>Pride</td><td>Refusing to reuse existing solutions (NIH syndrome)</td></tr>
+  </table>
+
+  <h3 class="topic">Anti-Pattern 1: Analysis Paralysis (Management)</h3>
+  <p><strong>Symptom:</strong> Project continuously restarted; analysis never ends; cost exceeds expectation without predictable endpoint.</p>
+  <p><strong>Cause:</strong> Waterfall assumption â€” insisting all analysis must complete before design starts. Goals not well defined.</p>
+  <p><strong>Solution:</strong> Use <strong>incremental development</strong>. Internal increments (infrastructure) and external increments (user-visible features) built iteratively.</p>
+
+  <h3 class="topic">Anti-Pattern 2: Vendor Lock-In (Architecture)</h3>
+  <p><strong>Symptom:</strong> Software completely dependent on one vendor. Every product upgrade drives maintenance. Delays in promised features stall development.</p>
+  <p><strong>Cause:</strong> Product selected on marketing alone, not technical inspection. No isolation layer between app and vendor product.</p>
+  <p><strong>Solution: Isolation Layer</strong> â€” abstract layer separating application from vendor technology. App talks to abstraction, not vendor API directly.</p>
+
+  <h3 class="topic">Anti-Pattern 3: The Blob (Development)</h3>
+  <p><strong>Symptom:</strong> One class with 60+ attributes and operations, doing everything. Other classes only hold data. Violates SRP.</p>
+  <p><strong>Cause:</strong> Lack of OO architecture, no enforcement of design principles.</p>
+  <h4 class="sub">Tiny Code Smell Example</h4>
+  <pre><span class="cmt">// BAD: one blob class doing everything</span>
+<span class="kw">class</span> <span class="cls">Library</span> {
+    <span class="kw">void</span> <span class="fn">addBook</span>() { }
+    <span class="kw">void</span> <span class="fn">searchBook</span>() { }
+    <span class="kw">void</span> <span class="fn">issueBook</span>() { }
+    <span class="kw">void</span> <span class="fn">payFine</span>() { }
+    <span class="kw">void</span> <span class="fn">registerUser</span>() { }
+}</pre>
+
+  <!-- Blob refactoring diagram -->
+  <div class="diagram">
+    <svg viewBox="0 0 420 120" xmlns="http://www.w3.org/2000/svg" width="420" height="120">
+      <!-- Bad -->
+      <rect x="10" y="20" width="120" height="80" rx="6" fill="#1b1f2e" stroke="#f87171" stroke-width="2"/>
+      <text x="70" y="38" fill="#f87171" font-family="JetBrains Mono" font-size="10" text-anchor="middle" font-weight="bold">LIBRARY (Blob)</text>
+      <text x="70" y="55" fill="#7a82a0" font-family="JetBrains Mono" font-size="8" text-anchor="middle">60+ attributes</text>
+      <text x="70" y="69" fill="#7a82a0" font-family="JetBrains Mono" font-size="8" text-anchor="middle">catalog ops</text>
+      <text x="70" y="83" fill="#7a82a0" font-family="JetBrains Mono" font-size="8" text-anchor="middle">item ops</text>
+      <text x="70" y="97" fill="#7a82a0" font-family="JetBrains Mono" font-size="8" text-anchor="middle">user ops... etc</text>
+
+      <text x="195" y="65" fill="#fbbf24" font-family="JetBrains Mono" font-size="18">â†’</text>
+
+      <!-- Good -->
+      <rect x="230" y="10" width="80" height="30" rx="4" fill="#1b1f2e" stroke="#34d399" stroke-width="1.5"/>
+      <text x="270" y="30" fill="#34d399" font-family="JetBrains Mono" font-size="9" text-anchor="middle">LIBRARY</text>
+      <rect x="230" y="55" width="80" height="30" rx="4" fill="#1b1f2e" stroke="#34d399" stroke-width="1.5"/>
+      <text x="270" y="75" fill="#34d399" font-family="JetBrains Mono" font-size="9" text-anchor="middle">CATALOG</text>
+      <rect x="330" y="55" width="70" height="30" rx="4" fill="#1b1f2e" stroke="#34d399" stroke-width="1.5"/>
+      <text x="365" y="75" fill="#34d399" font-family="JetBrains Mono" font-size="9" text-anchor="middle">ITEM</text>
+      <line x1="270" y1="40" x2="270" y2="55" stroke="#34d399" stroke-width="1"/>
+      <line x1="310" y1="70" x2="330" y2="70" stroke="#34d399" stroke-width="1"/>
+    </svg>
+  </div>
+
+  <p><strong>Refactoring steps:</strong></p>
+  <ol class="steps">
+    <li>Identify related attributes/operations â†’ group by responsibility</li>
+    <li>Find "natural homes" â†’ migrate to appropriate classes</li>
+    <li>Remove far-coupled/redundant associations</li>
+    <li>Migrate to derived classes where appropriate</li>
+    <li>Replace transient associations with type specifiers</li>
+  </ol>
+  <div class="mcq">Blob = one class does everything (60+ methods). Causes: no OO architecture. Fix: distribute responsibilities. Analysis Paralysis = too much analysis, no action.</div>
+</div>
+
+<!-- â”€â”€ Quick Revision â”€â”€ -->
+<hr>
+<h2 class="sec v">32. 4-Mark Practice Bank</h2>
+<div class="card">
+  <p><strong>Use these exactly like your exam pattern:</strong> identify the pattern/principle from a scenario, correct a bad implementation, implement the solution in Java, or describe intent/participants/applicability.</p>
+
+  <h4 class="sub">Common 4-Mark Question Types</h4>
+  <table>
+    <tr><th>Type</th><th>What the examiner expects</th></tr>
+    <tr><td><strong>Identify</strong></td><td>Name the correct pattern/principle from the scenario and justify it briefly</td></tr>
+    <tr><td><strong>Correct</strong></td><td>Spot what is wrong in the design/code and rewrite using the right pattern</td></tr>
+    <tr><td><strong>Implement</strong></td><td>Write a small Java sketch using the proper participants</td></tr>
+    <tr><td><strong>Specify</strong></td><td>Write Intent, Motivation, Applicability, Structure, Participants, Consequences</td></tr>
+  </table>
+
+  <h4 class="sub">Unit 3 Practice</h4>
+  <ul class="pts">
+    <li>GRASP Creator: In a library system, who should create <code>BookIssue</code> objects and why?</li>
+    <li>Information Expert: Which class should calculate cart total in an e-commerce system?</li>
+    <li>SRP: A single <code>Invoice</code> class calculates totals, prints reports, and saves to DB. Refactor it.</li>
+    <li>OCP: A payment class uses <code>if-else</code> for UPI, card, and cash. Redesign it.</li>
+    <li>LSP: A subclass throws <code>UnsupportedOperationException</code> for inherited methods. Explain the violation.</li>
+    <li>DIP: A service directly depends on <code>MySQLDatabase</code>. Rewrite using abstraction.</li>
+    <li>Singleton: Multiple config managers are created accidentally. Fix it using Singleton in Java.</li>
+    <li>Factory Method: A notification client directly creates SMS and email objects. Redesign using Factory Method.</li>
+    <li>Builder: A laptop object has many optional parameters. Explain why Builder is better than a long constructor.</li>
+    <li>Prototype: A certificate generator creates many similar objects. Explain why cloning is better.</li>
+  </ul>
+
+  <h4 class="sub">Unit 4 Practice</h4>
+  <ul class="pts">
+    <li>Adapter: A client expects <code>Printer.print()</code> but only <code>OldPrinter.printOldFormat()</code> exists. Adapt it.</li>
+    <li>Facade: A movie system needs separate calls to projector, lights, and speakers. Simplify the client.</li>
+    <li>Proxy: An image must load only when needed. Identify the proxy type and write the structure.</li>
+    <li>Flyweight: A text editor stores repeated characters. Distinguish intrinsic and extrinsic state.</li>
+    <li>Bridge: Different remotes must control different device brands without subclass explosion. Apply Bridge.</li>
+    <li>Composite: A file system should treat files and folders uniformly. Draw the structure.</li>
+    <li>Decorator: A coffee object should gain milk and sugar dynamically. Implement it without subclass explosion.</li>
+    <li>Chain of Responsibility: A leave request may go to lead, manager, or director. Build the handler chain.</li>
+    <li>Command: A remote control should queue and execute commands for TV operations. Identify participants.</li>
+    <li>Interpreter: Represent and evaluate a small arithmetic expression using expression objects.</li>
+    <li>Iterator: Traverse a collection without exposing internal representation. Explain using Java Iterator.</li>
+    <li>Observer: A YouTube channel should notify subscribers on upload. Draw the notification flow.</li>
+    <li>Strategy: A checkout page should switch payment algorithms at runtime. Implement Strategy.</li>
+    <li>State: A vending machine behaves differently in idle and paid states. Model it using State.</li>
+    <li>Mediator: Users in a chat room should communicate through one object instead of directly.</li>
+    <li>Memento: A text editor should support undo without exposing internal fields.</li>
+    <li>Visitor: Add tax calculation to product objects without changing all product classes.</li>
+    <li>Template Method: Tea and coffee follow the same preparation steps with small variations. Write the template.</li>
+  </ul>
+</div>
+
+<h2 class="sec v">âš¡ Quick Revision Table</h2>
+<div class="card">
+  <table>
+    <tr><th>Pattern</th><th>Category</th><th>One-liner</th></tr>
+    <tr><td>Creator</td><td>GRASP</td><td>Container creates Contained</td></tr>
+    <tr><td>Info Expert</td><td>GRASP</td><td>Assign to class with needed data</td></tr>
+    <tr><td>Controller</td><td>GRASP</td><td>First object receiving UI event; delegates, doesn't do</td></tr>
+    <tr><td>SRP</td><td>SOLID</td><td>One class, one reason to change</td></tr>
+    <tr><td>OCP</td><td>SOLID</td><td>Extend, never modify</td></tr>
+    <tr><td>LSP</td><td>SOLID</td><td>Subclass substitutable for superclass, is-a</td></tr>
+    <tr><td>ISP</td><td>SOLID</td><td>No forced implementation of unused interface methods</td></tr>
+    <tr><td>DIP</td><td>SOLID</td><td>Depend on abstractions, not concretions</td></tr>
+    <tr><td>Singleton</td><td>Creational</td><td>Only one instance, private constructor + static getInstance()</td></tr>
+    <tr><td>Factory</td><td>Creational</td><td>Subclasses decide what to instantiate (Virtual Constructor)</td></tr>
+    <tr><td>Builder</td><td>Creational</td><td>Director + Builder step-by-step construction</td></tr>
+    <tr><td>Prototype</td><td>Creational</td><td>Clone existing objects, avoid expensive creation</td></tr>
+    <tr><td>Adapter</td><td>Structural</td><td>Wrapper â€” converts incompatible interfaces</td></tr>
+    <tr><td>Facade</td><td>Structural</td><td>Unified simple interface to complex subsystem</td></tr>
+    <tr><td>Proxy</td><td>Structural</td><td>Surrogate controlling access to real object</td></tr>
+    <tr><td>Flyweight</td><td>Structural</td><td>Share intrinsic state; extrinsic state passed in</td></tr>
+    <tr><td>Chain of Resp.</td><td>Behavioral</td><td>Pass request along chain until handled</td></tr>
+    <tr><td>Command</td><td>Behavioral</td><td>Encapsulate request as object; Invoker, Receiver, Command</td></tr>
+    <tr><td>Interpreter</td><td>Behavioral</td><td>Grammar + AST + interpret() for DSL</td></tr>
+    <tr><td>Iterator</td><td>Behavioral</td><td>Sequential traversal without exposing implementation</td></tr>
+    <tr><td>Bridge</td><td>Structural</td><td>Separate abstraction from implementation using composition</td></tr>
+    <tr><td>Composite</td><td>Structural</td><td>Treat part and whole uniformly in tree structures</td></tr>
+    <tr><td>Decorator</td><td>Structural</td><td>Add responsibilities dynamically by wrapping object</td></tr>
+    <tr><td>Observer</td><td>Behavioral</td><td>One subject notifies many dependents automatically</td></tr>
+    <tr><td>Strategy</td><td>Behavioral</td><td>Encapsulate interchangeable algorithms</td></tr>
+    <tr><td>State</td><td>Behavioral</td><td>Behaviour changes with internal state</td></tr>
+    <tr><td>Mediator</td><td>Behavioral</td><td>Central object coordinates colleague interaction</td></tr>
+    <tr><td>Memento</td><td>Behavioral</td><td>Save and restore object state without exposing internals</td></tr>
+    <tr><td>Visitor</td><td>Behavioral</td><td>Add new operations to stable object structures</td></tr>
+    <tr><td>Template Method</td><td>Behavioral</td><td>Parent fixes algorithm skeleton, subclasses fill steps</td></tr>
+  </table>
+</div>
+
+<div style="text-align:center;padding:1.5rem 0;color:var(--muted);font-size:0.8rem;font-style:italic;border-top:1px solid var(--border);margin-top:2rem;">
+  All the best for your test tomorrow! OOAD Units 3 & 4 â€” Prof. Shridevi A Sawant ðŸŽ¯
+</div>
+
+</div>
+</body>
+</html>
+

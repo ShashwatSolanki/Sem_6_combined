@@ -1,0 +1,2454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cloud Computing — Complete Q&A</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --surface2: #1a1a24;
+    --border: #2a2a3a;
+    --accent: #7c6dfa;
+    --accent2: #00d4ff;
+    --accent3: #ff6b6b;
+    --accent4: #ffd166;
+    --text: #e8e8f0;
+    --muted: #8888aa;
+    --unit1: #7c6dfa;
+    --unit2: #00d4ff;
+    --unit3: #3ddc84;
+    --unit4: #ff6b6b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: 'Space Mono', monospace;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,10,15,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .search-wrap { position: relative; flex: 1; max-width: 420px; margin: 0 2rem; }
+  .search-wrap input {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.5rem 1rem 0.5rem 2.5rem;
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .search-wrap input:focus { border-color: var(--accent); }
+  .search-wrap::before {
+    content: '⌕';
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    font-size: 1.1rem;
+  }
+  .stats { font-size: 0.75rem; color: var(--muted); white-space: nowrap; }
+
+  /* HERO */
+  .hero {
+    padding: 3rem 2rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 600px; height: 300px;
+    background: radial-gradient(ellipse at center, rgba(124,109,250,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+  }
+  .hero h1 span {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero p { color: var(--muted); margin-top: 0.75rem; font-size: 0.85rem; }
+  
+  /* UNIT TABS */
+  .unit-tabs {
+    display: flex;
+    gap: 0.5rem;
+    padding: 1.5rem 2rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    border-bottom: 1px solid var(--border);
+  }
+  .unit-tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1.25rem;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .tab-btn:hover { border-color: var(--accent); color: var(--text); }
+  .tab-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
+  .tab-btn[data-unit="all"].active { background: var(--surface2); border-color: var(--accent); color: var(--accent); }
+  .tab-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  /* MAIN LAYOUT */
+  .main {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 0;
+    min-height: calc(100vh - 200px);
+  }
+  
+  /* SIDEBAR */
+  .sidebar {
+    border-right: 1px solid var(--border);
+    padding: 1.5rem 1rem;
+    position: sticky;
+    top: 64px;
+    height: calc(100vh - 64px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+  .sidebar-section { margin-bottom: 1.5rem; }
+  .sidebar-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+    padding: 0 0.5rem;
+  }
+  .sidebar-link {
+    display: block;
+    padding: 0.4rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    color: var(--muted);
+    text-decoration: none;
+    transition: all 0.15s;
+    cursor: pointer;
+    line-height: 1.4;
+  }
+  .sidebar-link:hover { background: var(--surface2); color: var(--text); }
+  .sidebar-link.active { background: rgba(124,109,250,0.15); color: var(--accent); }
+
+  /* CONTENT */
+  .content { padding: 2rem; }
+  
+  /* UNIT SECTION */
+  .unit-section {
+    margin-bottom: 3rem;
+  }
+  .unit-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .unit-badge {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.75rem;
+    border-radius: 100px;
+  }
+  .unit-header h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+  }
+
+  /* Q&A CARD */
+  .qa-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .qa-card:hover { border-color: #3a3a5a; }
+  .qa-card.open { border-color: var(--border); }
+  
+  .qa-question {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    cursor: pointer;
+    user-select: none;
+  }
+  .q-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--muted);
+    padding: 0.2rem 0.5rem;
+    background: var(--surface2);
+    border-radius: 4px;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+  .q-text {
+    flex: 1;
+    font-size: 0.88rem;
+    font-weight: 400;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .q-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.4rem; }
+  .q-tag {
+    font-size: 0.68rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    background: var(--surface2);
+    color: var(--muted);
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .q-chevron {
+    color: var(--muted);
+    font-size: 0.85rem;
+    transition: transform 0.2s;
+    margin-top: 3px;
+    flex-shrink: 0;
+  }
+  .qa-card.open .q-chevron { transform: rotate(180deg); }
+  
+  .qa-answer {
+    display: none;
+    padding: 0 1.5rem 1.5rem 1.5rem;
+    border-top: 1px solid var(--border);
+    margin-top: -1px;
+  }
+  .qa-card.open .qa-answer { display: block; }
+  .qa-answer-inner {
+    padding-top: 1.25rem;
+    font-size: 0.84rem;
+    color: #c8c8e0;
+    line-height: 1.8;
+  }
+  .qa-answer-inner h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text);
+    margin: 1.25rem 0 0.5rem 0;
+  }
+  .qa-answer-inner h4:first-child { margin-top: 0; }
+  .qa-answer-inner p { margin-bottom: 0.75rem; }
+  .qa-answer-inner ul, .qa-answer-inner ol {
+    padding-left: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+  .qa-answer-inner li { margin-bottom: 0.3rem; }
+  .qa-answer-inner strong { color: var(--text); font-weight: 700; }
+  .qa-answer-inner em { color: var(--accent2); font-style: normal; }
+  .qa-answer-inner .highlight {
+    background: rgba(124,109,250,0.1);
+    border-left: 3px solid var(--accent);
+    padding: 0.75rem 1rem;
+    border-radius: 0 8px 8px 0;
+    margin: 0.75rem 0;
+    font-size: 0.82rem;
+  }
+  .qa-answer-inner .formula {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 0.6rem 1rem;
+    border-radius: 6px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--accent4);
+    margin: 0.75rem 0;
+    display: inline-block;
+  }
+  .qa-answer-inner table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0.75rem 0;
+    font-size: 0.8rem;
+  }
+  .qa-answer-inner th {
+    background: var(--surface2);
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border: 1px solid var(--border);
+  }
+  .qa-answer-inner td {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .mark-tag {
+    font-size: 0.7rem;
+    color: var(--accent4);
+    font-weight: 700;
+    margin-left: 0.5rem;
+    font-family: 'Syne', sans-serif;
+  }
+  .no-results {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--muted);
+  }
+
+  @media (max-width: 900px) {
+    .main { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    .search-wrap { max-width: 220px; }
+  }
+  @media (max-width: 600px) {
+    header { padding: 0 1rem; }
+    .content { padding: 1rem; }
+    .unit-tabs { padding: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">☁ CC Q&amp;A</div>
+  <div class="search-wrap">
+    <input type="text" id="searchInput" placeholder="Search questions..." oninput="filterCards()">
+  </div>
+  <div class="stats" id="statsBar">Loading…</div>
+</header>
+
+<div class="hero">
+  <h1>Cloud Computing<br><span>Q&A Reference</span></h1>
+  <p>PES University · UE23CS351B · All Past ESA Questions with Detailed Answers</p>
+</div>
+
+<div class="unit-tabs">
+  <button class="tab-btn active" data-unit="all" onclick="filterUnit('all', this)">
+    <span class="tab-dot" style="background:#7c6dfa"></span>All Units
+  </button>
+  <button class="tab-btn" data-unit="1" onclick="filterUnit('1', this)">
+    <span class="tab-dot" style="background:#7c6dfa"></span>Unit 1 · Cloud Models
+  </button>
+  <button class="tab-btn" data-unit="2" onclick="filterUnit('2', this)">
+    <span class="tab-dot" style="background:#00d4ff"></span>Unit 2 · Virtualization
+  </button>
+  <button class="tab-btn" data-unit="3" onclick="filterUnit('3', this)">
+    <span class="tab-dot" style="background:#3ddc84"></span>Unit 3 · Distributed Storage
+  </button>
+  <button class="tab-btn" data-unit="4" onclick="filterUnit('4', this)">
+    <span class="tab-dot" style="background:#ff6b6b"></span>Unit 4 · Controller & Security
+  </button>
+</div>
+
+<div class="main">
+  <div class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title">Unit 1</div>
+      <a class="sidebar-link" onclick="scrollTo('q-cc-intro')">Cloud Computing Intro</a>
+      <a class="sidebar-link" onclick="scrollTo('q-characteristics')">Characteristics</a>
+      <a class="sidebar-link" onclick="scrollTo('q-service-models')">Service Models</a>
+      <a class="sidebar-link" onclick="scrollTo('q-deployment-models')">Deployment Models</a>
+      <a class="sidebar-link" onclick="scrollTo('q-parallelism')">Degrees of Parallelism</a>
+      <a class="sidebar-link" onclick="scrollTo('q-microservices')">Microservices vs Monolithic</a>
+      <a class="sidebar-link" onclick="scrollTo('q-pubsub')">Pub/Sub & Message Queues</a>
+      <a class="sidebar-link" onclick="scrollTo('q-rest')">REST</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">Unit 2</div>
+      <a class="sidebar-link" onclick="scrollTo('q-hypervisors')">Hypervisors</a>
+      <a class="sidebar-link" onclick="scrollTo('q-paravirt')">Paravirtualization</a>
+      <a class="sidebar-link" onclick="scrollTo('q-vm-container')">VM vs Container</a>
+      <a class="sidebar-link" onclick="scrollTo('q-vm-migration')">VM Migration</a>
+      <a class="sidebar-link" onclick="scrollTo('q-docker')">Docker Architecture</a>
+      <a class="sidebar-link" onclick="scrollTo('q-kubernetes')">Kubernetes Architecture</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">Unit 3</div>
+      <a class="sidebar-link" onclick="scrollTo('q-storage-types')">Storage Types</a>
+      <a class="sidebar-link" onclick="scrollTo('q-lustre-gluster')">Lustre & GlusterFS</a>
+      <a class="sidebar-link" onclick="scrollTo('q-replication')">Replication</a>
+      <a class="sidebar-link" onclick="scrollTo('q-partitioning')">Partitioning</a>
+      <a class="sidebar-link" onclick="scrollTo('q-consistency')">Consistency Models</a>
+      <a class="sidebar-link" onclick="scrollTo('q-cap')">CAP Theorem</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">Unit 4</div>
+      <a class="sidebar-link" onclick="scrollTo('q-p2p-master')">P2P vs Master-Slave</a>
+      <a class="sidebar-link" onclick="scrollTo('q-fault-tolerance')">Fault Tolerance</a>
+      <a class="sidebar-link" onclick="scrollTo('q-leader-election')">Leader Election</a>
+      <a class="sidebar-link" onclick="scrollTo('q-zookeeper')">Zookeeper</a>
+      <a class="sidebar-link" onclick="scrollTo('q-multitenancy')">Multitenancy</a>
+      <a class="sidebar-link" onclick="scrollTo('q-cloud-bursting')">Cloud Bursting</a>
+      <a class="sidebar-link" onclick="scrollTo('q-reverse-proxy')">Reverse Proxy</a>
+      <a class="sidebar-link" onclick="scrollTo('q-security')">Security Patterns</a>
+    </div>
+  </div>
+
+  <div class="content" id="mainContent">
+    <!-- ===== UNIT 1 ===== -->
+    <div class="unit-section" data-unit="1">
+      <div class="unit-header">
+        <span class="unit-badge" style="background:rgba(124,109,250,0.15);color:#7c6dfa;">UNIT 1</span>
+        <h2>Cloud Programming Models</h2>
+      </div>
+
+      <!-- Q1 -->
+      <div class="qa-card" id="q-characteristics" data-unit="1" data-keywords="elasticity rapid provisioning measured service resource pooling characteristics features cloud computing">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q1</span>
+          <div class="q-text">
+            Explain the following terms with respect to Cloud Computing: (a) Elasticity, (b) Rapid Provisioning, (c) Measured Service, (d) Resource Pooling
+            <div class="q-tags"><span class="q-tag">Most Asked</span><span class="q-tag">Unit 1</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <h4>a) Elasticity</h4>
+            <p>Elasticity is the ability of a cloud platform to <strong>rapidly increase or decrease computing resources</strong> to cope with changing loads dynamically. It refers to the actual scaling action—adding or removing resources in response to demand. For example, a web application may need more servers during peak traffic and fewer during off-peak hours.</p>
+            <div class="highlight"><em>Key distinction:</em> Elasticity is dynamic (real-time), whereas Scalability is the potential/capability to grow. Elasticity is about <em>doing</em>, scalability is about <em>being able to do</em>.</div>
+            <ul>
+              <li><strong>Scale Up (Vertical Scaling):</strong> Adding more power (CPU, RAM) to existing servers.</li>
+              <li><strong>Scale Out (Horizontal Scaling):</strong> Adding more servers to distribute load.</li>
+              <li><strong>Scale Down:</strong> Releasing unused resources to save cost.</li>
+            </ul>
+
+            <h4>b) Rapid Provisioning</h4>
+            <p>Rapid provisioning means that cloud resources (compute, storage, networking) can be <strong>acquired and released quickly</strong>—within minutes—with minimal management effort or service provider interaction. This is also called "on-demand self-service." Users can self-provision resources through a web portal or API without calling a helpdesk.</p>
+
+            <h4>c) Measured Service</h4>
+            <p>Cloud systems automatically control and optimize resource use by leveraging a metering capability. Resources usage is <strong>monitored, controlled, and reported transparently</strong>. This enables the "pay-as-you-go" or "pay-per-use" business model—consumers pay only for what they actually consume. Examples: AWS billing by GB-hour of storage, per-second compute billing.</p>
+
+            <h4>d) Resource Pooling</h4>
+            <p>The provider's computing resources are <strong>pooled to serve multiple consumers</strong> using a multi-tenant model. Physical and virtual resources are dynamically assigned and reassigned according to consumer demand. Customers generally have no control or knowledge over the exact physical location of provided resources (location independence). Example: Multiple customers share the same physical servers through virtualization.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q2 -->
+      <div class="qa-card" id="q-cc-intro" data-unit="1" data-keywords="benefits moving applications cloud advantages scalability cost security">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q2</span>
+          <div class="q-text">
+            List and explain the benefits of moving applications to the cloud.
+            <div class="q-tags"><span class="q-tag">Most Asked</span><span class="q-tag">Unit 1</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <ul>
+              <li><strong>Scalability:</strong> Applications on the cloud have a better ability to scale up or down based on IT requirements and business plans. Resources can be added or removed as demand changes.</li>
+              <li><strong>Cost Reduction:</strong> Organizations can reduce operational costs while improving IT processes. Applications pay only for what they use, eliminating the need to maintain costly data centers. Capital expenses (CapEx) are replaced with variable operational expenses (OpEx).</li>
+              <li><strong>Integration:</strong> Cloud allows businesses to seamlessly connect systems together and improve efficiency with all services, alleviating risks like hardware refresh cycles.</li>
+              <li><strong>Accessibility:</strong> All data is stored in the cloud so it can be accessed from anywhere regardless of what happens to physical machinery. Applications are available from desktops, laptops, and mobile devices.</li>
+              <li><strong>Security:</strong> Cloud infrastructure is built with privacy and security in mind. Providers handle security updates automatically, apply threat detection, and keep systems protected against known vulnerabilities.</li>
+              <li><strong>Elasticity:</strong> Scale resources up or down instantly as business needs change—ideal for handling peak loads without over-provisioning.</li>
+              <li><strong>Deployment Speed:</strong> Cloud enables global expansion and deployment in minutes rather than weeks or months.</li>
+              <li><strong>Disaster Recovery:</strong> Cloud platforms provide built-in backup, redundancy, and disaster recovery options.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q3 -->
+      <div class="qa-card" id="q-service-models" data-unit="1" data-keywords="service models IaaS PaaS SaaS deployment models public private hybrid multi-cloud">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q3</span>
+          <div class="q-text">
+            Describe briefly 3 service models and 3 deployment models of cloud computing.
+            <div class="q-tags"><span class="q-tag">Most Asked</span><span class="q-tag">Unit 1</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <h4>Service Models</h4>
+            <table>
+              <tr><th>Model</th><th>Full Name</th><th>What is Provided</th><th>Examples</th></tr>
+              <tr><td><strong>IaaS</strong></td><td>Infrastructure as a Service</td><td>Virtual machines, storage, networking. User manages OS upward.</td><td>AWS EC2, AWS S3, Google Compute Engine, Azure VMs</td></tr>
+              <tr><td><strong>PaaS</strong></td><td>Platform as a Service</td><td>Runtime environment, middleware, development tools. User manages applications and data.</td><td>Google App Engine, AWS RDS, Azure App Service, Heroku</td></tr>
+              <tr><td><strong>SaaS</strong></td><td>Software as a Service</td><td>Fully hosted applications delivered over the web. User just uses the application.</td><td>Office 365, Gmail, Salesforce, Shopify, Dropbox</td></tr>
+            </table>
+
+            <h4>Deployment Models</h4>
+            <p><strong>Public Cloud:</strong> Cloud infrastructure shared by the general public over the Internet by a service provider (e.g., AWS, Azure, GCP). Cost-effective, highly scalable, but less control over security. Multiple customers share the same infrastructure (multi-tenancy).</p>
+            <p><strong>Private Cloud:</strong> Cloud infrastructure dedicated to a single organization. Hosted either on-premises or by a third-party provider. Provides greater control, enhanced security, and compliance. Used in heavily regulated industries (banking, healthcare). However, it is more expensive and requires internal expertise.</p>
+            <p><strong>Hybrid Cloud:</strong> Combination of public and private cloud, allowing data and applications to move between them. Offers balance of flexibility and security. Enables cloud bursting—when private cloud capacity is exceeded, overflow to public cloud.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q4 -->
+      <div class="qa-card" id="q-deployment-models" data-unit="1" data-keywords="private public cloud advantages disadvantages compare contrast">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q4</span>
+          <div class="q-text">
+            Discuss the relative advantages and disadvantages of private and public clouds.
+            <div class="q-tags"><span class="q-tag">Most Asked</span><span class="q-tag">Unit 1</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <table>
+              <tr><th></th><th>Public Cloud</th><th>Private Cloud</th></tr>
+              <tr><td><strong>Cost</strong></td><td>Pay-as-you-go; no upfront investment; economical for variable workloads</td><td>High capital expense; dedicated hardware; higher ongoing operational costs</td></tr>
+              <tr><td><strong>Scalability</strong></td><td>Excellent—virtually unlimited, on-demand resources</td><td>Limited by owned hardware; must plan capacity ahead</td></tr>
+              <tr><td><strong>Security</strong></td><td>Shared infrastructure; provider manages security; some risk from multi-tenancy</td><td>Greater control; dedicated, isolated hardware; easier to meet strict compliance requirements</td></tr>
+              <tr><td><strong>Control</strong></td><td>Less control over infrastructure</td><td>Full control over hardware and software configuration</td></tr>
+              <tr><td><strong>Compliance</strong></td><td>May not meet regulations for sensitive data</td><td>Suitable for regulated industries (healthcare, banking, government)</td></tr>
+              <tr><td><strong>Vendor Lock-in</strong></td><td>Risk of lock-in to provider ecosystem</td><td>No vendor lock-in; use own infrastructure</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q5 -->
+      <div class="qa-card" id="q-parallelism" data-unit="1" data-keywords="parallelism bit level instruction level task level degrees parallel computing">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q5</span>
+          <div class="q-text">
+            Explain different degrees of parallelism with an example.
+            <div class="q-tags"><span class="q-tag">Most Asked</span><span class="q-tag">Unit 1</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <p>Parallelism refers to executing multiple computations simultaneously. There are several degrees:</p>
+            <h4>Bit-Level Parallelism</h4>
+            <p>Increases the processor word size, allowing more data to be processed per operation. <em>Example:</em> Moving from an 8-bit to a 32-bit processor means a 32-bit addition can be done in one clock cycle instead of four. Modern 64-bit CPUs process 64 bits at a time.</p>
+
+            <h4>Instruction-Level Parallelism (ILP)</h4>
+            <p>Multiple instructions are executed simultaneously within the same processor. Techniques include pipelining (overlapping execution stages of multiple instructions) and superscalar execution (dispatching multiple instructions per clock cycle). <em>Example:</em> A CPU pipeline processes Fetch, Decode, Execute, Writeback stages for different instructions simultaneously.</p>
+
+            <h4>Task-Level Parallelism</h4>
+            <p>Different tasks or processes run simultaneously on multiple processors/cores. <em>Example:</em> In a web server, each HTTP request is handled by a separate thread/process running in parallel. In MapReduce on Hadoop, the Map phase processes multiple data partitions on different nodes simultaneously.</p>
+
+            <h4>Data Parallelism</h4>
+            <p>The same operation is applied to multiple data elements simultaneously. <em>Example:</em> GPU computing applies the same shader operation to thousands of pixels in parallel.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q6 -->
+      <div class="qa-card" id="q-microservices" data-unit="1" data-keywords="microservices monolithic differences challenges migrating saga pattern">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q6</span>
+          <div class="q-text">
+            What are the differences between monolithic and microservices applications? What are the challenges associated with migrating monolithic applications?
+            <div class="q-tags"><span class="q-tag">Most Asked</span><span class="q-tag">Unit 1</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <h4>Monolithic Architecture</h4>
+            <p>A monolithic application is built as a <strong>single, indivisible unit</strong>. All components (UI, business logic, data access) are tightly coupled and deployed together.</p>
+            <p><em>Advantages:</em> Simple to develop initially, easy to deploy (copy one artifact), simple scalability (replicate the whole app).</p>
+            <p><em>Disadvantages:</em> As the app grows, the codebase becomes complex; hard to scale individual components; a failure in any part can bring down the whole app; technology stack is locked in.</p>
+
+            <h4>Microservices Architecture</h4>
+            <p>Microservices are <strong>small, independent services</strong> that each handle a specific business capability, communicate over APIs (usually REST/HTTP or messaging queues), and can be deployed independently.</p>
+            <p><em>Advantages:</em> Independent scalability, independent deployment, different services can use different technologies, failure isolation, easier for large teams.</p>
+            <p><em>Disadvantages:</em> Higher complexity in inter-service communication, distributed tracing, service discovery, and data consistency.</p>
+
+            <h4>Key Differences</h4>
+            <table>
+              <tr><th>Aspect</th><th>Monolithic</th><th>Microservices</th></tr>
+              <tr><td>Deployment</td><td>Single deployable unit</td><td>Each service deployed independently</td></tr>
+              <tr><td>Scalability</td><td>Scale the whole app</td><td>Scale individual services</td></tr>
+              <tr><td>Technology</td><td>One tech stack</td><td>Polyglot (different tech per service)</td></tr>
+              <tr><td>Failure</td><td>One failure can crash all</td><td>Failures are isolated</td></tr>
+              <tr><td>Communication</td><td>In-process function calls</td><td>Network calls (REST/messaging)</td></tr>
+            </table>
+
+            <h4>Challenges of Migrating Monolithic Applications</h4>
+            <ul>
+              <li><strong>Identifying boundaries:</strong> Decomposing a tightly coupled monolith into independently deployable services is difficult—domain boundaries are unclear.</li>
+              <li><strong>Data management:</strong> The monolith often has a single shared database. Splitting it per-service requires complex data migration and handling distributed transactions.</li>
+              <li><strong>Distributed transactions:</strong> ACID transactions across multiple services are complex—handled with the <strong>Saga pattern</strong> (chain of local transactions with compensating transactions on failure).</li>
+              <li><strong>Testing complexity:</strong> Integration testing across many independent services is harder.</li>
+              <li><strong>Operational overhead:</strong> Requires container orchestration, service discovery, load balancing, distributed logging and tracing.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q7 -->
+      <div class="qa-card" id="q-pubsub" data-unit="1" data-keywords="pub sub publish subscribe message queue asynchronous communication model">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q7</span>
+          <div class="q-text">
+            Explain the four core concepts of the publisher/subscriber model used in asynchronous communication. What are the different purposes for which the pub/sub model can be used?
+            <div class="q-tags"><span class="q-tag">Unit 1</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <h4>Four Core Concepts of Pub/Sub</h4>
+            <ol>
+              <li><strong>Message:</strong> The data payload that is published. It contains the event or information that needs to be communicated.</li>
+              <li><strong>Topic:</strong> A named channel/subject to which messages are published. Publishers send messages to topics; subscribers express interest in topics.</li>
+              <li><strong>Publisher (Producer):</strong> An entity that creates and sends messages to a topic. Publishers are decoupled from subscribers—they don't know who receives the messages.</li>
+              <li><strong>Subscriber (Consumer):</strong> An entity that registers interest in a topic and receives messages published to that topic. Multiple subscribers can receive the same message (fan-out).</li>
+            </ol>
+
+            <h4>How It Works</h4>
+            <p>When a publisher sends a message to a topic, all subscribers of that topic immediately receive it. The publisher and subscriber are temporally and spatially decoupled—publishers don't need to know if subscribers are running, and subscribers receive messages even if the publisher has stopped.</p>
+
+            <h4>Purposes of Pub/Sub</h4>
+            <ul>
+              <li><strong>Event notification:</strong> Notifying multiple services when an event occurs (e.g., order placed → notify billing, inventory, shipping services).</li>
+              <li><strong>Multiple subscribers:</strong> Fan-out to multiple consumers simultaneously.</li>
+              <li><strong>Decoupling services:</strong> Services don't need direct knowledge of each other; improves resilience.</li>
+              <li><strong>Stream processing:</strong> Real-time data pipelines (Apache Kafka).</li>
+              <li><strong>Log aggregation:</strong> Collecting logs from multiple services to a single subscriber.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q8 -->
+      <div class="qa-card" id="q-rest" data-unit="1" data-keywords="REST REST API architectural principles operations HTTP microservice">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q8</span>
+          <div class="q-text">
+            Explain REST operations and the REST architectural style with its four principles.
+            <div class="q-tags"><span class="q-tag">Most Asked</span><span class="q-tag">Unit 1</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <h4>REST (Representational State Transfer)</h4>
+            <p>REST is an architectural style for designing networked applications. It uses HTTP protocol and treats everything as a <strong>resource</strong> accessed via URIs. REST is the foundation for microservices communication.</p>
+
+            <h4>Four Key REST Principles</h4>
+            <ol>
+              <li><strong>Client-Server:</strong> Clear separation between UI/client and data storage/server. This improves portability of the UI and scalability of the server components.</li>
+              <li><strong>Stateless:</strong> Each request from client to server must contain all information needed to understand and process the request. No session state is stored on the server between requests. Each request is independent.</li>
+              <li><strong>Uniform Interface:</strong> A consistent, standardized interface between components. Resources are identified by URIs; interactions happen through a fixed set of operations.</li>
+              <li><strong>Layered System:</strong> Client cannot tell whether it is connected directly to the end server or to an intermediary (proxy, load balancer, etc.). Enables scalability through caching, load balancing.</li>
+            </ol>
+
+            <h4>REST HTTP Operations (CRUD)</h4>
+            <table>
+              <tr><th>HTTP Method</th><th>Operation</th><th>Example</th></tr>
+              <tr><td>GET</td><td>Read a resource</td><td>GET /users/123</td></tr>
+              <tr><td>POST</td><td>Create a resource</td><td>POST /users</td></tr>
+              <tr><td>PUT</td><td>Update/replace a resource</td><td>PUT /users/123</td></tr>
+              <tr><td>DELETE</td><td>Delete a resource</td><td>DELETE /users/123</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q9 serverless -->
+      <div class="qa-card" data-unit="1" data-keywords="serverless computing advantages benefits lambda function as a service">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q9</span>
+          <div class="q-text">
+            What is serverless computing? List the advantages. Give an example real-world cloud service that employs serverless computing.
+            <div class="q-tags"><span class="q-tag">Unit 1</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <p><strong>Serverless computing</strong> is a cloud execution model where the cloud provider dynamically manages the allocation and provisioning of servers. Developers write and deploy code (functions) without managing underlying servers. The provider automatically scales the infrastructure.</p>
+            <h4>Advantages</h4>
+            <ul>
+              <li><strong>No server management:</strong> No need to provision, patch, or manage servers.</li>
+              <li><strong>Pay-per-execution:</strong> Charged only when code runs, not for idle time.</li>
+              <li><strong>Automatic scaling:</strong> Scales automatically from zero to peak demand.</li>
+              <li><strong>Faster development:</strong> Developers focus only on business logic.</li>
+              <li><strong>High availability:</strong> Provider handles fault tolerance and redundancy.</li>
+            </ul>
+            <p><strong>Example:</strong> AWS Lambda—execute functions in response to events (HTTP requests, S3 uploads, DynamoDB changes) without managing servers. Also: Azure Functions, Google Cloud Functions.</p>
+            <div class="highlight">Serverless is ideal for event-driven, stateless, short-duration workloads such as image processing, notification sending, and API backends.</div>
+          </div>
+        </div>
+      </div>
+      <!-- Q10 -->
+      <div class="qa-card" id="q-tech-challenges" data-unit="1" data-keywords="technology challenges cloud computing scalability elasticity performance unpredictability availability reliability security compliance multitenancy">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q10</span>
+          <div class="q-text">
+            Discuss the most common technology challenges that occur in cloud computing.
+            <div class="q-tags"><span class="q-tag">New</span><span class="q-tag">Unit 1</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <ul>
+              <li><strong>Scalability:</strong> Cloud applications must handle growth in users, data, and requests. Scaling may be vertical or horizontal, but the design must avoid bottlenecks.</li>
+              <li><strong>Elasticity:</strong> Resources should expand and shrink with demand. The challenge is to automate this without over-provisioning or affecting response time.</li>
+              <li><strong>Performance unpredictability:</strong> Shared infrastructure, virtualization overhead, noisy neighbours, and network variability can make performance less predictable.</li>
+              <li><strong>Reliability and availability:</strong> Cloud systems run on large distributed infrastructure where machines, networks, and software can fail. Replication, failure detection, checkpointing, and recovery are needed.</li>
+              <li><strong>Security:</strong> Data and computation run on shared infrastructure, so access control, isolation, encryption, monitoring, and secure APIs are essential.</li>
+              <li><strong>Compliance:</strong> Applications may need to satisfy legal, privacy, audit, or data-location rules.</li>
+              <li><strong>Multi-tenancy:</strong> Multiple customers share pooled resources, so the system must maintain isolation while still achieving high utilization.</li>
+              <li><strong>Portability and migration:</strong> Existing applications may need design/code changes before they work correctly in cloud environments.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q11 -->
+      <div class="qa-card" id="q-cloud-architecture" data-unit="1" data-keywords="cloud architecture diagram front end back end client infrastructure service application storage management security cloud ready design considerations">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q11</span>
+          <div class="q-text">
+            Explain cloud architecture and key design considerations for building a cloud-ready application.
+            <div class="q-tags"><span class="q-tag">New</span><span class="q-tag">Unit 1</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <p><strong>Cloud architecture</strong> describes the technology components of a cloud system and the relationships between them. The front end is the client side through which users access services; the back end is the provider side that hosts applications, services, storage, runtime platforms, management, and security.</p>
+            <h4>Main Components</h4>
+            <ul>
+              <li><strong>Client infrastructure:</strong> browser, mobile app, API client, or portal used by consumers.</li>
+              <li><strong>Application/service layer:</strong> SaaS applications, microservices, or APIs exposed to users.</li>
+              <li><strong>Runtime/platform layer:</strong> PaaS middleware, databases, queues, web servers, and development/runtime support.</li>
+              <li><strong>Infrastructure layer:</strong> virtual machines, containers, networks, load balancers, and storage.</li>
+              <li><strong>Management and security:</strong> monitoring, provisioning, scheduling, access control, billing, and policy enforcement.</li>
+            </ul>
+            <div class="highlight">Diagram idea: Client/Front End → Internet/API Gateway → Cloud Services/Application Layer → Platform/Runtime → Virtualized Compute + Storage + Network, with management and security spanning all layers.</div>
+            <h4>Cloud-ready Design Considerations</h4>
+            <ul>
+              <li>Design for horizontal scaling and stateless service instances wherever possible.</li>
+              <li>Use loose coupling through REST APIs, message queues, or pub/sub communication.</li>
+              <li>Plan for failures using redundancy, retries, checkpointing, recovery, and failover.</li>
+              <li>Separate data from compute so that instances can be replaced without losing state.</li>
+              <li>Use security by design: authentication, authorization, isolation, encryption, and audit logging.</li>
+              <li>Keep observability in mind: logs, metrics, alerts, and health checks.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q12 -->
+      <div class="qa-card" id="q-soa-microservices-rest" data-unit="1" data-keywords="SOA service oriented architecture microservices REST APIs SOAP reusable service interfaces">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q12</span>
+          <div class="q-text">
+            What is the difference between SOA and microservices? What role do REST APIs play in SOA/microservices?
+            <div class="q-tags"><span class="q-tag">New</span><span class="q-tag">Unit 1</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <p><strong>SOA</strong> is an architectural approach where software capabilities are exposed as reusable services through standard service interfaces. Services may communicate using SOAP/HTTP, JSON/HTTP, or other network protocols.</p>
+            <p><strong>Microservices</strong> are a finer-grained cloud-native style where an application is split into small independently deployable services, each usually owning a specific business capability and its data.</p>
+            <table>
+              <tr><th>Aspect</th><th>SOA</th><th>Microservices</th></tr>
+              <tr><td>Granularity</td><td>Often larger enterprise services</td><td>Small, focused services</td></tr>
+              <tr><td>Data ownership</td><td>May share enterprise data stores</td><td>Prefer database-per-service or strong ownership</td></tr>
+              <tr><td>Deployment</td><td>Often centrally governed</td><td>Independently built and deployed</td></tr>
+              <tr><td>Communication</td><td>SOAP/REST/message bus</td><td>REST, lightweight messaging, events</td></tr>
+            </table>
+            <p><strong>REST APIs</strong> provide a simple uniform way for services to expose resources over HTTP. They help SOA and microservices communicate using standard operations such as GET, POST, PUT, PATCH, and DELETE without tight coupling between service implementations.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q13 -->
+      <div class="qa-card" id="q-distributed-system-models" data-unit="1" data-keywords="distributed system model client server peer to peer p2p three tier middleware queue asynchronous communication">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q13</span>
+          <div class="q-text">
+            Explain distributed system models with an example.
+            <div class="q-tags"><span class="q-tag">New</span><span class="q-tag">Unit 1</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <p>A distributed system is a collection of independent computers that appear to users as a single coherent system. The slides classify common structures into models such as client-server, peer-to-peer, and layered/multi-tier systems.</p>
+            <ul>
+              <li><strong>Client-server:</strong> Clients send requests to servers that provide services. Example: a browser requesting pages from a web server.</li>
+              <li><strong>Peer-to-peer:</strong> Nodes act as both clients and servers. Work and data can be spread across peers, reducing dependence on a central server.</li>
+              <li><strong>Three-tier/layered model:</strong> Presentation, application logic, and data are separated. Example: web UI → application server/API → database/storage.</li>
+              <li><strong>Message-queue/pub-sub model:</strong> Components communicate asynchronously through queues or topics. This improves loose coupling and resilience.</li>
+            </ul>
+            <div class="highlight">Cloud applications often combine these models: a client-server API, microservices behind it, queues for asynchronous tasks, and distributed storage for persistent data.</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end unit 1 -->
+
+    <!-- ===== UNIT 2 ===== -->
+    <div class="unit-section" data-unit="2">
+      <div class="unit-header">
+        <span class="unit-badge" style="background:rgba(0,212,255,0.1);color:#00d4ff;">UNIT 2</span>
+        <h2>Virtualization</h2>
+      </div>
+
+      <!-- Q10 -->
+      <div class="qa-card" id="q-hypervisors" data-unit="2" data-keywords="hypervisor type 1 type 2 bare metal hosted examples differences">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q14</span>
+          <div class="q-text">
+            What is the difference between a hosted hypervisor (Type 2) and a bare metal hypervisor (Type 1)? Give an example of each. <span class="mark-tag">Most Asked</span>
+            <div class="q-tags"><span class="q-tag">Most Asked</span><span class="q-tag">Unit 2</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <h4>Type 1 — Bare Metal Hypervisor</h4>
+            <p>A Type 1 hypervisor (also called VMM—Virtual Machine Monitor) runs <strong>directly on the physical hardware</strong> without an underlying host OS. It directly controls the hardware and manages guest VMs. It provides the best performance and is used in enterprise and cloud environments.</p>
+            <p><em>Examples:</em> VMware ESXi, Xen, Microsoft Hyper-V, IBM CP/CMS, KVM (debated—it's integrated into Linux kernel).</p>
+
+            <h4>Type 2 — Hosted Hypervisor</h4>
+            <p>A Type 2 hypervisor runs as an application <strong>on top of a host operating system</strong>. The host OS manages hardware resources and the hypervisor runs as software on top of it. Easier to set up but introduces additional overhead from the host OS layer. Commonly used for development and testing.</p>
+            <p><em>Examples:</em> VMware Workstation, Oracle VirtualBox, QEMU.</p>
+
+            <h4>Comparison Table</h4>
+            <table>
+              <tr><th>Aspect</th><th>Type 1 (Bare Metal)</th><th>Type 2 (Hosted)</th></tr>
+              <tr><td>Runs on</td><td>Directly on hardware</td><td>On top of host OS</td></tr>
+              <tr><td>Performance</td><td>Better (direct HW access)</td><td>Lower (extra OS layer)</td></tr>
+              <tr><td>Use case</td><td>Production, data centers</td><td>Dev, testing, desktops</td></tr>
+              <tr><td>Overhead</td><td>Less</td><td>More</td></tr>
+              <tr><td>Examples</td><td>VMware ESXi, Xen, Hyper-V</td><td>VirtualBox, VMware Workstation</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q11 -->
+      <div class="qa-card" id="q-paravirt" data-unit="2" data-keywords="paravirtualization full virtualization x86 transparent binary translation trap emulate">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q15</span>
+          <div class="q-text">
+            How are paravirtualization and full virtualization techniques used to virtualize x86?
+            <div class="q-tags"><span class="q-tag">Most Asked</span><span class="q-tag">Unit 2</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <h4>Background: The x86 Virtualization Problem</h4>
+            <p>x86 has 4 privilege rings (Ring 0–3). In normal operation, the OS runs at Ring 0 (most privileged) and applications at Ring 3. Some x86 instructions behave differently at Ring 0 vs Ring 1—they are "non-virtualizable" (they don't trap when executed in unprivileged mode but silently fail). This makes simple trap-and-emulate impossible on x86 without modifications.</p>
+
+            <h4>Full (Transparent) Virtualization</h4>
+            <p>The guest OS runs <strong>without any modification</strong>. The hypervisor uses <strong>binary translation</strong> at runtime to intercept and emulate privileged and sensitive instructions.</p>
+            <ul>
+              <li>At runtime, the VMM scans guest OS kernel code and replaces non-virtualizable instructions with traps into the VMM.</li>
+              <li>Safe instructions run directly on the hardware (for performance).</li>
+              <li>Guest OS is unaware it is being virtualized.</li>
+              <li>Example: VMware Workstation, Oracle VirtualBox.</li>
+            </ul>
+
+            <h4>Paravirtualization</h4>
+            <p>The guest OS kernel is <strong>modified at compile time</strong> to replace all privileged/sensitive instructions with explicit <strong>hypercalls</strong> to the hypervisor.</p>
+            <ul>
+              <li>Guest OS is aware it is being virtualized—it cooperates with the hypervisor.</li>
+              <li>Performance is better than full virtualization because no binary translation overhead at runtime.</li>
+              <li>Requires source code of the guest OS to be modifiable (works with Linux, not with proprietary OS like Windows without patches).</li>
+              <li>Guest OS typically runs at Ring 1 instead of Ring 0.</li>
+              <li>Example: Xen hypervisor.</li>
+            </ul>
+
+            <div class="highlight"><em>Key difference:</em> Full virtualization modifies at runtime (binary translation); Paravirtualization modifies at compile time (hypercalls replace privileged instructions).</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q12 - Virtualization types applied -->
+      <div class="qa-card" data-unit="2" data-keywords="full virtualization bare metal host based para virtualization apply identify type">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q16</span>
+          <div class="q-text">
+            Apply the appropriate virtualization type (Full, Bare Metal, Host-based, Paravirtualization) for each requirement: (i) dedicated apps on VMs + other apps on host OS; (ii) special APIs requiring OS modifications; (iii) non-critical instructions on hardware directly; (iv) virtualization software directly on hardware.
+            <div class="q-tags"><span class="q-tag">Most Asked</span><span class="q-tag">Unit 2</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <table>
+              <tr><th>Requirement</th><th>Virtualization Type</th><th>Justification</th></tr>
+              <tr>
+                <td>(i) Run dedicated apps on VMs created on guest OS AND run other apps on host OS directly</td>
+                <td><strong>Host-Based (Type 2)</strong></td>
+                <td>Type 2 hypervisor runs on top of a host OS. Applications can run both on the host OS directly and inside VMs created by the hypervisor. Example: VMware Workstation on Windows.</td>
+              </tr>
+              <tr>
+                <td>(ii) Run special APIs requiring substantial OS modifications in a VM</td>
+                <td><strong>Paravirtualization</strong></td>
+                <td>Paravirtualization modifies the guest OS kernel (requiring source code access) and replaces privileged instructions with hypercalls. It is suited when OS modifications are needed for performance. Example: Xen.</td>
+              </tr>
+              <tr>
+                <td>(iii) Non-critical instructions run on hardware directly; critical instructions are replaced with traps into VMM emulated by software</td>
+                <td><strong>Full Virtualization (Binary Translation)</strong></td>
+                <td>Full virtualization intercepts critical/privileged instructions at runtime and emulates them via the VMM, while non-critical instructions run directly on hardware for performance. Guest OS is not modified.</td>
+              </tr>
+              <tr>
+                <td>(iv) Install virtualization software directly on hardware</td>
+                <td><strong>Bare Metal (Type 1)</strong></td>
+                <td>Type 1 hypervisor is installed directly on physical hardware without a host OS. Example: VMware ESXi, Xen, Hyper-V.</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q13 VM vs Container -->
+      <div class="qa-card" id="q-vm-container" data-unit="2" data-keywords="virtual machine container differences similarities docker vm compare">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q17</span>
+          <div class="q-text">
+            List at least four differences between a VM and a Container. What are the similarities?
+            <div class="q-tags"><span class="q-tag">Most Asked</span><span class="q-tag">Unit 2</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <h4>Differences</h4>
+            <table>
+              <tr><th>Aspect</th><th>Virtual Machine</th><th>Container</th></tr>
+              <tr><td>OS</td><td>Each VM has its own full OS (kernel + OS libs)</td><td>Shares the host OS kernel; only includes app + dependencies</td></tr>
+              <tr><td>Size</td><td>GBs (full OS image)</td><td>MBs (lightweight)</td></tr>
+              <tr><td>Boot time</td><td>Minutes</td><td>Seconds (milliseconds)</td></tr>
+              <tr><td>Isolation</td><td>Strong hardware-level isolation via hypervisor</td><td>Process-level isolation via namespaces and cgroups</td></tr>
+              <tr><td>Performance</td><td>Some overhead from virtualization layer</td><td>Near-native performance (no hypervisor)</td></tr>
+              <tr><td>Portability</td><td>Larger, harder to move</td><td>Highly portable (Docker image runs anywhere)</td></tr>
+              <tr><td>Resource use</td><td>More resource-intensive</td><td>More efficient, higher density</td></tr>
+            </table>
+            <h4>Similarities</h4>
+            <ul>
+              <li>Both provide isolated execution environments for applications.</li>
+              <li>Both can be created, started, stopped, and destroyed programmatically.</li>
+              <li>Both enable running multiple workloads on the same physical machine.</li>
+              <li>Both improve resource utilization compared to bare-metal dedicated servers.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q14 VM Migration -->
+      <div class="qa-card" id="q-vm-migration" data-unit="2" data-keywords="hot migration cold migration live migration pre-copy post-copy techniques vm">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q18</span>
+          <div class="q-text">
+            What is the difference between hot migration and cold migration? Explain pre-copy and post-copy techniques of hot migration.
+            <div class="q-tags"><span class="q-tag">Most Asked</span><span class="q-tag">Unit 2</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <h4>Cold Migration</h4>
+            <p>The VM is <strong>shut down</strong> (powered off) before migration. The disk image and configuration are transferred to the destination host, then the VM is restarted there. This results in downtime but is simpler and guarantees a clean, consistent state.</p>
+
+            <h4>Hot (Live) Migration</h4>
+            <p>The VM is migrated <strong>while still running</strong>, with minimal or zero downtime. The VM continues serving requests during the migration process. Used in production environments for load balancing, hardware maintenance, and failover.</p>
+
+            <h4>Pre-Copy Technique</h4>
+            <p>The dominant approach for live migration:</p>
+            <ol>
+              <li><strong>Iterative rounds:</strong> Memory pages are copied to the destination while the VM is still running on the source.</li>
+              <li><strong>Dirty page tracking:</strong> Pages modified during copying (dirty pages) are re-copied in subsequent rounds.</li>
+              <li><strong>Stop-and-copy:</strong> When dirty pages become small enough (convergence), the VM is briefly suspended, remaining dirty pages are copied, and the VM is resumed on the destination.</li>
+              <li><strong>Advantage:</strong> Very short stop time. <strong>Disadvantage:</strong> Memory-intensive workloads with high write rates may not converge easily (too many dirty pages).</li>
+            </ol>
+
+            <h4>Post-Copy Technique</h4>
+            <ol>
+              <li><strong>VM is immediately suspended</strong> and its CPU state and minimal memory are transferred to the destination.</li>
+              <li>The VM starts running on the destination immediately.</li>
+              <li>When pages not yet transferred are accessed, a <strong>page fault</strong> occurs—the destination requests the missing page from the source on demand.</li>
+              <li><strong>Advantage:</strong> Only one copy of each page is needed (no re-copying dirty pages). <strong>Disadvantage:</strong> If the source fails before all pages are transferred, the VM is lost; network latency for page faults impacts performance.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q15 Docker -->
+      <div class="qa-card" id="q-docker" data-unit="2" data-keywords="docker architecture client daemon registry containers images unionfs">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q19</span>
+          <div class="q-text">
+            Explain Docker architecture with a neat diagram description.
+            <div class="q-tags"><span class="q-tag">Most Asked</span><span class="q-tag">Unit 2</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <p>Docker uses a <strong>client-server architecture</strong> with three main components:</p>
+
+            <h4>1. Docker Client</h4>
+            <p>The primary interface for users. Commands like <code>docker run</code>, <code>docker build</code>, <code>docker pull</code> are typed by the user. The client sends these commands to the Docker Daemon via REST API over UNIX sockets or a network interface. The client can communicate with more than one daemon.</p>
+
+            <h4>2. Docker Daemon (dockerd)</h4>
+            <p>Runs on the Docker Host. Listens for Docker API requests and manages Docker objects: images, containers, networks, and volumes. A daemon can also communicate with other daemons to manage Docker services (Swarm).</p>
+
+            <h4>3. Docker Registry</h4>
+            <p>Stores Docker images. Docker Hub is a public registry. Private registries can be hosted within an organization. When you run <code>docker pull</code>, images are downloaded from the registry; <code>docker push</code> uploads images.</p>
+
+            <h4>Docker Objects</h4>
+            <ul>
+              <li><strong>Images:</strong> Read-only templates used to create containers, built from Dockerfiles. Each instruction in a Dockerfile creates a layer (enabling incremental rebuilds).</li>
+              <li><strong>Containers:</strong> Running instances of images. They add a writable layer on top of the read-only image layers (using UnionFS like overlay2/AUFS).</li>
+              <li><strong>Volumes:</strong> Persistent storage that outlives container lifecycle.</li>
+              <li><strong>Networks:</strong> Enable communication between containers.</li>
+            </ul>
+
+            <h4>UnionFS (Union File System)</h4>
+            <p>Docker uses UnionFS to stack multiple read-only image layers with one writable container layer. This allows multiple containers to share base image layers (saving disk space) while each has its own isolated writable layer.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q16 Kubernetes -->
+      <div class="qa-card" id="q-kubernetes" data-unit="2" data-keywords="kubernetes architecture master worker node kubelet kube-scheduler controller manager pods etcd">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q20</span>
+          <div class="q-text">
+            Explain Kubernetes architecture with a neat diagram showing all key components of master and worker nodes. What are controller-manager, kubelets, and pods?
+            <div class="q-tags"><span class="q-tag">Most Asked</span><span class="q-tag">Unit 2</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <p>A Kubernetes (K8s) cluster consists of a <strong>Master node</strong> (control plane) and multiple <strong>Worker nodes</strong>.</p>
+
+            <h4>Master Node Components</h4>
+            <ul>
+              <li><strong>kube-apiserver:</strong> Exposes the Kubernetes API. Entry point for all REST commands to control the cluster. All admin operations go through here.</li>
+              <li><strong>etcd:</strong> Distributed key-value store that stores all cluster data (configuration, state, secrets). Used for shared configuration and service discovery.</li>
+              <li><strong>kube-scheduler:</strong> Watches for newly created Pods with no assigned node and selects a node for them to run on, based on resource availability and constraints.</li>
+              <li><strong>kube-controller-manager:</strong> Runs controllers that watch the cluster state via the API server and make corrective changes. Examples:
+                <ul>
+                  <li>Replication Controller: Ensures the correct number of pod replicas.</li>
+                  <li>Node Controller: Manages node lifecycle.</li>
+                </ul>
+              </li>
+            </ul>
+
+            <h4>Worker Node Components</h4>
+            <ul>
+              <li><strong>Kubelet:</strong> An agent running on each worker node. Gets pod configurations from the API server and ensures described containers are running and healthy.</li>
+              <li><strong>kube-proxy:</strong> Network proxy running on each node. Handles network routing for TCP/UDP packets; implements load balancing for services.</li>
+              <li><strong>Container Runtime:</strong> Software responsible for running containers (Docker, containerd, CRI-O).</li>
+            </ul>
+
+            <h4>Pods</h4>
+            <p>The smallest deployable unit in Kubernetes. A Pod contains one or more containers that share the same network namespace (same IP address) and storage volumes. Containers in a Pod are co-scheduled on the same node.</p>
+
+            <h4>Service</h4>
+            <p>A logical collection of Pods. Provides a stable IP/DNS name and load balancing for accessing the pods, even as they are created/destroyed dynamically.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q17 Shadow page tables -->
+      <div class="qa-card" data-unit="2" data-keywords="shadow page table nested page table challenges VMM memory virtualization">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q21</span>
+          <div class="q-text">
+            Explain Shadow Page Tables with a neat diagram. What are the challenges? How do Nested/Extended Page Tables overcome the software overheads of shadow paging?
+            <div class="q-tags"><span class="q-tag">Unit 2</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <h4>Memory Virtualization Challenge</h4>
+            <p>In a virtual machine, the Guest OS manages its own page tables mapping <em>Guest Virtual Addresses (GVA) → Guest Physical Addresses (GPA)</em>. However, GPA is not the real physical address—the VMM manages the mapping <em>GPA → Machine Physical Addresses (MPA)</em>. The CPU's MMU uses the page table to translate addresses but only understands one level of mapping.</p>
+
+            <h4>Shadow Page Tables</h4>
+            <p>The VMM maintains a <strong>shadow page table</strong> that directly maps <em>GVA → MPA</em>, combining both translations. The VMM keeps the shadow page table in sync with the guest page table.</p>
+            <ul>
+              <li>When the guest OS modifies its page table, the VMM traps the write and updates the shadow page table accordingly.</li>
+              <li>The hardware MMU uses the shadow page table directly.</li>
+            </ul>
+
+            <h4>Challenges of Shadow Page Tables</h4>
+            <ul>
+              <li><strong>Overhead:</strong> Every guest page table modification causes a trap to the VMM, leading to high overhead.</li>
+              <li><strong>Memory overhead:</strong> A separate shadow page table must be maintained for each guest process on each VM.</li>
+              <li><strong>TLB flushes:</strong> Context switches between VMs require TLB invalidation, causing performance loss.</li>
+              <li><strong>Synchronization complexity:</strong> Keeping the shadow page table consistent with the guest table is complex.</li>
+            </ul>
+
+            <h4>Nested/Extended Page Tables (Hardware Solution)</h4>
+            <p>Modern CPUs (AMD-V's NPT, Intel's EPT) provide hardware support for two-level page table walking:</p>
+            <ul>
+              <li>The hardware MMU walks the <em>Guest Page Table</em> (GVA → GPA) and then automatically walks the <em>Host Page Table</em> (GPA → MPA) using hardware.</li>
+              <li>No VMM trapping on every guest page table modification needed.</li>
+              <li>Reduces hypervisor overhead significantly; no software shadow page tables needed.</li>
+              <li>Improves VM performance dramatically for memory-intensive workloads.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <!-- Q18 -->
+      <div class="qa-card" id="q-devops" data-unit="2" data-keywords="DevOps traditional software development operations CI CD version control automation dockerfile pipeline jenkins">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q22</span>
+          <div class="q-text">
+            Explain why DevOps is needed. How is DevOps different from traditional software development and operations?
+            <div class="q-tags"><span class="q-tag">New</span><span class="q-tag">Unit 2</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <p><strong>DevOps</strong> combines development and operations practices so that software can be built, tested, released, deployed, and monitored continuously. In cloud-native systems, frequent changes, container images, infrastructure scripts, and orchestration files need strong automation.</p>
+            <h4>Why DevOps is Needed</h4>
+            <ul>
+              <li>Reduces the delay between writing code and running it in production.</li>
+              <li>Automates build, test, packaging, deployment, and rollback.</li>
+              <li>Improves collaboration between developers, testers, and operations teams.</li>
+              <li>Uses version control for code, documentation, scripts, Dockerfiles, and deployment descriptors.</li>
+              <li>Supports repeatable cloud deployments through CI/CD tools such as Jenkins pipelines.</li>
+            </ul>
+            <table>
+              <tr><th>Traditional Approach</th><th>DevOps Approach</th></tr>
+              <tr><td>Development and operations work in separate phases</td><td>Shared responsibility across build, deploy, and run</td></tr>
+              <tr><td>Manual releases and environment setup</td><td>Automated pipelines and infrastructure/configuration as code</td></tr>
+              <tr><td>Late testing and slower feedback</td><td>Continuous integration and continuous testing</td></tr>
+              <tr><td>Deployment is occasional and risky</td><td>Deployment is frequent, smaller, and repeatable</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q19 -->
+      <div class="qa-card" id="q-privilege-rings" data-unit="2" data-keywords="privilege rings ring 0 ring 1 ring 2 ring 3 x86 virtualization privileged instructions user mode kernel mode trap">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q23</span>
+          <div class="q-text">
+            Explain privilege rings in x86 and the instruction execution problem in virtualization.
+            <div class="q-tags"><span class="q-tag">New</span><span class="q-tag">Unit 2</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <p>x86 processors provide privilege rings. <strong>Ring 0</strong> has the highest privilege and is normally used by the operating system kernel. <strong>Ring 3</strong> has the least privilege and is used by user applications. Rings 1 and 2 exist but are rarely used by ordinary operating systems.</p>
+            <ul>
+              <li>Privileged instructions should execute only in Ring 0.</li>
+              <li>In virtualization, the VMM/hypervisor needs control of Ring 0.</li>
+              <li>The guest OS cannot safely run with full hardware privilege, so it is often de-privileged or executed in a special hardware-assisted mode.</li>
+              <li>Some x86 sensitive instructions behaved differently outside Ring 0 instead of trapping cleanly, which made classic trap-and-emulate virtualization difficult.</li>
+            </ul>
+            <p><strong>Solutions:</strong> Binary translation rewrites problematic instructions; paravirtualization modifies the guest OS to make hypercalls; hardware virtualization adds root/non-root modes so the guest OS can run as if privileged while the hypervisor remains in control.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q20 -->
+      <div class="qa-card" id="q-container-namespaces" data-unit="2" data-keywords="containers namespaces PID UTS MNT IPC NET USER Docker isolation cgroups Linux kernel">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q24</span>
+          <div class="q-text">
+            What are namespaces with respect to containers? Explain PID and UTS namespaces.
+            <div class="q-tags"><span class="q-tag">New</span><span class="q-tag">Unit 2</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <p><strong>Namespaces</strong> are Linux kernel features used by containers to isolate global system resources. A namespace makes a process group see its own instance of a resource, even though it is running on the same physical host as other processes.</p>
+            <ul>
+              <li><strong>PID namespace:</strong> Isolates process identifiers. Processes inside a container see their own process tree and are not aware of processes outside their namespace.</li>
+              <li><strong>UTS namespace:</strong> Isolates hostnames and domain names, allowing multiple containers on the same host to appear to have different host identities.</li>
+              <li><strong>MNT namespace:</strong> Isolates mount points and filesystem views.</li>
+              <li><strong>IPC namespace:</strong> Isolates inter-process communication resources.</li>
+              <li><strong>NET namespace:</strong> Gives each container its own network interfaces, routing tables, and ports.</li>
+              <li><strong>USER namespace:</strong> Maps users and group IDs separately inside the namespace.</li>
+            </ul>
+            <div class="highlight">Docker creates namespaces when a container is created; cgroups complement namespaces by limiting CPU, memory, and other resource usage.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Extra -->
+      <div class="qa-card" id="q-goldberg-popek" data-unit="2" data-keywords="Goldberg Popek virtualization requirements theorem sensitive privileged instructions efficiency resource control equivalence x86">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q25</span>
+          <div class="q-text">
+            Explain the Popek and Goldberg virtualization requirements. Does classic x86 satisfy them?
+            <div class="q-tags"><span class="q-tag">Added</span><span class="q-tag">Unit 2</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <p>Popek and Goldberg defined the conditions for an architecture to support efficient virtualization. A virtual machine monitor should provide:</p>
+            <ul>
+              <li><strong>Equivalence:</strong> A program running inside the VM should behave essentially like it would on real hardware.</li>
+              <li><strong>Resource control:</strong> The VMM must remain in complete control of CPU, memory, and I/O resources.</li>
+              <li><strong>Efficiency:</strong> Most non-privileged instructions should run directly on hardware without VMM intervention.</li>
+            </ul>
+            <p>The key theorem says an architecture is classically virtualizable if all <strong>sensitive instructions</strong> are also <strong>privileged instructions</strong>. Then sensitive operations trap to the VMM, which can emulate them safely.</p>
+            <p>Classic pre-2005 x86 did not fully satisfy this because some sensitive instructions behaved differently outside Ring 0 without trapping cleanly. This is why x86 virtualization used techniques like binary translation, paravirtualization, and later hardware support such as Intel VT-x and AMD-V.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="qa-card" id="q-io-virtualization" data-unit="2" data-keywords="I/O virtualization full device emulation para IO split driver direct IO passthrough VT-d flexibility cost density cables">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q26</span>
+          <div class="q-text">
+            Explain I/O virtualization and its main implementation techniques.
+            <div class="q-tags"><span class="q-tag">Added</span><span class="q-tag">Unit 2</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <p><strong>I/O virtualization</strong> abstracts physical input/output devices so that multiple virtual machines can share and access them safely. The VMM routes I/O requests between guest virtual devices and real hardware.</p>
+            <table>
+              <tr><th>Technique</th><th>Explanation</th><th>Trade-off</th></tr>
+              <tr><td>Full device emulation</td><td>The VMM emulates a standard device; guest I/O traps into the VMM.</td><td>Compatible but slower.</td></tr>
+              <tr><td>Para-I/O / split driver</td><td>Guest uses a front-end driver and host/VMM uses a back-end driver to multiplex real device access.</td><td>Better performance but needs special drivers.</td></tr>
+              <tr><td>Direct I/O / passthrough</td><td>A VM accesses a physical device directly using hardware support such as VT-d/IOMMU.</td><td>High performance but less flexible for sharing/migration.</td></tr>
+            </table>
+            <p>Benefits include flexibility, reduced device/cable cost, higher I/O density, and better utilization of shared hardware.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="qa-card" id="q-jenkins-pipeline" data-unit="2" data-keywords="Jenkins pipeline CI CD automation DevOps continuous integration continuous delivery build test deploy">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q27</span>
+          <div class="q-text">
+            What is Jenkins and how is a Jenkins pipeline useful in DevOps?
+            <div class="q-tags"><span class="q-tag">Added</span><span class="q-tag">Unit 2</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <p><strong>Jenkins</strong> is an open-source automation server widely used for continuous integration and continuous delivery. It automates repetitive software delivery steps such as build, test, packaging, image creation, deployment, and notifications.</p>
+            <p>A <strong>Jenkins pipeline</strong> represents the workflow as code, usually in a Jenkinsfile. A typical cloud-native pipeline is:</p>
+            <ul>
+              <li>Checkout source code from version control.</li>
+              <li>Build the application and run unit/integration tests.</li>
+              <li>Create artifacts or Docker images.</li>
+              <li>Push artifacts/images to a registry.</li>
+              <li>Deploy to test/staging/production, often with Kubernetes or similar orchestration.</li>
+            </ul>
+            <div class="highlight">In DevOps, Jenkins helps make releases repeatable, automated, faster, and less dependent on manual operations.</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end unit 2 -->
+
+    <!-- ===== UNIT 3 ===== -->
+    <div class="unit-section" data-unit="3">
+      <div class="unit-header">
+        <span class="unit-badge" style="background:rgba(61,220,132,0.1);color:#3ddc84;">UNIT 3</span>
+        <h2>Distributed Storage</h2>
+      </div>
+
+      <!-- Q18 Storage types -->
+      <div class="qa-card" id="q-storage-types" data-unit="3" data-keywords="block file object storage types DAS NAS SAN understanding data storage">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q28</span>
+          <div class="q-text">
+            Explain the three main types of data storage: File, Block, and Object Storage.
+            <div class="q-tags"><span class="q-tag">Unit 3</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <h4>File Storage</h4>
+            <p>Organizes and represents data as a <strong>hierarchy of files in folders</strong>. Data is stored inside a folder with a path used to locate it. Limited metadata tells the system where files are kept. Scaling is typically "scale out" as there's a limit to adding capacity to one system.</p>
+            <p><em>Examples:</em> NAS (Network Attached Storage), DAS (Direct Attached Storage), NFS, CIFS.</p>
+
+            <h4>Block Storage</h4>
+            <p>Chunks data into <strong>arbitrarily organized, evenly sized volumes (blocks)</strong>. Each block is given a unique identifier. The storage system places blocks wherever convenient and reassembles them when data is requested. Decouples data from the user's environment.</p>
+            <p><em>Use cases:</em> Databases, high-performance transactional workloads (ERP, CRM systems). Usually used with SAN environments.</p>
+            <p><em>Examples:</em> AWS EBS, SAN storage.</p>
+            <p><em>Limitation:</em> Expensive; limited capability to handle metadata.</p>
+
+            <h4>Object Storage</h4>
+            <p>Manages data as <strong>discrete objects</strong> in a flat structure (no folder hierarchy). Each object contains the data, a unique identifier (UUID), and rich metadata. Objects are stored in a single repository. Highly scalable (petabytes), ideal for unstructured data.</p>
+            <p><em>Use cases:</em> Media files, backups, static web content, big data archives.</p>
+            <p><em>Examples:</em> AWS S3, Azure Blob Storage, Google Cloud Storage.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q19 Lustre and GlusterFS -->
+      <div class="qa-card" id="q-lustre-gluster" data-unit="3" data-keywords="lustre file system architecture glusterfs gluster distributed file system diagram differences">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q29</span>
+          <div class="q-text">
+            Explain Lustre file system architecture with a neat diagram. How does Lustre differ from GlusterFS?
+            <div class="q-tags"><span class="q-tag">Most Asked</span><span class="q-tag">Unit 3</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <h4>Lustre File System</h4>
+            <p>Lustre is a high-performance parallel distributed file system widely used in HPC (High Performance Computing) and supercomputers.</p>
+            <h4>Lustre Architecture Components:</h4>
+            <ul>
+              <li><strong>MDS (Metadata Server):</strong> Stores file metadata (names, directories, permissions, ownership). There is typically one MDS (or a small cluster for HA). Handles namespace operations (create, delete, rename).</li>
+              <li><strong>MDT (Metadata Target):</strong> Storage device attached to MDS that stores metadata.</li>
+              <li><strong>OSS (Object Storage Server):</strong> Handles actual file data I/O. Multiple OSSes provide parallel data access.</li>
+              <li><strong>OST (Object Storage Target):</strong> Disk attached to an OSS that stores file data as objects.</li>
+              <li><strong>Clients:</strong> Mount the Lustre file system and transparently access files. The client communicates with both MDS (for metadata) and OSS (for data).</li>
+              <li><strong>MGS (Management Server):</strong> Stores configuration information for the Lustre file system.</li>
+            </ul>
+            <p><strong>How it works:</strong> When a client reads a file, it first contacts MDS to get the file's metadata and the layout (which OSTs store the file's stripes). Then it directly accesses the relevant OSSes in parallel for the data. This allows aggregate bandwidth scaling linearly with the number of OSTs.</p>
+
+            <h4>GlusterFS</h4>
+            <p>GlusterFS is a <strong>scale-out</strong> network attached storage file system. It is <em>serverless</em>—there is no separate metadata server. Instead, metadata is distributed across all storage nodes using an elastic hashing algorithm (DHTable). Clients can directly locate data without querying a central metadata server.</p>
+            <ul>
+              <li>Storage bricks (a directory on a server) are combined into volumes.</li>
+              <li>Supports distributed, replicated, striped, and tiered volumes.</li>
+              <li>Translated (FUSE) to be mounted as a standard filesystem.</li>
+            </ul>
+
+            <h4>Key Differences</h4>
+            <table>
+              <tr><th>Aspect</th><th>Lustre</th><th>GlusterFS</th></tr>
+              <tr><td>Metadata</td><td>Dedicated MDS</td><td>No central metadata server (hashing)</td></tr>
+              <tr><td>Use case</td><td>HPC, supercomputers</td><td>General purpose, cloud, enterprise</td></tr>
+              <tr><td>Architecture</td><td>Client + MDS + OSS</td><td>Serverless, P2P-like</td></tr>
+              <tr><td>Scalability</td><td>Extremely high bandwidth</td><td>Scale-out storage</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q20 Replication -->
+      <div class="qa-card" id="q-replication" data-unit="3" data-keywords="replication distributed leaderless leader single multi replication leader-based lag">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q30</span>
+          <div class="q-text">
+            What is replication in a distributed environment? Why is it needed? Explain the different types of replication techniques based on number of leaders (single-leader, multi-leader, leaderless).
+            <div class="q-tags"><span class="q-tag">Most Asked</span><span class="q-tag">Unit 3</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <p><strong>Replication</strong> means keeping multiple copies of the same data on different nodes (potentially in different locations).</p>
+            <h4>Why Replication?</h4>
+            <ul>
+              <li>Keep data geographically closer to users → reduced latency.</li>
+              <li>Fault tolerance / high availability—continue working even if some nodes fail.</li>
+              <li>Scale out read throughput across multiple machines.</li>
+            </ul>
+
+            <h4>1. Single-Leader Replication (Leader-Based)</h4>
+            <p>One replica is designated the <strong>leader</strong>. All write requests go to the leader. The leader writes to its local storage and sends a replication log to followers. Followers apply the log in the same order. Reads can go to any replica (though may be slightly stale).</p>
+            <p><em>Examples:</em> PostgreSQL, MySQL with replication, MongoDB primary-secondary.</p>
+            <p><em>Limitation:</em> Replication lag—followers may serve stale data; leader is a bottleneck for writes.</p>
+
+            <h4>2. Multi-Leader Replication</h4>
+            <p>Multiple leaders each accept writes. Leaders replicate changes to each other and to followers. Useful in multi-datacenter deployments (one leader per datacenter). Reduces latency for writes.</p>
+            <p><em>Challenge:</em> Write conflicts—when the same data is modified on two different leaders concurrently, conflicts must be resolved.</p>
+
+            <h4>3. Leaderless Replication</h4>
+            <p>Any replica can accept writes. Clients write to <strong>multiple replicas</strong> (quorum write: typically W out of N nodes must confirm). Clients read from <strong>multiple replicas</strong> and use version numbers to determine the latest value (quorum read: R out of N nodes).</p>
+            <p>If W + R > N, there is guaranteed overlap, ensuring at least one node has the latest value.</p>
+            <p>Stale reads are repaired through <strong>read repair</strong> (client updates stale replica during read) and <strong>anti-entropy</strong> (background process syncs replicas).</p>
+            <p><em>Examples:</em> Apache Cassandra, Amazon DynamoDB, Riak.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q21 Partitioning -->
+      <div class="qa-card" id="q-partitioning" data-unit="3" data-keywords="partitioning sharding key-value data consistent hashing rebalancing dynamic fixed proportional nodes">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q31</span>
+          <div class="q-text">
+            What is the purpose of rebalancing partitions? Explain: Fixed Number of Partitions, Dynamic Partitioning, and Partitioning Proportional to the Nodes.
+            <div class="q-tags"><span class="q-tag">Most Asked</span><span class="q-tag">Unit 3</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <h4>Rebalancing Partitions — Purpose</h4>
+            <p>Rebalancing is the process of moving data between nodes when the cluster configuration changes (nodes added/removed, hardware failures, data growth). The goals are:</p>
+            <ul>
+              <li>Distribute load (data and requests) fairly across nodes after changes.</li>
+              <li>Continue accepting reads and writes while rebalancing is in progress.</li>
+              <li>Move only the minimum necessary data to minimize network/disk load.</li>
+            </ul>
+
+            <h4>1. Fixed Number of Partitions</h4>
+            <p>Create many more partitions than nodes (e.g., 1000 partitions for 10 nodes = 100 partitions/node). When a new node is added, it steals a few partitions from each existing node. Partition boundaries don't change; only assignment changes.</p>
+            <p><em>Advantage:</em> Simple; partition count doesn't change. <em>Disadvantage:</em> Must choose partition count ahead of time—too high wastes resources, too low means big partitions and expensive rebalancing.</p>
+
+            <h4>2. Dynamic Partitioning</h4>
+            <p>Partitions grow and split based on data size. When a partition exceeds a threshold (e.g., 10GB), it's split into two. When data is deleted, partitions can be merged. The number of partitions scales with total data volume.</p>
+            <p><em>Advantage:</em> No need to pre-configure partition count; adapts to data. <em>Disadvantage:</em> Initially one partition means all requests go to one node until first split occurs (mitigated with pre-splitting).</p>
+
+            <h4>3. Partitioning Proportional to the Nodes</h4>
+            <p>Fixed number of partitions <em>per node</em> (e.g., 150 partitions per node). When a new node joins, it randomly picks that many partitions to split, takes half of the data, and keeps the other half in place. Total partition count grows with the number of nodes.</p>
+            <p><em>Used in:  Cassandra, Ketama. Advantage:</em> Partition sizes remain stable as cluster grows. <em>Disadvantage:</em> Random splitting can lead to unfair data distribution.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q22 Consistency Models -->
+      <div class="qa-card" id="q-consistency" data-unit="3" data-keywords="consistency model strict sequential causal PRAM linearizable">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q32</span>
+          <div class="q-text">
+            What is a consistency model? Explain Strict, Sequential, Causal, and PRAM (Pipelined RAM) consistency models.
+            <div class="q-tags"><span class="q-tag">Most Asked</span><span class="q-tag">Unit 3</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <p>A <strong>consistency model</strong> defines the rules for when and how updates to shared data become visible to different processes in a distributed system. Stronger consistency models are easier to reason about but harder to implement.</p>
+
+            <h4>1. Strict Consistency (Linearizability)</h4>
+            <p>The strongest model. Any read on a data item X must return the value of the <strong>most recent write</strong> to X, based on absolute (real-world) time. All operations appear instantaneous and in global time order.</p>
+            <p><em>Implication:</em> Effectively impossible to guarantee in a distributed system (violates CAP). Only achievable on a single processor or with atomic transactions.</p>
+
+            <h4>2. Sequential Consistency</h4>
+            <p>The result of any execution is the same as if operations of all processes were executed in some <strong>sequential order</strong>, and the operations of each individual process appear in that sequence in the order specified by its program. All processes see the same global order of operations, though that order may differ from real-world time order.</p>
+            <p><em>Example:</em> If process P1 writes A=1 then B=2, all processes see A=1 before B=2, but another process's write might appear between them.</p>
+
+            <h4>3. Causal Consistency</h4>
+            <p>Writes that are <strong>causally related</strong> must be seen by all processes in the same order. Concurrent writes (with no causal relationship) may be seen in different orders by different processes. Causally related means: if one event (write) may have influenced another, all processes must agree on their order.</p>
+            <p><em>Weaker than sequential</em> but stronger than eventual consistency.</p>
+
+            <h4>4. PRAM (Pipelined RAM) Consistency</h4>
+            <p>Writes done by a <strong>single process are seen by all other processes in the order in which they were issued</strong>, but writes from different processes may be seen in different orders by different processes. Each process's writes appear in order, but interleaving between different processes may vary.</p>
+            <p><em>This is weaker than causal consistency.</em> Easy to implement efficiently as it only requires FIFO ordering of writes from the same source.</p>
+
+            <div class="highlight">Ordering of strength (strongest → weakest): Strict → Sequential → Causal → PRAM → Eventual</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q23 CAP -->
+      <div class="qa-card" id="q-cap" data-unit="3" data-keywords="CAP theorem consistency availability partition tolerance choose database">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q33</span>
+          <div class="q-text">
+            What does the CAP theorem state? Briefly explain the 3 properties. How would you choose a database for your application based on the CAP theorem?
+            <div class="q-tags"><span class="q-tag">Most Asked</span><span class="q-tag">Unit 3</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <h4>CAP Theorem</h4>
+            <p>The CAP theorem states that it is <strong>impossible for a distributed data store to simultaneously provide all three of the following guarantees</strong>. At most two can be strongly supported at the same time:</p>
+
+            <h4>1. Consistency (C)</h4>
+            <p>Every read receives the <strong>most recent write</strong> or an error. All nodes see the same data at any given time. A system has consistency if every read returns the latest successfully written value.</p>
+
+            <h4>2. Availability (A)</h4>
+            <p>Every request receives a (non-error) response, <strong>without guarantee that it contains the most recent data</strong>. Every working node returns a valid response to any request.</p>
+
+            <h4>3. Partition Tolerance (P)</h4>
+            <p>The system continues to operate despite an arbitrary number of <strong>network partitions</strong> (message losses or delays between nodes). In a distributed system, network partitions are inevitable, so P must always be tolerated.</p>
+
+            <div class="highlight">Since network partitions (P) always occur in distributed systems, the real trade-off is between <strong>Consistency (CP)</strong> and <strong>Availability (AP)</strong> when a partition occurs.</div>
+
+            <h4>Choosing a Database Based on CAP</h4>
+            <table>
+              <tr><th>Choice</th><th>Behavior</th><th>Use When</th><th>Examples</th></tr>
+              <tr>
+                <td><strong>CP (Consistency + Partition Tolerance)</strong></td>
+                <td>Rejects requests to avoid returning inconsistent data during a partition. May be unavailable during partition.</td>
+                <td>Financial transactions, banking, payment systems—where data accuracy is critical.</td>
+                <td>HBase, ZooKeeper, MongoDB (in strong consistency mode), PostgreSQL</td>
+              </tr>
+              <tr>
+                <td><strong>AP (Availability + Partition Tolerance)</strong></td>
+                <td>Returns potentially stale data during partition rather than failing. Eventually consistent.</td>
+                <td>Social media feeds, shopping carts, DNS—where availability is more important than perfect consistency.</td>
+                <td>Apache Cassandra, CouchDB, DynamoDB, Riak</td>
+              </tr>
+            </table>
+            <p><em>Note:</em> CA (Consistency + Availability without partition tolerance) is not realistic for distributed systems—partitions always happen over a network. CA applies to single-node systems.</p>
+          </div>
+        </div>
+      </div>
+      <!-- Q25 -->
+      <div class="qa-card" id="q-request-routing" data-unit="3" data-keywords="request routing partitioning key value coordinator random routing partition aware client routing table">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q34</span>
+          <div class="q-text">
+            Explain request routing in partitioned storage systems.
+            <div class="q-tags"><span class="q-tag">New</span><span class="q-tag">Unit 3</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <p>In a partitioned key-value system, data is divided across nodes. <strong>Request routing</strong> decides which node should handle a read/write request for a given key.</p>
+            <ul>
+              <li><strong>Route to any node:</strong> A client contacts any node; if that node does not own the partition, it forwards the request to the correct node.</li>
+              <li><strong>Routing tier/coordinator:</strong> A separate routing layer knows the partition-to-node mapping and sends the request to the right storage node.</li>
+              <li><strong>Partition-aware client:</strong> The client stores or fetches routing metadata and directly contacts the node responsible for the key.</li>
+              <li><strong>Gossip/metadata service based routing:</strong> Cluster membership and partition ownership are maintained through a coordination or metadata service so routers and clients can update their tables.</li>
+            </ul>
+            <p>Good routing reduces extra network hops, but the system must update routing information during failures and rebalancing.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q26 -->
+      <div class="qa-card" id="q-s3-object-storage" data-unit="3" data-keywords="Amazon S3 simple storage service object storage bucket key metadata object cloud storage">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q35</span>
+          <div class="q-text">
+            Illustrate the working of Amazon Simple Storage Service with respect to object storage.
+            <div class="q-tags"><span class="q-tag">New</span><span class="q-tag">Unit 3</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <p>Amazon S3 is an example of <strong>cloud object storage</strong>. Object storage keeps data as objects in a flat namespace rather than as files in folders or blocks on disks.</p>
+            <h4>How it Works</h4>
+            <ul>
+              <li>Data is stored as an <strong>object</strong>: actual content plus metadata.</li>
+              <li>Objects are placed in <strong>buckets</strong>, which are logical containers.</li>
+              <li>Each object has a <strong>key</strong> that uniquely identifies it inside a bucket.</li>
+              <li>Applications use APIs to PUT, GET, LIST, COPY, or DELETE objects.</li>
+              <li>The storage service handles distribution, replication, durability, and availability behind the API.</li>
+            </ul>
+            <div class="highlight">Example: A photo-sharing app stores image bytes as objects, keeps metadata such as content type and owner, and retrieves each image using its bucket and key.</div>
+            <p>Object storage is useful for backups, media, logs, static website content, and large unstructured data because it scales horizontally and can attach rich metadata to each object.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q27 -->
+      <div class="qa-card" id="q-glusterfs" data-unit="3" data-keywords="GlusterFS architecture distributed metadata bricks translators AFR load balancing Lustre comparison">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q36</span>
+          <div class="q-text">
+            Explain GlusterFS file system architecture with a neat diagram.
+            <div class="q-tags"><span class="q-tag">New</span><span class="q-tag">Unit 3</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <p><strong>GlusterFS</strong> is an open-source distributed cluster file system. Unlike Lustre, it does not depend on a centralized metadata server; metadata and data are distributed across storage nodes.</p>
+            <h4>Architecture</h4>
+            <ul>
+              <li><strong>Storage bricks:</strong> Basic storage units made of a server plus directly attached or network-attached storage.</li>
+              <li><strong>Gluster servers:</strong> Host bricks and export them as part of a single distributed file system.</li>
+              <li><strong>Gluster client:</strong> Mounts the Gluster volume and accesses files transparently.</li>
+              <li><strong>Translators:</strong> Stackable modules that implement features such as distribution, replication, striping, load balancing, and failure handling.</li>
+              <li><strong>AFR translator:</strong> Provides automatic file replication by keeping identical copies on multiple bricks.</li>
+            </ul>
+            <div class="highlight">Diagram idea: Client → GlusterFS client layer/translators → multiple Gluster servers → bricks. There is no separate central metadata server.</div>
+            <p>GlusterFS is highly available and scalable because clients can access many storage nodes and the system can handle failure of individual nodes transparently through replication.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Extra -->
+      <div class="qa-card" id="q-transactions-2pc" data-unit="3" data-keywords="transactions ACID distributed transaction two phase commit 2PC coordinator participant prepare commit abort">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q37</span>
+          <div class="q-text">
+            Explain transactions in distributed systems and the Two-Phase Commit protocol.
+            <div class="q-tags"><span class="q-tag">Added</span><span class="q-tag">Unit 3</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <p>A <strong>transaction</strong> is a unit of work that should preserve ACID properties: atomicity, consistency, isolation, and durability. In distributed systems, one transaction may involve multiple nodes or services, so commit/abort must be coordinated.</p>
+            <h4>Two-Phase Commit (2PC)</h4>
+            <ul>
+              <li><strong>Coordinator:</strong> Controls the transaction decision.</li>
+              <li><strong>Participants:</strong> Nodes/services that hold part of the data being updated.</li>
+              <li><strong>Phase 1 - Prepare/Vote:</strong> Coordinator asks every participant if it can commit. Each participant writes enough state to commit later and votes yes/no.</li>
+              <li><strong>Phase 2 - Commit/Abort:</strong> If all vote yes, the coordinator sends commit. If any vote no or timeout occurs, it sends abort.</li>
+            </ul>
+            <p>2PC gives atomic commitment across nodes, but it can block if the coordinator fails at the wrong time. For microservices, Saga/compensating transactions are often preferred when long-running distributed transactions are not practical.</p>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end unit 3 -->
+
+    <!-- ===== UNIT 4 ===== -->
+    <div class="unit-section" data-unit="4">
+      <div class="unit-header">
+        <span class="unit-badge" style="background:rgba(255,107,107,0.1);color:#ff6b6b;">UNIT 4</span>
+        <h2>Cloud Controller, Performance, Scalability &amp; Security</h2>
+      </div>
+
+      <!-- Q24 P2P vs Master -->
+      <div class="qa-card" id="q-p2p-master" data-unit="4" data-keywords="p2p peer to peer master slave client server architecture distributed system advantages limitations">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q38</span>
+          <div class="q-text">
+            Compare P2P and Master-Slave (Client-Server) distributed system architectures, including advantages and limitations of each.
+            <div class="q-tags"><span class="q-tag">Unit 4</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <h4>Peer-to-Peer (P2P) Architecture</h4>
+            <p>Every node acts as both a client and a server. All nodes are equal—no hierarchy. Nodes join/leave autonomously; the system is self-organizing with distributed control. No node has a global view of the system.</p>
+            <p><strong>Advantages:</strong></p>
+            <ul>
+              <li>Highly scalable—add more peers to scale.</li>
+              <li>No single point of failure (SPOF); fault-tolerant.</li>
+              <li>No central coordinator needed.</li>
+              <li>Load is naturally distributed.</li>
+            </ul>
+            <p><strong>Limitations:</strong></p>
+            <ul>
+              <li>Security is harder to enforce—each peer has its own data.</li>
+              <li>Decision making becomes harder without a central authority.</li>
+              <li>Difficult to manage effectively at scale.</li>
+              <li>Logical paths don't match physical paths, leading to higher latency.</li>
+            </ul>
+
+            <h4>Master-Slave (Client-Server) Architecture</h4>
+            <p>Roles are asymmetric—one node (master/server) provides resources/services and others (slaves/clients) consume them. Centralized control enables easier management, consistency, and security.</p>
+            <p><strong>Advantages:</strong></p>
+            <ul>
+              <li>Centralized control simplifies management and security.</li>
+              <li>Strong consistency easier to achieve.</li>
+              <li>Well-understood and predictable behavior.</li>
+            </ul>
+            <p><strong>Limitations:</strong></p>
+            <ul>
+              <li>Master is a single point of failure (SPOF).</li>
+              <li>Master is a potential performance bottleneck.</li>
+              <li>Less resilient if master fails.</li>
+            </ul>
+
+            <div class="highlight"><em>Cloud practice:</em> Cloud systems typically use client-server (master-slave) architecture with centralized management in a single administrative domain, given the manageability, security, and consistency requirements. P2P is used selectively (e.g., Amazon Aurora multi-master).</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q25 Fault tolerance -->
+      <div class="qa-card" id="q-fault-tolerance" data-unit="4" data-keywords="fault tolerant system types failures MTBF MTTR failover heartbeat probing dual scheme failure detection">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q39</span>
+          <div class="q-text">
+            What is a fault-tolerant system? Name at least two types of failures. If a service was unavailable for 60 minutes in 75 hours due to 6 failures, compute MTBF and MTTR. Explain Failover and failure detection strategies.
+            <div class="q-tags"><span class="q-tag">Most Asked</span><span class="q-tag">Unit 4</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <h4>Fault-Tolerant System</h4>
+            <p>A fault-tolerant system is a system designed to continue operating correctly even when some of its components fail. It achieves this through redundancy, failover mechanisms, and careful error handling.</p>
+
+            <h4>Types of Failures</h4>
+            <ul>
+              <li><strong>Crash/Fail-Stop:</strong> A node stops responding entirely. Easiest to detect and handle.</li>
+              <li><strong>Omission Fault:</strong> A node fails to send or receive messages (lost messages).</li>
+              <li><strong>Timing Fault:</strong> A node responds but outside the expected time window.</li>
+              <li><strong>Arbitrary/Byzantine Fault:</strong> A node behaves incorrectly in unpredictable ways (may send wrong data, corrupt data). Hardest to handle.</li>
+            </ul>
+
+            <h4>MTBF and MTTR Calculation</h4>
+            <p>Given: Total time = 75 hours, Downtime = 60 min = 1 hour, Number of failures = 6.</p>
+            <p>Total uptime = 75 - 1 = 74 hours</p>
+            <div class="formula">MTBF = Total Uptime / Number of Failures = 74 / 6 ≈ 12.33 hours</div>
+            <div class="formula">MTTR = Total Downtime / Number of Failures = 60 / 6 = 10 minutes</div>
+
+            <h4>Failover</h4>
+            <p>Failover is the process of automatically switching to a standby/backup system when the primary fails. Two types:</p>
+            <ul>
+              <li><strong>Active-Passive:</strong> One active server handles all traffic; a standby takes over on failure. Simpler but wasteful (standby idle).</li>
+              <li><strong>Active-Active:</strong> Multiple active servers share traffic; on failure, remaining servers absorb the load. Better utilization.</li>
+            </ul>
+
+            <h4>Failure Detection</h4>
+            <p><strong>Heartbeat:</strong> Nodes periodically send heartbeat messages to a monitor. If heartbeat is not received within a timeout, the node is considered failed.</p>
+            <p><strong>Probing:</strong> A monitoring node actively polls (probes) other nodes to check if they are alive.</p>
+            <p><strong>Dual-Scheme Strategy:</strong> Combines heartbeat and probing. Heartbeat detects failure passively; probing actively confirms before declaring failure. Reduces false positives (declaring a slow-but-alive node as failed).</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q26 Leader Election -->
+      <div class="qa-card" id="q-leader-election" data-unit="4" data-keywords="leader election purpose ring algorithm bully algorithm modified ring worst case messages">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q40</span>
+          <div class="q-text">
+            What is the purpose of Leader Election in distributed computing? Explain the Ring Election Algorithm (including worst-case scenario and messages required) and the Modified Ring Election Algorithm. Also explain the Bully Algorithm with best and worst cases.
+            <div class="q-tags"><span class="q-tag">Most Asked</span><span class="q-tag">Unit 4</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <h4>Purpose of Leader Election</h4>
+            <p>In distributed systems, many algorithms require a single coordinator (leader) to manage tasks, maintain consistency, and coordinate resource access. However, if the leader fails, a new leader must be chosen. Leader election algorithms determine which node takes over.</p>
+            <p><em>When to elect:</em> At system startup, and when the current leader fails (no response within a timeout).</p>
+
+            <h4>Ring Election Algorithm</h4>
+            <p>Processes are organized in a <strong>logical ring</strong>. Messages are sent clockwise.</p>
+            <ol>
+              <li>Any process that notices the leader has failed sends an <strong>Election</strong> message containing its own id:attr.</li>
+              <li>Each receiving process compares the arriving id with its own:
+                <ul>
+                  <li>If arrived id > own id → forward the message unchanged.</li>
+                  <li>If arrived id &lt; own id, and this process hasn't sent its own election message → overwrite with own id and forward.</li>
+                  <li>If arrived id matches own id → this process wins (its id is highest) → send <strong>Elected</strong> message.</li>
+                </ul>
+              </li>
+              <li>On receiving Elected: note the new coordinator id, forward, unless you are the coordinator.</li>
+            </ol>
+            <p><strong>Worst Case:</strong> The counter-clockwise neighbor of the initiator has the highest id.</p>
+            <div class="formula">Messages = (N-1) + N + N = 3N - 1 &nbsp;|&nbsp; Turnaround = 3N - 1</div>
+            <p><em>Problem:</em> If a process is slow (not crashed), it may be bypassed and not elected even though it has the highest id. Ring reorganization is complex on failures during election.</p>
+
+            <h4>Modified Ring Election Algorithm</h4>
+            <p>Instead of overwriting the message, each process <strong>appends its id:attr</strong> to the message. Once the message returns to the initiator, it contains all ids.</p>
+            <ol>
+              <li>Initiator elects the process with the best attribute value from the list.</li>
+              <li>Sends a <strong>Coordinator</strong> message; each process appends its id and records the coordinator id.</li>
+              <li>If the coordinator's id is in the final id-list, election is complete; otherwise, restart.</li>
+            </ol>
+            <p>This handles failures more robustly—failed processes are bypassed. The message count is approximately 2N for a non-faulty election (N for election round + N for coordinator announcement).</p>
+
+            <h4>Bully Algorithm</h4>
+            <p>All processes know each other's IDs. A process that detects the leader's failure initiates an election by sending an <strong>Election</strong> message to all processes with <em>higher</em> IDs.</p>
+            <ul>
+              <li>If no reply within timeout → the initiator declares itself leader and sends <strong>Coordinator</strong> to all lower IDs.</li>
+              <li>If a reply is received → wait for a Coordinator message from the higher process.</li>
+              <li>A process receiving Election starts its own election (sends to those with higher IDs).</li>
+            </ul>
+            <p><strong>Best case:</strong> Process with 2nd highest ID detects failure → sends Coordinator to N-2 processes. Turnaround = 1 message transmission time.</p>
+            <p><strong>Worst case:</strong> Process with lowest ID detects failure → N-1 elections start simultaneously. Message complexity = O(N²). Turnaround ≈ 5 message transmission times.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q27 Distributed Lock -->
+      <div class="qa-card" data-unit="4" data-keywords="distributed lock problem fencing token optimistic pessimistic lock zookeeper">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q41</span>
+          <div class="q-text">
+            What is the problem with a typical distributed lock implementation? Explain the approach (fencing tokens) to overcome the problem. What is distributed locking? Explain optimistic and pessimistic locks.
+            <div class="q-tags"><span class="q-tag">Most Asked</span><span class="q-tag">Unit 4</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <h4>Distributed Lock</h4>
+            <p>A distributed lock is used to provide mutually exclusive access to shared resources across multiple nodes in a distributed system.</p>
+
+            <h4>Problem with Typical Implementation</h4>
+            <p>Consider: Client 1 acquires lock with expiry 30s. Due to GC pause or slow network, Client 1 is still holding the lock when it expires. Lock manager grants the lock to Client 2. Now both Client 1 (resumed from pause, unaware of expiry) and Client 2 hold the lock simultaneously → race condition → data corruption.</p>
+
+            <h4>Solution: Fencing Tokens</h4>
+            <p>Every time a lock is granted, the lock service returns a <strong>monotonically increasing fencing token</strong> (e.g., token 34, then 35). When writing to storage, the client includes its token. The storage server <strong>rejects writes with a token lower than the highest it has already seen</strong>. Even if Client 1 resumes with stale token 34, the storage rejects it because Client 2 already wrote with token 35.</p>
+
+            <h4>Pessimistic Locking</h4>
+            <p>A lock is acquired <strong>before</strong> reading/writing shared data. No other process can access the resource until the lock is released. Suitable when conflicts are likely (high contention).</p>
+            <p><em>Downside:</em> Deadlocks possible; reduces concurrency.</p>
+
+            <h4>Optimistic Locking</h4>
+            <p>No lock is acquired upfront. Each resource has a version number. At commit time, the system checks if the version is still the same as when read. If not (someone else modified it), the transaction is retried.</p>
+            <p><em>Suitable for:</em> Low-contention scenarios; higher throughput as no blocking.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q28 Zookeeper -->
+      <div class="qa-card" id="q-zookeeper" data-unit="4" data-keywords="zookeeper apache how it works services benefits znodes leader election distributed lock">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q42</span>
+          <div class="q-text">
+            What is Zookeeper? How does it work? What are the key benefits and common services offered by Zookeeper? Name at least two contexts where Zookeeper may be used.
+            <div class="q-tags"><span class="q-tag">Most Asked</span><span class="q-tag">Unit 4</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <h4>What is Zookeeper?</h4>
+            <p>Apache ZooKeeper is an <strong>open-source, high-performance coordination service</strong> for distributed applications. It provides a centralized infrastructure to maintain configuration information, naming, distributed synchronization, group services, and distributed locking—so developers don't need to build these from scratch.</p>
+
+            <h4>How It Works</h4>
+            <p>ZooKeeper uses a <strong>hierarchical namespace of data registers called znodes</strong> (similar to a file system tree). Each znode can store data and may have children.</p>
+            <ul>
+              <li>Applications create znodes to coordinate tasks or store shared state.</li>
+              <li>Any node in the cluster can register to be notified of changes to a znode (watch mechanism).</li>
+              <li>ZooKeeper runs as an <strong>ensemble</strong> (cluster of 3 or 5 servers) for high availability—one server is elected Leader, others are Followers.</li>
+              <li>Client read requests are handled by the connected ZooKeeper server.</li>
+              <li>Client write requests are forwarded to and handled by the Leader.</li>
+              <li>A majority (quorum) of servers must be available for ZooKeeper to function.</li>
+              <li>Each client sends regular heartbeats to the server; if a client fails to respond, its ephemeral znodes are automatically deleted.</li>
+            </ul>
+
+            <h4>Key Benefits</h4>
+            <ul>
+              <li><strong>Simplicity:</strong> Simple, familiar file-system-like interface.</li>
+              <li><strong>High Availability:</strong> Ensemble of nodes eliminates single point of failure.</li>
+              <li><strong>Reliability:</strong> Uses quorum writes; data is persisted in logs.</li>
+              <li><strong>Wait-Free:</strong> Slow/failed clients don't block fast clients.</li>
+              <li><strong>Atomicity:</strong> Transactions either succeed or fail completely.</li>
+            </ul>
+
+            <h4>Common Services</h4>
+            <ul>
+              <li><strong>Naming service:</strong> Unique identification for each node.</li>
+              <li><strong>Configuration management:</strong> Distributed applications read config from ZooKeeper znodes.</li>
+              <li><strong>Distributed locks & synchronization:</strong> Implementing mutual exclusion across nodes.</li>
+              <li><strong>Leader election:</strong> Processes use znodes to elect a leader.</li>
+              <li><strong>Group membership:</strong> Track which servers are alive in a cluster.</li>
+            </ul>
+
+            <h4>Real-World Usage Contexts</h4>
+            <ul>
+              <li><strong>Apache Kafka (earlier versions):</strong> Used Zookeeper to manage broker metadata and consumer group coordination.</li>
+              <li><strong>Apache HBase:</strong> Uses ZooKeeper to track status of distributed data and coordinate the master.</li>
+              <li><strong>Hadoop clusters:</strong> Centralized coordination across 500+ commodity servers.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q29 Multitenancy -->
+      <div class="qa-card" id="q-multitenancy" data-unit="4" data-keywords="multitenancy multitenant database architecture types preallocated column name value pair benefits">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q43</span>
+          <div class="q-text">
+            What is multi-tenancy? Mention its benefits in Cloud Computing. Explain the types of multitenant architecture. Design a multitenant database using the preallocated column method and the name-value pair method.
+            <div class="q-tags"><span class="q-tag">Most Asked</span><span class="q-tag">Unit 4</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <h4>What is Multi-tenancy?</h4>
+            <p>Multi-tenancy is an architecture where a <strong>single instance of a software application serves multiple customers (tenants)</strong>. Each tenant's data is isolated and invisible to other tenants, but they share the same underlying infrastructure and application instance.</p>
+
+            <h4>Benefits</h4>
+            <ul>
+              <li><strong>Better resource utilization:</strong> Resources are shared across tenants, maximizing utilization.</li>
+              <li><strong>Lower costs:</strong> Shared infrastructure drastically reduces per-tenant cost.</li>
+              <li><strong>Easier updates:</strong> One codebase to maintain, patches applied once for all tenants.</li>
+              <li><strong>Scalability:</strong> Adding more tenants doesn't require new infrastructure.</li>
+            </ul>
+
+            <h4>Types of Multi-Tenant Architecture</h4>
+            <ol>
+              <li><strong>Single Multi-Tenant Database:</strong> One app instance + one database instance for all tenants. Most scalable and lowest cost, but highest operational complexity. Each tenant's data is stored in shared tables with a tenant_id column.</li>
+              <li><strong>One Database per Tenant:</strong> One app instance + separate database per tenant. Better isolation, lower complexity, but higher cost and lower scalability (each DB adds overhead).</li>
+              <li><strong>Standalone Single-Tenant App:</strong> Separate app + separate DB for each tenant. Highest isolation and data security, but most expensive and hardest to manage.</li>
+            </ol>
+
+            <h4>Preallocated Column Method Example</h4>
+            <p>Scenario: HighTechUniv stores (USN, Name, Email) and GlobalUniv stores (USN, Name, Grade).</p>
+            <table>
+              <tr><th>TenantID</th><th>USN</th><th>Name</th><th>CustomCol1</th><th>CustomCol2</th></tr>
+              <tr><td>HighTechUniv</td><td>PES1</td><td>Ananya</td><td>ananya@pes.edu (Email)</td><td>NULL</td></tr>
+              <tr><td>GlobalUniv</td><td>GL01</td><td>Ravi</td><td>A+ (Grade)</td><td>NULL</td></tr>
+            </table>
+            <p>Pre-allocated columns (CustomCol1, CustomCol2…) are shared across tenants. A metadata table maps each tenant's field names to column names.</p>
+
+            <h4>Name-Value Pair Method Example</h4>
+            <p>Each custom attribute is stored as a row, not a column:</p>
+            <table>
+              <tr><th>TenantID</th><th>EntityID</th><th>AttributeName</th><th>AttributeValue</th></tr>
+              <tr><td>HighTechUniv</td><td>PES1</td><td>Email</td><td>ananya@pes.edu</td></tr>
+              <tr><td>GlobalUniv</td><td>GL01</td><td>Grade</td><td>A+</td></tr>
+            </table>
+            <p>Highly flexible—any tenant can have any number of attributes. However, querying is more complex (requires pivot operations).</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q30 Cloud Bursting -->
+      <div class="qa-card" id="q-cloud-bursting" data-unit="4" data-keywords="cloud bursting hybrid cloud benefits private public peak demand elasticity">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q44</span>
+          <div class="q-text">
+            What is Cloud Bursting? What are the factors to consider? Explain how Cloud Bursting can be beneficial to cloud users.
+            <div class="q-tags"><span class="q-tag">Most Asked</span><span class="q-tag">Unit 4</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <h4>What is Cloud Bursting?</h4>
+            <p>Cloud bursting is a configuration set up between a <strong>private cloud and a public cloud</strong> to handle peaks in IT demand. When an organization's private cloud consumes 100% of available resources, overflow traffic is automatically directed to the public cloud to avoid service interruption. The organization pays for public cloud resources only when the burst occurs.</p>
+
+            <h4>How It Works</h4>
+            <p>A hybrid cloud setup enables this. The private cloud handles base load; when demand exceeds capacity, additional workloads "burst" into the public cloud. Once demand subsides, resources on the public cloud are released.</p>
+
+            <h4>Use Cases (Triggers)</h4>
+            <ul>
+              <li><strong>Software Development/CI-CD:</strong> DevOps teams use multiple VMs for testing only temporarily. CI/CD tasks are great candidates—short bursts when developers push code.</li>
+              <li><strong>Marketing Campaigns:</strong> Product launches generate large, temporary traffic influxes (e.g., movie/game releases).</li>
+              <li><strong>Big Data Processing:</strong> One-time queries, ML model training, 3D rendering, autonomous vehicle simulation that exceed private cloud capacity.</li>
+              <li><strong>Seasonal Businesses:</strong> Holiday shopping rush, end-of-quarter financial processing, election campaign traffic.</li>
+            </ul>
+
+            <h4>Benefits</h4>
+            <ul>
+              <li><strong>Cost savings:</strong> Pay for additional resources only when needed; no need to over-provision private cloud.</li>
+              <li><strong>No service interruption:</strong> Peak loads are handled without degrading service quality.</li>
+              <li><strong>Flexibility:</strong> Combine benefits of private cloud (control, security) with public cloud (elasticity, scale).</li>
+              <li><strong>Business continuity:</strong> Handles unexpected traffic spikes gracefully.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q31 Reverse Proxy -->
+      <div class="qa-card" id="q-reverse-proxy" data-unit="4" data-keywords="reverse proxy forward proxy benefits applications difference load balancer">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q45</span>
+          <div class="q-text">
+            What is a reverse proxy? What are its benefits? How is it different from a forward proxy? Provide applications where both are used.
+            <div class="q-tags"><span class="q-tag">Most Asked</span><span class="q-tag">Unit 4</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <h4>Reverse Proxy</h4>
+            <p>A reverse proxy sits in front of <strong>backend servers</strong>. Client requests go to the reverse proxy, which forwards them to appropriate backend servers. Clients see only the proxy's IP address—backend servers are hidden.</p>
+            <h4>Benefits of Reverse Proxy</h4>
+            <ul>
+              <li><strong>Load Balancing:</strong> Distributes incoming requests across multiple backend servers to prevent overloading any single one. Eliminates single point of failure.</li>
+              <li><strong>Security:</strong> Hides backend server details. Protects against DDoS by rejecting/blacklisting traffic from malicious IPs. Enables zero-trust architecture.</li>
+              <li><strong>Web Acceleration / Caching:</strong> Caches static content (images, videos), reducing load on backend and improving response times.</li>
+              <li><strong>SSL Termination:</strong> Handles SSL/TLS encryption/decryption, offloading this from backend servers.</li>
+              <li><strong>Scalability and Flexibility:</strong> Backend infrastructure can be changed without clients knowing.</li>
+              <li><strong>Identity Branding:</strong> Can conceal third-party service URLs (e.g., payment gateway) behind the business's own domain.</li>
+            </ul>
+
+            <h4>Forward Proxy</h4>
+            <p>A forward proxy sits in front of <strong>client machines</strong>. When clients make requests to the internet, the proxy intercepts them and communicates on behalf of the clients. The server sees the proxy's IP, not the client's.</p>
+            <h4>Benefits of Forward Proxy</h4>
+            <ul>
+              <li>Bypass institutional browsing restrictions or regional content blocks.</li>
+              <li>Filter and block access to certain content (school/corporate networks).</li>
+              <li>Anonymize user identity online.</li>
+              <li>Cache web content for an organization's users.</li>
+            </ul>
+
+            <h4>Key Difference</h4>
+            <table>
+              <tr><th></th><th>Reverse Proxy</th><th>Forward Proxy</th></tr>
+              <tr><td>Sits in front of</td><td>Servers (backend)</td><td>Clients (users)</td></tr>
+              <tr><td>Who is hidden</td><td>Backend servers</td><td>Client users</td></tr>
+              <tr><td>Used for</td><td>Load balancing, CDN, security of servers</td><td>Content filtering, privacy, bypassing restrictions</td></tr>
+              <tr><td>Examples</td><td>Nginx, HAProxy, Cloudflare</td><td>Squid, corporate proxies</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q32 Security Patterns -->
+      <div class="qa-card" id="q-security" data-unit="4" data-keywords="security design patterns defense in depth honeypot sandbox network pattern cloud security">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q46</span>
+          <div class="q-text">
+            Explain the following security design patterns: Defense in Depth, Honeypots, Sandboxes, Network Patterns.
+            <div class="q-tags"><span class="q-tag">Most Asked</span><span class="q-tag">Unit 4</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <h4>1. Defense in Depth</h4>
+            <p>This pattern states that <strong>defenses should be layered</strong> so an attacker must overcome multiple security controls to reach important resources. No single security mechanism is relied upon exclusively.</p>
+            <p><em>Cloud example:</em> Remote admin access allowed only through VPN → only from whitelisted IPs → requires one-time password (OTP). An attacker must defeat all three layers.</p>
+
+            <h4>2. Honeypots</h4>
+            <p>A <strong>decoy computer system</strong> that appears attractive to attackers. While the attacker wastes time attacking the honeypot (believing it to be a valuable target), security personnel observe the attack patterns and gather intelligence, then attempt to trap and contain the attack.</p>
+            <p><em>Cloud context:</em> A honeypot VM is deployed that monitors any suspicious attempt to break into it. Both cloud service providers and cloud customers can deploy honeypots.</p>
+
+            <h4>3. Sandboxes</h4>
+            <p>Sandboxing executes software in a <strong>restricted environment</strong> within the OS. Even if an attacker compromises the sandboxed software, they don't get unrestricted access to OS resources. The attacker must additionally break out of the sandbox to gain full control.</p>
+            <p>Sandboxes provide defense in depth—they limit the blast radius of a compromise. Examples: Browser sandbox, container namespaces, Java SecurityManager.</p>
+
+            <h4>4. Network Patterns</h4>
+            <p><strong>VM Isolation:</strong> New techniques isolate traffic between VMs sharing the same physical hardware (traffic that doesn't cross the switching network). Security features include:</p>
+            <ul>
+              <li>Encryption of traffic between VMs on the same host.</li>
+              <li>Tightened security controls on VMs (restrict which ports accept traffic).</li>
+            </ul>
+            <p><strong>Subnet Isolation:</strong> VMs grouped into isolated subnets. Traffic between subnets passes through firewalls/security appliances. Limits lateral movement within a network if one VM is compromised.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q33 DoS DDoS EDoS -->
+      <div class="qa-card" data-unit="4" data-keywords="DoS DDoS EDoS attack cloud threat economic denial sustainability">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q47</span>
+          <div class="q-text">
+            What is a DoS attack? Explain with sketches how DoS is different from DDoS. Distinguish EDoS from the above.
+            <div class="q-tags"><span class="q-tag">Most Asked</span><span class="q-tag">Unit 4</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <h4>DoS (Denial of Service)</h4>
+            <p>An attack in which a <strong>single attacker</strong> floods a target (server/network) with excessive requests or malformed traffic to exhaust resources (bandwidth, CPU, memory), making the service unavailable to legitimate users.</p>
+            <p><em>Characteristic:</em> Originates from a single source → easier to detect and block (block that IP).</p>
+
+            <h4>DDoS (Distributed Denial of Service)</h4>
+            <p>An attack in which <strong>many distributed attackers</strong> (a botnet—network of compromised machines) simultaneously flood the target. The traffic appears to come from thousands of legitimate sources, making it very difficult to filter.</p>
+            <p><em>Key difference:</em> DoS = one attacker; DDoS = thousands of attackers acting in concert. DDoS is far more powerful and harder to mitigate.</p>
+
+            <h4>EDoS (Economic Denial of Sustainability)</h4>
+            <p>An attack unique to cloud computing. Instead of crashing the service, attackers <strong>generate excessive usage of auto-scaling cloud resources</strong>, causing the victim to incur massive cloud bills that they cannot sustain economically.</p>
+            <p>The target service remains available (may even scale up automatically), but the cost becomes unsustainable—the business is harmed economically rather than through outage.</p>
+            <p><em>Example:</em> An attacker simulates millions of legitimate users on an auto-scaling web service → the service scales out to hundreds of instances → the owner is charged millions of dollars in cloud costs.</p>
+
+            <table>
+              <tr><th>Aspect</th><th>DoS</th><th>DDoS</th><th>EDoS</th></tr>
+              <tr><td>Attacker</td><td>Single source</td><td>Multiple (botnet)</td><td>Single or multiple</td></tr>
+              <tr><td>Goal</td><td>Service outage</td><td>Service outage</td><td>Financial damage</td></tr>
+              <tr><td>Service status</td><td>Down</td><td>Down</td><td>Running (but costing)</td></tr>
+              <tr><td>Cloud specific</td><td>No</td><td>No</td><td>Yes (pay-as-you-go)</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q34 Keystone -->
+      <div class="qa-card" data-unit="4" data-keywords="keystone openstack authentication cloud domain token project role user IAM">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q48</span>
+          <div class="q-text">
+            Explain the following Keystone concepts: Domain, Token. What is Keystone in OpenStack?
+            <div class="q-tags"><span class="q-tag">Unit 4</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <h4>What is Keystone?</h4>
+            <p>Keystone is the <strong>OpenStack Identity Service</strong>. It provides API client authentication, service discovery, and distributed multi-tenant authorization. Every request to an OpenStack service is authenticated via Keystone. It acts as a central registry of users, projects, roles, and services.</p>
+
+            <h4>Domain in Keystone</h4>
+            <p>A <strong>Domain</strong> is a high-level organizational grouping in Keystone that contains Projects, Users, and Groups. It enables multi-organization management within a single cloud deployment. Domains allow different organizations to coexist without interfering with each other.</p>
+            <p><em>Example:</em> A cloud provider hosting two universities (HighTechUniv, GlobalUniv) creates a separate domain for each. Each domain manages its own users and projects independently.</p>
+
+            <h4>Token in Keystone</h4>
+            <p>A <strong>Token</strong> is a time-limited credential issued by Keystone upon successful authentication. After verifying a user's identity (username/password or OAuth), Keystone issues a token. This token is then included in all subsequent API requests to OpenStack services (Nova, Swift, Cinder) to prove identity and authorization.</p>
+            <p>Tokens expire after a configured TTL (time-to-live), requiring re-authentication.</p>
+
+            <h4>Other Key Concepts</h4>
+            <ul>
+              <li><strong>Project:</strong> An abstraction (like a tenant/namespace) representing a group of resources belonging to an organization or team.</li>
+              <li><strong>Role:</strong> A named set of permissions assigned to users/groups within a project/domain. Used for authorization.</li>
+              <li><strong>User:</strong> An individual API consumer. Identified by username + password or OAuth/LDAP credentials.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q35 Cloud Scaling -->
+      <div class="qa-card" data-unit="4" data-keywords="cloud scaling strategies vertical horizontal elasticity scalability difference">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q49</span>
+          <div class="q-text">
+            Discuss Cloud Scaling Strategies. How does Cloud Scalability differ from Cloud Elasticity?
+            <div class="q-tags"><span class="q-tag">Unit 4</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <h4>Cloud Scaling Strategies</h4>
+            <p><strong>Vertical Scaling (Scale Up/Down):</strong> Increasing or decreasing the capacity of existing resources (add more CPU/RAM to a server). Simple but has hardware limits; requires downtime in some cases.</p>
+            <p><strong>Horizontal Scaling (Scale Out/In):</strong> Adding more machines/instances to the pool (add more servers). More common in cloud; requires load balancing; no single machine limits. Scale in removes excess machines to reduce cost.</p>
+            <p><strong>Auto-scaling:</strong> Cloud platforms automatically add/remove instances based on metrics (CPU usage, request rate) and policies. Examples: AWS Auto Scaling Groups, Kubernetes HPA (Horizontal Pod Autoscaler).</p>
+
+            <h4>Scalability vs Elasticity</h4>
+            <table>
+              <tr><th>Aspect</th><th>Scalability</th><th>Elasticity</th></tr>
+              <tr><td>Definition</td><td>The <em>ability</em> to handle growing workloads by adding resources</td><td>The <em>dynamic</em> increase/decrease of resources in real-time based on actual demand</td></tr>
+              <tr><td>Nature</td><td>Structural capability (designed-in)</td><td>Operational behavior (real-time action)</td></tr>
+              <tr><td>Direction</td><td>Typically scale up only</td><td>Both scale up AND scale down</td></tr>
+              <tr><td>Timing</td><td>Planned expansion</td><td>Real-time, automatic</td></tr>
+              <tr><td>Example</td><td>"Our database can handle 10x more users if we add more nodes"</td><td>"The system added 50 servers automatically during Black Friday peak and removed them after"</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q36 -->
+      <div class="qa-card" id="q-resource-management-scheduling" data-unit="4" data-keywords="resource management scheduling cloud controller resource allocation physical machine virtual machine fairness starvation deadlines">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q50</span>
+          <div class="q-text">
+            Explain resource management, scheduling, and resource allocation in a cloud controller.
+            <div class="q-tags"><span class="q-tag">New</span><span class="q-tag">Unit 4</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <p>Cloud controllers manage requests for compute, storage, and network resources across many physical machines. They maintain resource state, choose suitable hosts, commit resources when allocation succeeds, and roll back on failure.</p>
+            <ul>
+              <li><strong>Resource management:</strong> Tracks available capacity and applies policies for allocation, isolation, and utilization.</li>
+              <li><strong>Scheduling:</strong> Decides where workloads should run. A server may host many VMs, and a VM may support several applications.</li>
+              <li><strong>Scheduling goals:</strong> Algorithms should be efficient, fair, starvation-free, and able to satisfy performance or deadline constraints when required.</li>
+              <li><strong>Placement factors:</strong> CPU, memory, storage, network, current load, affinity/anti-affinity, availability zones, and security policies.</li>
+              <li><strong>Failure handling:</strong> If allocation cannot be completed, the request must be rejected or rolled back so resource state stays consistent.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q37 -->
+      <div class="qa-card" id="q-cloud-security-requirements" data-unit="4" data-keywords="cloud security requirements physical security virtual security authentication authorization isolation encryption IAM Keystone">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q51</span>
+          <div class="q-text">
+            What is the need for cloud security? Explain physical and virtual cloud security requirements.
+            <div class="q-tags"><span class="q-tag">New</span><span class="q-tag">Unit 4</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <p>Cloud security is needed because cloud platforms pool physical resources, virtualize them, expose them over networks, and share them among many tenants. A weakness can affect confidentiality, integrity, availability, compliance, or tenant isolation.</p>
+            <h4>Physical Security</h4>
+            <ul>
+              <li>Protect data centers, racks, servers, disks, and network devices from unauthorized physical access.</li>
+              <li>Use controlled entry, surveillance, power backup, fire suppression, and disaster recovery processes.</li>
+              <li>Ensure physical redundancy so that hardware failure does not become a single point of failure.</li>
+            </ul>
+            <h4>Virtual Security</h4>
+            <ul>
+              <li>Isolate tenants using hypervisors, containers, namespaces, cgroups, and virtual networks.</li>
+              <li>Secure APIs, dashboards, and orchestration tools with authentication and authorization.</li>
+              <li>Use IAM/Keystone-like identity services for users, tokens, roles, domains, and service access.</li>
+              <li>Encrypt data at rest and in transit; monitor logs and network traffic for attacks.</li>
+              <li>Apply image/container scanning, least privilege, secrets management, and patching.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q38 -->
+      <div class="qa-card" id="q-cmdb-pattern" data-unit="4" data-keywords="CMDB configuration management database security design pattern assets dependencies incident change management">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q52</span>
+          <div class="q-text">
+            Explain the CMDB security/design pattern in cloud computing.
+            <div class="q-tags"><span class="q-tag">New</span><span class="q-tag">Unit 4</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <p><strong>CMDB</strong> stands for Configuration Management Database. In cloud operations, it records configuration items such as servers, VMs, containers, networks, storage, applications, owners, versions, and dependencies.</p>
+            <ul>
+              <li>It provides a single view of cloud assets and their relationships.</li>
+              <li>It helps assess the impact of changes, incidents, failures, and vulnerabilities.</li>
+              <li>It supports audit and compliance by tracking what exists, where it runs, and who owns it.</li>
+              <li>It improves security response because affected resources can be identified quickly during an incident.</li>
+            </ul>
+            <div class="highlight">Example: If a vulnerable container image is detected, CMDB data helps locate all services, tenants, and hosts using that image.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q39 -->
+      <div class="qa-card" id="q-failure-types-failover" data-unit="4" data-keywords="failure designer perspective failover active active active passive partial failure crash omission timing response arbitrary">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q53</span>
+          <div class="q-text">
+            What are the types of failures from a designer perspective? What is failover and what are its two architectures?
+            <div class="q-tags"><span class="q-tag">New</span><span class="q-tag">Unit 4</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <p>A system <strong>fails</strong> when it cannot meet its promised behavior. In distributed systems, failures may be partial and non-deterministic, so designers must explicitly plan how to detect and tolerate them.</p>
+            <ul>
+              <li><strong>Crash failure:</strong> A node stops working.</li>
+              <li><strong>Omission failure:</strong> A message or response is not sent/received.</li>
+              <li><strong>Timing/performance failure:</strong> A response arrives too late to be useful.</li>
+              <li><strong>Response failure:</strong> A component responds with an incorrect value or state transition.</li>
+              <li><strong>Arbitrary/Byzantine failure:</strong> A component behaves unpredictably or maliciously.</li>
+            </ul>
+            <p><strong>Failover</strong> is switching to a replica, standby server, redundant hardware, or backup service when the active component fails.</p>
+            <table>
+              <tr><th>Architecture</th><th>Explanation</th></tr>
+              <tr><td>Active-Active</td><td>Multiple nodes actively serve traffic. If one fails, surviving nodes take over its load.</td></tr>
+              <tr><td>Active-Passive</td><td>A standby node remains ready and takes over only when the primary fails.</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Extra -->
+      <div class="qa-card" id="q-edge-fog" data-unit="4" data-keywords="edge computing fog computing cloud edge fog latency IoT bandwidth real time">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q54</span>
+          <div class="q-text">
+            Explain Edge Computing and Fog Computing. How are they different from cloud computing?
+            <div class="q-tags"><span class="q-tag">Added</span><span class="q-tag">Unit 4</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <p><strong>Edge computing</strong> pushes computation and storage close to the data source or end user, such as sensors, gateways, mobile devices, or local edge servers. It reduces latency and bandwidth usage because not every request must travel to a distant cloud data center.</p>
+            <p><strong>Fog computing</strong> is an intermediate layer between edge devices and the central cloud. Fog nodes such as gateways, routers, or local micro-data centers aggregate, filter, store, and process data closer to users than the central cloud.</p>
+            <table>
+              <tr><th>Aspect</th><th>Cloud</th><th>Fog</th><th>Edge</th></tr>
+              <tr><td>Location</td><td>Centralized data centers</td><td>Intermediate/local nodes</td><td>Very close to devices/users</td></tr>
+              <tr><td>Latency</td><td>Higher</td><td>Medium</td><td>Lowest</td></tr>
+              <tr><td>Use cases</td><td>Large-scale storage/analytics</td><td>IoT aggregation, local control</td><td>Real-time decisions, sensors, AR/VR</td></tr>
+            </table>
+            <p>They complement the cloud: edge/fog handle latency-sensitive or bandwidth-heavy tasks, while the cloud handles global coordination, long-term storage, and large analytics.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="qa-card" id="q-consensus-raft" data-unit="4" data-keywords="consensus Raft Zookeeper leader election log replication distributed consensus fault tolerance">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q55</span>
+          <div class="q-text">
+            What is distributed consensus? Explain Raft briefly.
+            <div class="q-tags"><span class="q-tag">Added</span><span class="q-tag">Unit 4</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <p><strong>Consensus</strong> is the problem of getting a group of distributed nodes to agree on a value or system state despite failures, delays, and unreliable communication. It is needed for leader election, replicated logs, membership, distributed locks, and coordination services.</p>
+            <p><strong>Raft</strong> is a consensus algorithm designed to be easier to understand than Paxos. It divides consensus into:</p>
+            <ul>
+              <li><strong>Leader election:</strong> Nodes elect one leader for a term. The leader handles client requests.</li>
+              <li><strong>Log replication:</strong> The leader appends commands to its log and replicates them to followers.</li>
+              <li><strong>Commitment:</strong> Once a majority stores an entry, it is committed and applied to the state machine.</li>
+              <li><strong>Safety:</strong> Terms, majority voting, and log matching prevent conflicting committed histories.</li>
+            </ul>
+            <div class="highlight">Zookeeper-like coordination systems use consensus ideas to provide reliable coordination even when some nodes fail.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="qa-card" id="q-checkpoint-unreliable-communication" data-unit="4" data-keywords="checkpointing application recovery unreliable communication partial failure retries exponential backoff circuit breaker bulkhead timeout">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q56</span>
+          <div class="q-text">
+            Explain checkpointing, application recovery, and strategies for unreliable communication.
+            <div class="q-tags"><span class="q-tag">Added</span><span class="q-tag">Unit 4</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <p><strong>Checkpointing</strong> records the state of an application or computation at a known point. If the application fails, the latest checkpoint can be restored instead of restarting from the beginning.</p>
+            <p><strong>Application recovery</strong> restarts failed instances and restores them using checkpoints, replicas, or persistent state so service can continue with minimal loss.</p>
+            <h4>Handling Unreliable Communication</h4>
+            <ul>
+              <li><strong>Timeouts:</strong> Avoid waiting forever for a response.</li>
+              <li><strong>Retries with exponential backoff:</strong> Retry transient failures while reducing overload.</li>
+              <li><strong>Circuit breakers:</strong> Stop calling a failing service temporarily to prevent cascading failures.</li>
+              <li><strong>Bulkheads/isolation:</strong> Separate resources so one failing component does not exhaust the whole system.</li>
+              <li><strong>Fallback/cache:</strong> Return cached or degraded responses when a dependency is unavailable.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="qa-card" id="q-container-security" data-unit="4" data-keywords="container security Docker Kubernetes namespaces cgroups image scanning secrets RBAC network policies runtime security">
+        <div class="qa-question" onclick="toggle(this)">
+          <span class="q-num">Q57</span>
+          <div class="q-text">
+            Explain container security features used with Docker and Kubernetes.
+            <div class="q-tags"><span class="q-tag">Added</span><span class="q-tag">Unit 4</span></div>
+          </div>
+          <span class="q-chevron">▼</span>
+        </div>
+        <div class="qa-answer">
+          <div class="qa-answer-inner">
+            <ul>
+              <li><strong>Namespaces:</strong> Isolate process IDs, filesystems, hostnames, users, IPC, and networks.</li>
+              <li><strong>cgroups:</strong> Limit and account for CPU, memory, block I/O, and other resource usage.</li>
+              <li><strong>Image security:</strong> Use trusted base images, scan for vulnerabilities, and avoid unnecessary packages.</li>
+              <li><strong>Least privilege:</strong> Avoid privileged containers, drop Linux capabilities, and run as non-root where possible.</li>
+              <li><strong>Secrets management:</strong> Store credentials as Kubernetes Secrets or external secret managers instead of hardcoding them in images.</li>
+              <li><strong>RBAC and admission control:</strong> Restrict what users, service accounts, and workloads can do in Kubernetes.</li>
+              <li><strong>Network policies:</strong> Limit pod-to-pod and pod-to-service communication.</li>
+              <li><strong>Runtime monitoring:</strong> Detect unexpected processes, network calls, file changes, or privilege escalation attempts.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end unit 4 -->
+
+    <div class="no-results" id="noResults" style="display:none;">
+      <p>No questions found matching your search.</p>
+    </div>
+
+  </div><!-- end content -->
+</div><!-- end main -->
+
+<script>
+  let activeUnit = 'all';
+
+  function toggle(el) {
+    const card = el.closest('.qa-card');
+    card.classList.toggle('open');
+  }
+
+  function filterUnit(unit, btn) {
+    activeUnit = unit;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    applyFilters();
+  }
+
+  function filterCards() {
+    applyFilters();
+  }
+
+  function applyFilters() {
+    const query = document.getElementById('searchInput').value.toLowerCase().trim();
+    const cards = document.querySelectorAll('.qa-card');
+    let visible = 0;
+
+    cards.forEach(card => {
+      const cardUnit = card.dataset.unit;
+      const keywords = (card.dataset.keywords || '').toLowerCase();
+      const text = card.innerText.toLowerCase();
+      const matchUnit = activeUnit === 'all' || cardUnit === activeUnit;
+      const matchSearch = !query || keywords.includes(query) || text.includes(query);
+      
+      if (matchUnit && matchSearch) {
+        card.style.display = '';
+        visible++;
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    // Show/hide unit section headers
+    document.querySelectorAll('.unit-section').forEach(section => {
+      const sectionUnit = section.dataset.unit;
+      const matchUnit = activeUnit === 'all' || sectionUnit === activeUnit;
+      const hasVisible = [...section.querySelectorAll('.qa-card')].some(c => c.style.display !== 'none');
+      section.style.display = (matchUnit && hasVisible) ? '' : 'none';
+    });
+
+    document.getElementById('noResults').style.display = visible === 0 ? 'block' : 'none';
+    document.getElementById('statsBar').textContent = visible + ' questions';
+  }
+
+  function scrollTo(id) {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      el.classList.add('open');
+    }
+  }
+
+  // Count on load
+  window.addEventListener('load', () => {
+    const total = document.querySelectorAll('.qa-card').length;
+    document.getElementById('statsBar').textContent = total + ' questions';
+  });
+</script>
+</body>
+</html>
